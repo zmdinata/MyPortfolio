@@ -7,18 +7,16 @@
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
-<body class="dark-mode">
-
-    <nav class="navbar">
+<body class="dark-mode"> <nav class="navbar">
         <div class="navbar-container">
-            <a href="index.html#home" class="nav-logo">ZMDinata Portfolio</a>
+            <a href="#home" class="nav-logo">ZMDinata Portfolio</a>
             
             <ul class="nav-menu">
-                <li class="nav-item"><a href="index.html#home" class="nav-link" data-lang="en">About Me</a></li>
-                <li class="nav-item"><a href="index.html#home" class="nav-link" data-lang="id" style="display:none;">Tentang Saya</a></li>
+                <li class="nav-item"><a href="#home" class="nav-link" data-lang="en">About Me</a></li>
+                <li class="nav-item"><a href="#home" class="nav-link" data-lang="id" style="display:none;">Tentang Saya</a></li>
                 
-                <li class="nav-item"><a href="proyek_section.html" class="nav-link active" data-lang="en">Project</a></li>
-                <li class="nav-item"><a href="proyek_section.html" class="nav-link active" data-lang="id" style="display:none;">Proyek</a></li>
+                <li class="nav-item"><a href="proyek_section.html" class="nav-link" data-lang="en">Project</a></li>
+                <li class="nav-item"><a href="proyek_section.html" class="nav-link" data-lang="id" style="display:none;">Proyek</a></li>
                 
                 <li class="nav-item"><a href="sertif_section.html" class="nav-link" data-lang="en">Certification</a></li>
                 <li class="nav-item"><a href="sertif_section.html" class="nav-link" data-lang="id" style="display:none;">Sertifikasi</a></li>
@@ -28,11 +26,11 @@
             </ul>
 
             <div class="nav-toggles">
-                <button id="theme-toggle" class="toggle-btn">
+                <button id="theme-toggle-desktop" class="toggle-btn">
                     <span class="icon-moon">🌙</span>
                     <span class="icon-sun" style="display:none;">☀️</span>
                 </button>
-                <button id="lang-toggle" class="toggle-btn">ID</button>
+                <button id="lang-toggle-desktop" class="toggle-btn">ID</button>
             </div>
 
             <div class="nav-hamburger" id="nav-hamburger">
@@ -42,16 +40,33 @@
             </div>
         </div>
     </nav>
-    
+
     <div class="mobile-nav" id="mobile-nav">
         <a href="index.html#home" class="mobile-link" data-lang="en">About Me</a>
         <a href="index.html#home" class="mobile-link" data-lang="id" style="display:none;">Tentang Saya</a>
+        
         <a href="proyek_section.html" class="mobile-link" data-lang="en">Project</a>
         <a href="proyek_section.html" class="mobile-link" data-lang="id" style="display:none;">Proyek</a>
+        
         <a href="sertif_section.html" class="mobile-link" data-lang="en">Certification</a>
         <a href="sertif_section.html" class="mobile-link" data-lang="id" style="display:none;">Sertifikasi</a>
+        
         <a href="honor_section.html" class="mobile-link" data-lang="en">Honor</a>
         <a href="honor_section.html" class="mobile-link" data-lang="id" style="display:none;">Penghargaan</a>
+
+        <div class="mobile-nav-toggles">
+            <button id="theme-toggle-mobile" class="toggle-btn">
+                <span class="icon-moon">🌙</span>
+                <span class="icon-sun" style="display:none;">☀️</span>
+            </button>
+            <button id="lang-toggle-mobile" class="toggle-btn">ID</button>
+        </div>
+    </div>
+            <div class="nav-hamburger" id="nav-hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
     </div>
 
     <main class="page-section">
@@ -176,4 +191,5 @@
 
     <script src="script.js"></script>
 </body>
+
 </html>
