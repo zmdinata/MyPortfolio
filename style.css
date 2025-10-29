@@ -1,0 +1,762 @@
+/* ===== Google Font Import ===== */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* ===== CSS Variables ===== */
+:root {
+    /* Dark Mode (Default) - Terinspirasi dari foto */
+    --bg-color-dark: #121212;
+    --card-color-dark: #1a1a1a;
+    --text-color-dark: #e0e0e0;
+    --text-color-secondary-dark: #a0a0a0;
+    --accent-color-dark: #ffffff; /* Aksen putih untuk elegansi */
+    --border-color-dark: #333333;
+
+    /* Light Mode */
+    --bg-color-light: #f4f4f5;
+    --card-color-light: #ffffff;
+    --text-color-light: #222222;
+    --text-color-secondary-light: #555555;
+    --accent-color-light: #000000; /* Aksen hitam untuk elegansi */
+    --border-color-light: #dddddd;
+
+    /* Font */
+    --body-font: 'Inter', sans-serif;
+
+    /* Transitions */
+    --transition-speed: 0.3s ease;
+}
+
+/* ===== Global Styles ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: var(--body-font);
+    background-color: var(--bg-color-dark);
+    color: var(--text-color-dark);
+    transition: background-color var(--transition-speed), color var(--transition-speed);
+}
+
+/* ===== Light Mode Theme ===== */
+body.light-mode {
+    background-color: var(--bg-color-light);
+    color: var(--text-color-light);
+}
+
+h1, h2, h3, h4 {
+    color: var(--accent-color-dark);
+    font-weight: 600;
+}
+body.light-mode h1,
+body.light-mode h2,
+body.light-mode h3,
+body.light-mode h4 {
+    color: var(--accent-color-light);
+}
+
+p {
+    line-height: 1.7;
+    color: var(--text-color-secondary-dark);
+}
+body.light-mode p {
+    color: var(--text-color-secondary-light);
+}
+
+a {
+    color: var(--accent-color-dark);
+    text-decoration: none;
+    transition: color var(--transition-speed);
+}
+body.light-mode a {
+    color: var(--accent-color-light);
+}
+a:hover {
+    opacity: 0.8;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+ul {
+    list-style: none;
+    padding-left: 20px;
+}
+ul li {
+    position: relative;
+    padding-left: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--text-color-secondary-dark);
+}
+body.light-mode ul li {
+    color: var(--text-color-secondary-light);
+}
+ul li::before {
+    content: '•';
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: var(--accent-color-dark);
+    font-weight: bold;
+}
+body.light-mode ul li::before {
+    color: var(--accent-color-light);
+}
+
+/* ===== Navbar ===== */
+.navbar {
+    position: sticky;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: hsla(0, 0%, 7%, 0.8); /* Transparan untuk dark mode */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border-color-dark);
+    z-index: 100;
+    transition: background-color var(--transition-speed), border-color var(--transition-speed);
+}
+body.light-mode .navbar {
+    background-color: hsla(240, 8%, 97%, 0.8); /* Transparan untuk light mode */
+    border-bottom: 1px solid var(--border-color-light);
+}
+
+.navbar-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+}
+
+.nav-logo {
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+.nav-menu {
+    display: flex;
+    gap: 2rem;
+}
+
+.nav-link {
+    font-weight: 500;
+    font-size: 0.95rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid transparent;
+}
+.nav-link:hover, .nav-link.active {
+    color: var(--accent-color-dark);
+    border-bottom-color: var(--accent-color-dark);
+}
+body.light-mode .nav-link:hover,
+body.light-mode .nav-link.active {
+    color: var(--accent-color-light);
+    border-bottom-color: var(--accent-color-light);
+}
+
+.nav-toggles {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.toggle-btn {
+    background: none;
+    border: 1px solid var(--border-color-dark);
+    color: var(--text-color-dark);
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    font-size: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: var(--transition-speed);
+}
+body.light-mode .toggle-btn {
+    border-color: var(--border-color-light);
+    color: var(--text-color-light);
+}
+.toggle-btn:hover {
+    background-color: var(--card-color-dark);
+}
+body.light-mode .toggle-btn:hover {
+    background-color: #f0f0f0;
+}
+
+/* Hamburger Menu */
+.nav-hamburger {
+    display: none;
+    cursor: pointer;
+    flex-direction: column;
+    gap: 5px;
+}
+.nav-hamburger span {
+    display: block;
+    width: 25px;
+    height: 2px;
+    background-color: var(--accent-color-dark);
+    transition: var(--transition-speed);
+}
+body.light-mode .nav-hamburger span {
+    background-color: var(--accent-color-light);
+}
+
+/* Hamburger Active State (X) */
+.nav-hamburger.active span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+}
+.nav-hamburger.active span:nth-child(2) {
+    opacity: 0;
+}
+.nav-hamburger.active span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+}
+
+/* Mobile Nav Menu */
+.mobile-nav {
+    display: none;
+    position: fixed;
+    top: 65px; /* Tinggi navbar */
+    left: 0;
+    width: 100%;
+    height: calc(100vh - 65px);
+    background-color: var(--bg-color-dark);
+    flex-direction: column;
+    align-items: center;
+    padding-top: 2rem;
+    gap: 1.5rem;
+    z-index: 99;
+    transform: translateX(100%);
+    transition: transform var(--transition-speed);
+}
+body.light-mode .mobile-nav {
+    background-color: var(--bg-color-light);
+}
+.mobile-nav.active {
+    transform: translateX(0);
+    display: flex;
+}
+.mobile-link {
+    font-size: 1.25rem;
+    font-weight: 500;
+}
+
+/* ===== Main Content & Sections ===== */
+main {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+.content-section {
+    padding: 4rem 0;
+    border-bottom: 1px solid var(--border-color-dark);
+}
+body.light-mode .content-section {
+    border-bottom: 1px solid var(--border-color-light);
+}
+.content-section:last-of-type {
+    border-bottom: none;
+}
+.content-section h2 {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+}
+
+/* Untuk halaman sekunder seperti Proyek/Sertif */
+.page-section {
+    padding-top: 100px; /* Offset untuk navbar */
+}
+.page-section .content-section {
+    padding-top: 0;
+}
+
+/* ===== Hero Section ===== */
+.hero-section {
+    min-height: calc(100vh - 65px); /* Full height minus navbar */
+    display: flex;
+    align-items: center;
+    padding: 2rem 0;
+}
+.hero-content {
+    display: flex;
+    align-items: center;
+    gap: 3rem;
+    width: 100%;
+}
+.hero-text {
+    flex: 1;
+}
+.hero-name {
+    font-size: 2.5rem;
+    font-weight: 700;
+}
+.hero-job {
+    font-size: 1.1rem;
+    margin-top: 1rem;
+    color: var(--text-color-secondary-dark);
+}
+body.light-mode .hero-job {
+    color: var(--text-color-secondary-light);
+}
+.hero-lang {
+    font-size: 0.9rem;
+    margin-top: 1.5rem;
+    font-style: italic;
+    color: var(--text-color-secondary-dark);
+}
+body.light-mode .hero-lang {
+    color: var(--text-color-secondary-light);
+}
+
+.hero-image-container {
+    flex-shrink: 0;
+}
+.hero-image {
+    width: 300px;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 5px solid var(--card-color-dark);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    filter: grayscale(0.5); /* Sesuai tema foto */
+}
+body.light-mode .hero-image {
+    border-color: var(--card-color-light);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* ===== Experience & Education (Timeline) ===== */
+.timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+.timeline-item {
+    background-color: var(--card-color-dark);
+    padding: 1.5rem;
+    border-radius: 8px;
+    border: 1px solid var(--border-color-dark);
+    transition: var(--transition-speed);
+}
+body.light-mode .timeline-item {
+    background-color: var(--card-color-light);
+    border-color: var(--border-color-light);
+}
+.timeline-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+.timeline-item h3 {
+    font-size: 1.25rem;
+    margin-bottom: 0.25rem;
+}
+.timeline-sub {
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-bottom: 1rem;
+    color: var(--text-color-secondary-dark);
+}
+body.light-mode .timeline-sub {
+    color: var(--text-color-secondary-light);
+}
+.timeline-item ul {
+    margin-top: 1rem;
+}
+
+/* ===== Skills ===== */
+.skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+}
+.skill-card {
+    background-color: var(--card-color-dark);
+    padding: 1.5rem;
+    border-radius: 8px;
+    border: 1px solid var(--border-color-dark);
+    text-align: center;
+}
+body.light-mode .skill-card {
+    background-color: var(--card-color-light);
+    border-color: var(--border-color-light);
+}
+.skill-card h3 {
+    margin-bottom: 0.5rem;
+}
+
+/* ===== Contact ===== */
+.contact-links {
+    margin-top: 2rem;
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+.contact-link {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    border: 1px solid var(--border-color-dark);
+    border-radius: 5px;
+    font-weight: 500;
+    transition: var(--transition-speed);
+}
+body.light-mode .contact-link {
+    border-color: var(--border-color-light);
+}
+.contact-link:hover {
+    background-color: var(--accent-color-dark);
+    color: var(--bg-color-dark);
+    border-color: var(--accent-color-dark);
+}
+body.light-mode .contact-link:hover {
+    background-color: var(--accent-color-light);
+    color: var(--bg-color-light);
+    border-color: var(--accent-color-light);
+}
+
+/* ===== Footer ===== */
+.footer {
+    text-align: center;
+    padding: 2rem;
+    border-top: 1px solid var(--border-color-dark);
+}
+body.light-mode .footer {
+    border-top: 1px solid var(--border-color-light);
+}
+.footer p {
+    font-size: 0.9rem;
+    color: var(--text-color-secondary-dark);
+}
+body.light-mode .footer p {
+    color: var(--text-color-secondary-light);
+}
+
+/* ===== Project/Cert/Honor Sections (Horizontal Scroll) ===== */
+/* Penjudul sub-bagian di halaman proyek */
+#projects h3 {
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid var(--border-color-dark);
+    padding-bottom: 0.5rem;
+}
+body.light-mode #projects h3 {
+    border-color: var(--border-color-light);
+}
+/* Penjudul sub-bagian di halaman sertif/honor (BARU) */
+#certificates h3, #honors h3 {
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.horizontal-scroll-wrapper {
+    display: flex;
+    overflow-x: auto;
+    gap: 1.5rem;
+    padding: 1rem 0.5rem;
+    /* Custom scrollbar */
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-color-dark) var(--card-color-dark);
+}
+body.light-mode .horizontal-scroll-wrapper {
+    scrollbar-color: var(--border-color-light) var(--card-color-light);
+}
+.horizontal-scroll-wrapper::-webkit-scrollbar {
+    height: 8px;
+}
+.horizontal-scroll-wrapper::-webkit-scrollbar-track {
+    background: var(--card-color-dark);
+    border-radius: 4px;
+}
+body.light-mode .horizontal-scroll-wrapper::-webkit-scrollbar-track {
+    background: var(--card-color-light);
+}
+.horizontal-scroll-wrapper::-webkit-scrollbar-thumb {
+    background-color: var(--border-color-dark);
+    border-radius: 4px;
+}
+body.light-mode .horizontal-scroll-wrapper::-webkit-scrollbar-thumb {
+    background-color: var(--border-color-light);
+}
+
+.scroll-item {
+    flex: 0 0 auto;
+    width: 280px; /* Ukuran standar kartu */
+    height: 200px; /* Ukuran standar kartu */
+    border-radius: 8px;
+    border: 1px solid var(--border-color-dark);
+    background-color: var(--card-color-dark);
+    transition: var(--transition-speed);
+    overflow: hidden;
+    cursor: pointer; /* Menandakan bisa diklik */
+}
+body.light-mode .scroll-item {
+    border-color: var(--border-color-light);
+    background-color: var(--card-color-light);
+}
+.scroll-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Link di dalam kartu proyek */
+.project-card-link {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+}
+.project-card-link h4 {
+    padding: 0 1rem 1rem 1rem;
+    margin-top: auto;
+}
+
+/* Gambar di dalam .scroll-item (Umum) - (DIPERBARUI) */
+.scroll-item a img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Membuat gambar mengisi kotak */
+    display: block;
+}
+
+/* Pratinjau Teks (jika masih digunakan, tapi sebaiknya ganti gambar) */
+.project-preview {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    color: var(--text-color-secondary-dark);
+    background-color: rgba(0,0,0,0.1);
+    flex-grow: 1;
+}
+body.light-mode .project-preview {
+    color: var(--text-color-secondary-light);
+    background-color: rgba(0,0,0,0.05);
+}
+
+/* Gambar pratinjau (KHUSUS Proyek dengan judul) - (TIDAK BERUBAH) */
+.project-image-preview {
+    /* height: calc(100% - 50px); */ /* <- Hapus atau komentari baris ini */
+    width: 100%; /* Pastikan lebar penuh */
+    height: auto; /* Biarkan tinggi menyesuaikan */
+    aspect-ratio: 16 / 9; /* Paksa rasio aspek 16:9 */
+    object-fit: cover; /* Pastikan gambar mengisi kotak tanpa distorsi */
+}
+
+
+/* ===== CSS Auto-scroll (DIHAPUS) ===== */
+/* Semua style .autoscroll-wrapper, .autoscroll-inner, dan @keyframes autoscroll telah dihapus */
+/* Style .pdf-preview juga telah dihapus */
+
+
+/* ===== Responsive Design ===== */
+@media (max-width: 992px) {
+    .hero-content {
+        flex-direction: column-reverse;
+        text-align: center;
+    }
+    .hero-image {
+        width: 250px;
+        height: 250px;
+    }
+    .hero-name {
+        font-size: 2.25rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .nav-menu, .nav-toggles {
+        display: none;
+    }
+    .nav-hamburger {
+        display: flex;
+    }
+    main {
+        padding: 1rem;
+    }
+    .hero-section {
+        padding: 2rem 0;
+    }
+    .hero-image {
+        width: 200px;
+        height: 200px;
+    }
+    .hero-name {
+        font-size: 2rem;
+    }
+    .hero-job {
+        font-size: 1rem;
+    }
+    .content-section h2 {
+        font-size: 1.75rem;
+    }
+}
+
+
+/*
+=========================================
+===== 4. PREVIEW MODAL (TIDAK BERUBAH) =====
+=========================================
+*/
+.preview-modal {
+    display: none; /* Sembunyi by default */
+    position: fixed;
+    z-index: 1001; /* Di atas segalanya */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.85); /* Overlay gelap */
+    
+    /* Untuk centering */
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+}
+
+.preview-modal-content {
+    position: relative;
+    background-color: var(--card-color-dark);
+    border: 1px solid var(--border-color-dark);
+    border-radius: 8px;
+    width: 90%;
+    max-width: 1000px;
+    max-height: 90vh; /* Maksimal 90% tinggi layar */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    
+    /* Untuk centering body */
+    display: flex;
+    flex-direction: column;
+}
+body.light-mode .preview-modal-content {
+    background-color: var(--card-color-light);
+    border-color: var(--border-color-light);
+}
+
+.preview-modal-close {
+    position: absolute;
+    top: -15px;
+    right: -15px;
+    background-color: var(--accent-color-dark);
+    color: var(--bg-color-dark);
+    border: 2px solid var(--bg-color-dark);
+    
+    font-size: 1.5rem;
+    font-weight: bold;
+    line-height: 1;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 1002;
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+body.light-mode .preview-modal-close {
+    background-color: var(--accent-color-light);
+    color: var(--bg-color-light);
+    border-color: var(--bg-color-light);
+}
+.preview-modal-close:hover {
+    opacity: 0.8;
+}
+
+.preview-modal-body {
+    padding: 1rem;
+    overflow: auto; /* Jika konten terlalu besar */
+    height: 100%;
+    flex-grow: 1;
+}
+
+/* Style untuk konten di dalam modal */
+.preview-modal-body img {
+    width: 100%;
+    height: auto;
+    max-height: 85vh;
+    object-fit: contain; /* Agar gambar tidak terpotong */
+    display: block;
+    margin: 0 auto;
+}
+
+.preview-modal-body iframe {
+    width: 100%;
+    height: 80vh; /* Tinggi iframe */
+    border: none;
+    background-color: #fff; /* Latar belakang putih untuk PDF */
+}
+
+@media (max-width: 768px) {
+    .preview-modal-content {
+        width: 100%;
+        max-height: 85vh;
+        padding: 0.5rem;
+    }
+    .preview-modal-body {
+        padding: 0.5rem;
+    }
+    .preview-modal-close {
+        top: -10px;
+        right: -10px;
+        width: 30px;
+        height: 30px;
+        font-size: 1.2rem;
+    }
+}
+
+/*
+=========================================
+===== 5. CERTIFICATE GRID (BARU) =====
+=========================================
+*/
+/* Ini menggantikan layout horizontal-scroll untuk halaman sertifikat */
+.certificate-grid {
+    display: grid;
+    /* Buat grid responsif:
+      - auto-fit: Isi baris dengan item sebanyak mungkin.
+      - minmax(280px, 1fr): Setiap item minimal 280px,
+        tetapi bisa membesar (1fr) untuk mengisi ruang.
+    */
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem; /* Jarak antar item */
+    padding-top: 1rem; /* Beri jarak dari paragraf */
+}
+
+/* Kita perlu menyesuaikan .scroll-item KETIKA 
+  berada di dalam .certificate-grid
+*/
+.certificate-grid .scroll-item {
+    /* Hapus properti flex */
+    flex: none; 
+    
+    /* Hapus lebar tetap, biarkan grid yang mengatur.
+      Ini akan membuat item responsif.
+    */
+    width: 100%; 
+
+    /* Gunakan aspect-ratio 16:9 agar konsisten
+      dan biarkan tinggi otomatis
+    */
+    height: auto;
+    aspect-ratio: 16 / 9; 
+}
+
+/* Pastikan gambar di dalam mengisi dengan benar */
+.certificate-grid .scroll-item a img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}

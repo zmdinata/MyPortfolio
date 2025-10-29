@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projects - ZMDinata Portfolio</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="dark-mode">
+
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="index.html#home" class="nav-logo">ZMDinata Portfolio</a>
+            
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="index.html#home" class="nav-link" data-lang="en">About Me</a></li>
+                <li class="nav-item"><a href="index.html#home" class="nav-link" data-lang="id" style="display:none;">Tentang Saya</a></li>
+                
+                <li class="nav-item"><a href="proyek_section.html" class="nav-link active" data-lang="en">Project</a></li>
+                <li class="nav-item"><a href="proyek_section.html" class="nav-link active" data-lang="id" style="display:none;">Proyek</a></li>
+                
+                <li class="nav-item"><a href="sertif_section.html" class="nav-link" data-lang="en">Certification</a></li>
+                <li class="nav-item"><a href="sertif_section.html" class="nav-link" data-lang="id" style="display:none;">Sertifikasi</a></li>
+                
+                <li class="nav-item"><a href="honor_section.html" class="nav-link" data-lang="en">Honor</a></li>
+                <li class="nav-item"><a href="honor_section.html" class="nav-link" data-lang="id" style="display:none;">Penghargaan</a></li>
+            </ul>
+
+            <div class="nav-toggles">
+                <button id="theme-toggle" class="toggle-btn">
+                    <span class="icon-moon">🌙</span>
+                    <span class="icon-sun" style="display:none;">☀️</span>
+                </button>
+                <button id="lang-toggle" class="toggle-btn">ID</button>
+            </div>
+
+            <div class="nav-hamburger" id="nav-hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="mobile-nav" id="mobile-nav">
+        <a href="index.html#home" class="mobile-link" data-lang="en">About Me</a>
+        <a href="index.html#home" class="mobile-link" data-lang="id" style="display:none;">Tentang Saya</a>
+        <a href="proyek_section.html" class="mobile-link" data-lang="en">Project</a>
+        <a href="proyek_section.html" class="mobile-link" data-lang="id" style="display:none;">Proyek</a>
+        <a href="sertif_section.html" class="mobile-link" data-lang="en">Certification</a>
+        <a href="sertif_section.html" class="mobile-link" data-lang="id" style="display:none;">Sertifikasi</a>
+        <a href="honor_section.html" class="mobile-link" data-lang="en">Honor</a>
+        <a href="honor_section.html" class="mobile-link" data-lang="id" style="display:none;">Penghargaan</a>
+    </div>
+
+    <main class="page-section">
+        <section id="projects" class="content-section">
+            <h2 data-lang="en">Projects</h2>
+            <h2 data-lang="id" style="display:none;">Proyek</h2>
+            
+            <h3 data-lang="en">Data</h3>
+            <h3 data-lang="id" style="display:none;">Data</h3>
+            <div class="horizontal-scroll-wrapper">
+                <div class="scroll-item project-card">
+                    <a href="proyek/Data/data1.pdf" data-type="pdf" class="project-card-link">
+                        <img src="proyek/Data/data1.png" alt="Sales Analysis Preview" class="project-image-preview">
+                        <h4 data-lang="en">Sales Analysis Case Study</h4>
+                        <h4 data-lang="id" style="display:none;">Studi Kasus Analisis Penjualan</h4>
+                    </a>
+                </div>
+                <div class="scroll-item project-card">
+                    <a href="proyek/Data/data2.pdf" data-type="pdf" class="project-card-link">
+                        <img src="proyek/Data/data2.png" alt="Superstore Strategy Preview" class="project-image-preview">
+                        <h4 data-lang="en">Optimized Superstore Strategy</h4>
+                        <h4 data-lang="id" style="display:none;">Strategi Superstore yang Dioptimalkan</h4>
+                    </a>
+                </div>
+            </div>
+
+            <h3 data-lang="en">Competition</h3>
+            <h3 data-lang="id" style="display:none;">Lomba</h3>
+            <div class="horizontal-scroll-wrapper">
+                <div class="scroll-item project-card">
+                    <a href="proyek/Lomba/lomba1.pdf" data-type="pdf" class="project-card-link">
+                        <img src="proyek/Lomba/lomba1.png" alt="Dompi Preview" class="project-image-preview">
+                        <h4>Dompi: Digital Financial Innovations</h4>
+                    </a>
+                </div>
+                <div class="scroll-item project-card">
+                    <a href="proyek/Lomba/lomba2.pdf" data-type="pdf" class="project-card-link">
+                        <img src="proyek/Lomba/lomba2.png" alt="Herbelice Preview" class="project-image-preview">
+                        <h4>Herbelice: Es Krim Jamu</h4>
+                    </a>
+                </div>
+            </div>
+
+            <h3 data-lang="en">Coursework (Documents)</h3>
+            <h3 data-lang="id" style="display:none;">Tugas Kuliah (Dokumen)</h3>
+            <div class="horizontal-scroll-wrapper">
+                <div class="scroll-item project-card"><a href="proyek/Tugas/Tugas1.pdf" data-type="pdf" class="project-card-link"><img src="proyek/Tugas/Tugas1.png" alt="Tugas 1" class="project-image-preview"><h4 data-lang="en">ML Algorithm Report</h4><h4 data-lang="id" style="display:none;">Laporan Algoritma ML</h4></a></div>
+                <div class="scroll-item project-card"><a href="proyek/Tugas/Tugas2.pdf" data-type="pdf" class="project-card-link"><img src="proyek/Tugas/Tugas2.png" alt="Tugas 2" class="project-image-preview"><h4 data-lang="en">Fuel Efficiency Analysis (MPG)</h4><h4 data-lang="id" style="display:none;">Analisis Efisiensi BBM (MPG)</h4></a></div>
+                <div class="scroll-item project-card"><a href="proyek/Tugas/Tugas3.pdf" data-type="pdf" class="project-card-link"><img src="proyek/Tugas/Tugas3.png" alt="Tugas 3" class="project-image-preview"><h4>NusantaraFood MIS Analysis</h4></a></div>
+                <div class="scroll-item project-card"><a href="proyek/Tugas/Tugas4.pdf" data-type="pdf" class="project-card-link"><img src="proyek/Tugas/Tugas4.png" alt="Tugas 4" class="project-image-preview"><h4 data-lang="en">Cluster Analysis Report (gapminder)</h4><h4 data-lang="id" style="display:none;">Laporan Analisis Cluster (gapminder)</h4></a></div>
+            </div>
+            
+            <h3 data-lang="en">Coursework (Web Hosting)</h3>
+            <h3 data-lang="id" style="display:none;">Tugas Kuliah (Web Hosting)</h3>
+            <div class="horizontal-scroll-wrapper">
+                <div class="scroll-item project-card">
+                    <a href="https://p2boyyy.netlify.app/" data-type="iframe" class="project-card-link">
+                        <img src="proyek/Tugas/PWD.png" alt="P2 Boyyy Website Preview" class="project-image-preview">
+                        <h4 data-lang="en">Web Programming Group Assignments</h4>
+                        <h4 data-lang="id" style="display:none;">Kumpulan Tugas Kelompok Pemrograman Web</h4>
+                    </a>
+                </div>
+            </div>
+
+            <h3 data-lang="en">Design</h3>
+            <h3 data-lang="id" style="display:none;">Desain</h3>
+            <div class="horizontal-scroll-wrapper">
+                <div class="scroll-item project-card">
+                    <a href="https://www.instagram.com/flokyape/" data-type="external" target="_blank" rel="noopener noreferrer" class="project-card-link">
+                        <img src="proyek/Desain/proyek1.jpeg" alt="FlockyApe" class="project-image-preview">
+                        <h4>FlockyApe NFT</h4>
+                    </a>
+                </div>
+                
+                <div class="scroll-item project-card">
+                    <a href="proyek/Desain/proyek2.jpeg" data-type="image" class="project-card-link">
+                        <img src="proyek/Desain/proyek2.jpeg" alt="Struktur Kelas" class="project-image-preview">
+                        <h4 data-lang="en">Class Structure</h4>
+                        <h4 data-lang="id" style="display:none;">Struktur Kelas</h4>
+                    </a>
+                </div>
+                <div class="scroll-item project-card">
+                    <a href="proyek/Desain/proyek3.jpeg" data-type="image" class="project-card-link">
+                        <img src="proyek/Desain/proyek3.jpeg" alt="Parade Prodi" class="project-image-preview">
+                        <h4 data-lang="en">IS Program Parade</h4>
+                        <h4 data-lang="id" style="display:none;">Parade Prodi SI</h4>
+                    </a>
+                </div>
+
+                <div class="scroll-item project-card">
+                    <a href="https://www.instagram.com/zmdinata" data-type="external" target="_blank" rel="noopener noreferrer" class="project-card-link">
+                        <img src="proyek/Desain/zmdinata_insta.png" alt="Instagram Preview" class="project-image-preview">
+                        <h4 data-lang="en">Other Design Portfolio</h4>
+                        <h4 data-lang="id" style="display:none;">Portofolio Desain Lainnya</h4>
+                    </a>
+                </div>
+            </div>
+
+            <h3 data-lang="en">Others</h3>
+            <h3 data-lang="id" style="display:none;">Lainnya</h3>
+            <div class="horizontal-scroll-wrapper">
+                <div class="scroll-item project-card"><a href="proyek/Lainnya/Lain1.pdf" data-type="pdf" class="project-card-link"><img src="proyek/Lainnya/Lain1.png" alt="Lain 1" class="project-image-preview"><h4>Blockchain & Web3</h4></a></div>
+                <div class="scroll-item project-card"><a href="proyek/Lainnya/Lain2.pdf" data-type="pdf" class="project-card-link"><img src="proyek/Lainnya/Lain2.png" alt="Lain 2" class="project-image-preview"><h4>Grass Token Research</h4></a></div>
+                <div class="scroll-item project-card"><a href="proyek/Lainnya/Lain3.pdf" data-type="pdf" class="project-card-link"><img src="proyek/Lainnya/Lain3.png" alt="Lain 3" class="project-image-preview"><h4>MBOX Token Research</h4></a></div>
+            </div>
+            
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p data-lang="en">© 2025 Zacky Muhammad Dinata. All rights reserved.</p>
+        <p data-lang="id" style="display:none;">© 2025 Zacky Muhammad Dinata. Hak cipta dilindungi.</p>
+    </footer>
+
+    <div id="preview-modal" class="preview-modal">
+        <div class="preview-modal-content">
+            <button id="preview-modal-close" class="preview-modal-close">&times;</button>
+            <div id="preview-modal-body" class="preview-modal-body">
+                </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
