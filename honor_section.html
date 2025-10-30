@@ -9,9 +9,10 @@
 </head>
 <body class="dark-mode">
 
-    <nav class="navbar">
+    <body class="dark-mode"> <nav class="navbar">
         <div class="navbar-container">
             <a href="index.html#home" class="nav-logo">ZMDinata Portfolio</a>
+            
             <ul class="nav-menu">
                 <li class="nav-item"><a href="index.html#home" class="nav-link" data-lang="en">About Me</a></li>
                 <li class="nav-item"><a href="index.html#home" class="nav-link" data-lang="id" style="display:none;">Tentang Saya</a></li>
@@ -22,42 +23,47 @@
                 <li class="nav-item"><a href="sertif_section.html" class="nav-link" data-lang="en">Certification</a></li>
                 <li class="nav-item"><a href="sertif_section.html" class="nav-link" data-lang="id" style="display:none;">Sertifikasi</a></li>
                 
-                <li class="nav-item"><a href="honor_section.html" class="nav-link active" data-lang="en">Honor</a></li>
-                <li class="nav-item"><a href="honor_section.html" class="nav-link active" data-lang="id" style="display:none;">Penghargaan</a></li>
+                <li class="nav-item"><a href="honor_section.html" class="nav-link" data-lang="en">Honor</a></li>
+                <li class="nav-item"><a href="honor_section.html" class="nav-link" data-lang="id" style="display:none;">Penghargaan</a></li>
             </ul>
+
             <div class="nav-toggles">
-                <button id="theme-toggle" class="toggle-btn"><span class="icon-moon">🌙</span><span class="icon-sun" style="display:none;">☀️</span></button>
-                <button id="lang-toggle" class="toggle-btn">ID</button>
+                <button id="theme-toggle-desktop" class="toggle-btn">
+                    <span class="icon-moon">🌙</span>
+                    <span class="icon-sun" style="display:none;">☀️</span>
+                </button>
+                <button id="lang-toggle-desktop" class="toggle-btn">ID</button>
             </div>
-            <div class="nav-hamburger" id="nav-hamburger"><span></span><span></span><span></span></div>
+
+            <div class="nav-hamburger" id="nav-hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
         </div>
     </nav>
-    
+
     <div class="mobile-nav" id="mobile-nav">
         <a href="index.html#home" class="mobile-link" data-lang="en">About Me</a>
         <a href="index.html#home" class="mobile-link" data-lang="id" style="display:none;">Tentang Saya</a>
+        
         <a href="proyek_section.html" class="mobile-link" data-lang="en">Project</a>
         <a href="proyek_section.html" class="mobile-link" data-lang="id" style="display:none;">Proyek</a>
+        
         <a href="sertif_section.html" class="mobile-link" data-lang="en">Certification</a>
         <a href="sertif_section.html" class="mobile-link" data-lang="id" style="display:none;">Sertifikasi</a>
+        
         <a href="honor_section.html" class="mobile-link" data-lang="en">Honor</a>
         <a href="honor_section.html" class="mobile-link" data-lang="id" style="display:none;">Penghargaan</a>
+
+        <div class="mobile-nav-toggles">
+            <button id="theme-toggle-mobile" class="toggle-btn">
+                <span class="icon-moon">🌙</span>
+                <span class="icon-sun" style="display:none;">☀️</span>
+            </button>
+            <button id="lang-toggle-mobile" class="toggle-btn">ID</button>
+        </div>
     </div>
-
-    <main class="page-section">
-        <section id="honors" class="content-section">
-            <h2 data-lang="en">Honors & Awards</h2>
-            <h2 data-lang="id" style="display:none;">Penghargaan</h2>
-            <p data-lang="en">Scroll horizontally to see all items. Click any item to preview.</p>
-            <p data-lang="id" style="display:none;">Gulir ke samping untuk melihat semua item. Klik item untuk pratinjau.</p>
-
-            <div class="horizontal-scroll-wrapper">
-                
-                <div class="scroll-item">
-                    <a href="honor/honor1.jpeg" data-type="image">
-                        <img src="honor/honor1.jpeg" alt="Penghargaan 1">
-                    </a>
-                </div>
 
                 </div>
             </section>
@@ -79,3 +85,4 @@
     <script src="script.js"></script>
 </body>
 </html>
+
