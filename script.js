@@ -105,6 +105,10 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!hamburger || !mobileNav) return;
         hamburger.classList.toggle('active');
         mobileNav.classList.toggle('active');
+
+        // update aria-expanded untuk aksesibilitas
+        const expanded = hamburger.classList.contains('active');
+        hamburger.setAttribute('aria-expanded', expanded ? 'true' : 'false');
     }
 
     if (hamburger && mobileNav) {
