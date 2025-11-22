@@ -1,91 +1,121 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Zacky Muhammad Dinata - Portfolio</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 </head>
-<body class="dark-mode"> <nav class="navbar">
+<body class="dark-mode">
+    <!-- NAVBAR -->
+    <nav class="navbar">
         <div class="navbar-container">
             <a href="index.html#home" class="nav-logo">ZMDinata Portfolio</a>
-            
+
             <ul class="nav-menu">
-                <li class="nav-item"><a href="index.html#home" class="nav-link" data-lang="en">About Me</a></li>
-                <li class="nav-item"><a href="index.html#home" class="nav-link" data-lang="id" style="display:none;">Tentang Saya</a></li>
-                
-                <li class="nav-item"><a href="proyek_section.html" class="nav-link" data-lang="en">Project</a></li>
-                <li class="nav-item"><a href="proyek_section.html" class="nav-link" data-lang="id" style="display:none;">Proyek</a></li>
-                
-                <li class="nav-item"><a href="sertif_section.html" class="nav-link" data-lang="en">Certification</a></li>
-                <li class="nav-item"><a href="sertif_section.html" class="nav-link" data-lang="id" style="display:none;">Sertifikasi</a></li>
-                
-                <li class="nav-item"><a href="honor_section.html" class="nav-link" data-lang="en">Honor</a></li>
-                <li class="nav-item"><a href="honor_section.html" class="nav-link" data-lang="id" style="display:none;">Penghargaan</a></li>
+                <li class="nav-item">
+                    <a href="index.html#home" class="nav-link" data-lang="en">About Me</a>
+                </li>
+                <li class="nav-item">
+                    <a href="index.html#home" class="nav-link" data-lang="id" style="display:none;">Tentang Saya</a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="proyek_section.html" class="nav-link" data-lang="en">Project</a>
+                </li>
+                <li class="nav-item">
+                    <a href="proyek_section.html" class="nav-link" data-lang="id" style="display:none;">Proyek</a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="sertif_section.html" class="nav-link" data-lang="en">Certification</a>
+                </li>
+                <li class="nav-item">
+                    <a href="sertif_section.html" class="nav-link" data-lang="id" style="display:none;">Sertifikasi</a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="honor_section.html" class="nav-link" data-lang="en">Honor</a>
+                </li>
+                <li class="nav-item">
+                    <a href="honor_section.html" class="nav-link" data-lang="id" style="display:none;">Penghargaan</a>
+                </li>
             </ul>
 
             <div class="nav-toggles">
-                <button id="theme-toggle-desktop" class="toggle-btn">
+                <button id="theme-toggle-desktop" class="toggle-btn" aria-label="Toggle theme">
                     <span class="icon-moon">🌙</span>
                     <span class="icon-sun" style="display:none;">☀️</span>
                 </button>
-                <button id="lang-toggle-desktop" class="toggle-btn">ID</button>
+                <button id="lang-toggle-desktop" class="toggle-btn" aria-label="Toggle language">ID</button>
             </div>
 
-            <div class="nav-hamburger" id="nav-hamburger">
+            <button class="nav-hamburger" id="nav-hamburger" aria-label="Open navigation">
                 <span></span>
                 <span></span>
                 <span></span>
-            </div>
+            </button>
         </div>
     </nav>
 
+    <!-- MOBILE NAV -->
     <div class="mobile-nav" id="mobile-nav">
         <a href="index.html#home" class="mobile-link" data-lang="en">About Me</a>
         <a href="index.html#home" class="mobile-link" data-lang="id" style="display:none;">Tentang Saya</a>
-        
+
         <a href="proyek_section.html" class="mobile-link" data-lang="en">Project</a>
         <a href="proyek_section.html" class="mobile-link" data-lang="id" style="display:none;">Proyek</a>
-        
+
         <a href="sertif_section.html" class="mobile-link" data-lang="en">Certification</a>
         <a href="sertif_section.html" class="mobile-link" data-lang="id" style="display:none;">Sertifikasi</a>
-        
+
         <a href="honor_section.html" class="mobile-link" data-lang="en">Honor</a>
         <a href="honor_section.html" class="mobile-link" data-lang="id" style="display:none;">Penghargaan</a>
 
         <div class="mobile-nav-toggles">
-            <button id="theme-toggle-mobile" class="toggle-btn">
+            <button id="theme-toggle-mobile" class="toggle-btn" aria-label="Toggle theme (mobile)">
                 <span class="icon-moon">🌙</span>
                 <span class="icon-sun" style="display:none;">☀️</span>
             </button>
-            <button id="lang-toggle-mobile" class="toggle-btn">ID</button>
+            <button id="lang-toggle-mobile" class="toggle-btn" aria-label="Toggle language (mobile)">ID</button>
         </div>
-    </div>
-            <div class="nav-hamburger" id="nav-hamburger">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
     </div>
 
     <main>
+        <!-- HERO -->
         <section id="home" class="hero-section">
             <div class="hero-content">
                 <div class="hero-text">
+                    <p class="hero-kicker" data-lang="en">Portfolio & Journey</p>
+                    <p class="hero-kicker" data-lang="id" style="display:none;">Portofolio & Perjalanan</p>
+
                     <h1 class="hero-name">Zacky Muhammad Dinata</h1>
-                    <p class="hero-job" data-lang="en">Junior Data Scientist & Blockchain Enthusiast | Passionate About Blockchain & WEB 3 | NFT & Design Artist (Since 2021)</p>
-                    <p class="hero-job" data-lang="id" style="display:none;">Junior Data Scientist & Pegiat Blockchain | Antusias Terhadap Blockchain & WEB 3 | Seniman NFT & Desain (Sejak 2021)</p>
-                    
-                    <p class="hero-lang" data-lang="en">Indonesian (Native) & English (Pre-intermediate)</p>
-                    <p class="hero-lang" data-lang="id" style="display:none;">Indonesia (Bahasa Ibu) & Inggris (Pra-Menengah)</p>
+
+                    <p class="hero-job" data-lang="en">
+                        Junior Data Scientist & Blockchain Enthusiast | Passionate About Blockchain & WEB 3 | NFT & Design Artist (Since 2021)
+                    </p>
+                    <p class="hero-job" data-lang="id" style="display:none;">
+                        Junior Data Scientist & Pegiat Blockchain | Antusias Terhadap Blockchain & WEB 3 | Seniman NFT & Desain (Sejak 2021)
+                    </p>
+
+                    <div class="hero-meta">
+                        <span class="hero-pill" data-lang="en">Indonesian (Native)</span>
+                        <span class="hero-pill" data-lang="id" style="display:none;">Bahasa Indonesia (Ibu)</span>
+
+                        <span class="hero-pill" data-lang="en">English (Pre-intermediate)</span>
+                        <span class="hero-pill" data-lang="id" style="display:none;">Inggris (Pra-Menengah)</span>
+                    </div>
                 </div>
+
                 <div class="hero-image-container">
-                    <img src="photo.png" alt="Zacky Muhammad Dinata" class="hero-image">
+                    <div class="hero-image-ring"></div>
+                    <img src="photo.png" alt="Zacky Muhammad Dinata" class="hero-image" />
                 </div>
             </div>
         </section>
 
+        <!-- ABOUT -->
         <section id="about" class="content-section">
             <h2 data-lang="en">About Me</h2>
             <h2 data-lang="id" style="display:none;">Tentang Saya</h2>
@@ -97,6 +127,7 @@
             </p>
         </section>
 
+        <!-- EXPERIENCE -->
         <section id="experience" class="content-section">
             <h2 data-lang="en">Experience</h2>
             <h2 data-lang="id" style="display:none;">Pengalaman</h2>
@@ -106,36 +137,42 @@
                     <h3 data-lang="id" style="display:none;">Junior Data Scientist (Transisi Karir)</h3>
                     <p class="timeline-sub" data-lang="en">Jul 2025 - Present · Indonesia</p>
                     <p class="timeline-sub" data-lang="id" style="display:none;">Jul 2025 - Saat ini · Indonesia</p>
-                    <p data-lang="en">Currently undergoing a planned career transition to deepen my knowledge in Data Science and Blockchain. Actively building skills in Python, SQL, Excel, and MySQL through academic studies and self-learning.</p>
-                    <p data-lang="id" style="display:none;">Saat ini menjalani transisi karir terencana untuk memperdalam pengetahuan di bidang Data Science dan Blockchain. Secara aktif membangun keterampilan dengan Python, SQL, Excel, dan MySQL melalui studi akademis dan pembelajaran mandiri.</p>
+                    <p data-lang="en">
+                        Currently undergoing a planned career transition to deepen my knowledge in Data Science and Blockchain. Actively building skills in Python, SQL, Excel, and MySQL through academic studies and self-learning.
+                    </p>
+                    <p data-lang="id" style="display:none;">
+                        Saat ini menjalani transisi karir terencana untuk memperdalam pengetahuan di bidang Data Science dan Blockchain. Secara aktif membangun keterampilan dengan Python, SQL, Excel, dan MySQL melalui studi akademis dan pembelajaran mandiri.
+                    </p>
                 </div>
+
                 <div class="timeline-item">
                     <h3 data-lang="en">NFT & Design Artist</h3>
                     <h3 data-lang="id" style="display:none;">Seniman NFT & Desain</h3>
                     <p class="timeline-sub" data-lang="en">Freelance | Self-Employed · Dec 2021 - Present · Global (Remote)</p>
                     <p class="timeline-sub" data-lang="id" style="display:none;">Freelance | Wiraswasta · Des 2021 - Saat ini · Global (Remote)</p>
-                    
+
                     <p data-lang="en"><b>Key Responsibilities:</b></p>
                     <p data-lang="id" style="display:none;"><b>Tanggung Jawab Utama:</b></p>
                     <ul>
                         <li data-lang="en">Designed original NFT characters and layered traits aligned with client concepts.</li>
                         <li data-lang="id" style="display:none;">Merancang karakter NFT orisinal dan <i>traits</i> berlapis yang selaras dengan konsep klien.</li>
-                        
+
                         <li data-lang="en">Created diverse styles including vector, vexel, cartoon, and semi-realistic illustrations.</li>
                         <li data-lang="id" style="display:none;">Menciptakan beragam gaya termasuk ilustrasi vektor, vexel, kartun, dan semi-realistis.</li>
-                        
+
                         <li data-lang="en">Delivered generative-ready assets with optimized layering for NFT minting.</li>
                         <li data-lang="id" style="display:none;">Menghasilkan aset siap-generatif dengan lapisan yang dioptimalkan untuk <i>minting</i> NFT.</li>
                     </ul>
+
                     <p data-lang="en"><b>Key Achievements:</b></p>
                     <p data-lang="id" style="display:none;"><b>Pencapaian Utama:</b></p>
                     <ul>
                         <li data-lang="en">Completed 60+ one-of-one NFT artworks for the FlokyApe collection.</li>
                         <li data-lang="id" style="display:none;">Menyelesaikan 60+ karya seni NFT <i>one-of-one</i> untuk koleksi FlokyApe.</li>
-                        
+
                         <li data-lang="en">Designed 30+ layered trait items inspired by Azuki style.</li>
                         <li data-lang="id" style="display:none;">Merancang 30+ item <i>trait</i> berlapis yang terinspirasi dari gaya Azuki.</li>
-                        
+
                         <li data-lang="en">Delivered 20+ vector/vexel portraits for personal commissions.</li>
                         <li data-lang="id" style="display:none;">Menghasilkan 20+ potret vektor/vexel untuk komisi pribadi.</li>
                     </ul>
@@ -143,6 +180,7 @@
             </div>
         </section>
 
+        <!-- EDUCATION -->
         <section id="education" class="content-section">
             <h2 data-lang="en">Education</h2>
             <h2 data-lang="id" style="display:none;">Pendidikan</h2>
@@ -153,12 +191,17 @@
                     <p class="timeline-sub" data-lang="id" style="display:none;">Sarjana, Sistem Informasi · Okt 2024 - Okt 2028</p>
                     <p data-lang="en">Grade: 3.33</p>
                     <p data-lang="id" style="display:none;">IPK: 3.33</p>
-                    <p data-lang="en">Activities: Active in learning as a university student, focusing on business innovation and digital technology trends.</p>
-                    <p data-lang="id" style="display:none;">Aktivitas: Aktif belajar sebagai mahasiswa, fokus pada inovasi bisnis dan tren teknologi digital.</p>
+                    <p data-lang="en">
+                        Activities: Active in learning as a university student, focusing on business innovation and digital technology trends.
+                    </p>
+                    <p data-lang="id" style="display:none;">
+                        Aktivitas: Aktif belajar sebagai mahasiswa, fokus pada inovasi bisnis dan tren teknologi digital.
+                    </p>
                 </div>
             </div>
         </section>
 
+        <!-- SKILLS -->
         <section id="skills" class="content-section">
             <h2 data-lang="en">Skills</h2>
             <h2 data-lang="id" style="display:none;">Keterampilan</h2>
@@ -173,9 +216,10 @@
                     <h3 data-lang="id" style="display:none;">Pemrograman</h3>
                     <p>Python</p>
                 </div>
-                </div>
+            </div>
         </section>
 
+        <!-- CONTACT -->
         <section id="contact" class="content-section">
             <h2 data-lang="en">Contact Me</h2>
             <h2 data-lang="id" style="display:none;">Hubungi Saya</h2>
@@ -195,9 +239,14 @@
         <p data-lang="id" style="display:none;">© 2025 Zacky Muhammad Dinata. Hak cipta dilindungi.</p>
     </footer>
 
+    <!-- PREVIEW MODAL (Shared) -->
+    <div id="preview-modal" class="preview-modal">
+        <div class="preview-modal-content">
+            <button id="preview-modal-close" class="preview-modal-close" aria-label="Close preview">&times;</button>
+            <div id="preview-modal-body" class="preview-modal-body"></div>
+        </div>
+    </div>
+
     <script src="script.js"></script>
 </body>
-
 </html>
-
-
