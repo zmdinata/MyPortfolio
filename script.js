@@ -2,24 +2,25 @@ document.addEventListener('DOMContentLoaded', () => {
     // ===== Global Elements =====
     const themeToggleDesktop = document.getElementById('theme-toggle-desktop');
     const themeToggleMobile = document.getElementById('theme-toggle-mobile');
-
     const langToggleDesktop = document.getElementById('lang-toggle-desktop');
     const langToggleMobile = document.getElementById('lang-toggle-mobile');
-
     const hamburger = document.getElementById('nav-hamburger');
     const mobileNav = document.getElementById('mobile-nav');
     const mobileLinks = document.querySelectorAll('.mobile-link');
-
     const iconsSun = document.querySelectorAll('.icon-sun');
     const iconsMoon = document.querySelectorAll('.icon-moon');
 
+    // Modal Elements
+    const previewModal = document.getElementById('preview-modal');
+    const modalClose = document.getElementById('preview-modal-close');
+    const modalBody = document.getElementById('preview-modal-body');
+
     // ===== 1. THEME TOGGLER (Dark / Light) =====
     const savedTheme = localStorage.getItem('theme');
-
     if (savedTheme === 'light') {
         enableLightMode();
     } else {
-        enableDarkMode(); // default
+        enableDarkMode(); // default is dark-mode
     }
 
     function toggleTheme() {
@@ -34,22 +35,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function enableLightMode() {
         document.body.classList.add('light-mode');
-        iconsSun.forEach(icon => (icon.style.display = 'inline'));
+        iconsSun.forEach(icon => (icon.style.display = 'inline-flex'));
         iconsMoon.forEach(icon => (icon.style.display = 'none'));
     }
 
     function enableDarkMode() {
         document.body.classList.remove('light-mode');
         iconsSun.forEach(icon => (icon.style.display = 'none'));
-        iconsMoon.forEach(icon => (icon.style.display = 'inline'));
+        iconsMoon.forEach(icon => (icon.style.display = 'inline-flex'));
     }
 
-    if (themeToggleDesktop) {
-        themeToggleDesktop.addEventListener('click', toggleTheme);
-    }
-    if (themeToggleMobile) {
-        themeToggleMobile.addEventListener('click', toggleTheme);
-    }
+    if (themeToggleDesktop) { themeToggleDesktop.addEventListener('click', toggleTheme); }
+    if (themeToggleMobile) { themeToggleMobile.addEventListener('click', toggleTheme); }
 
     // ===== 2. LANGUAGE TOGGLER (EN / ID) =====
     let currentLang = localStorage.getItem('lang') || 'en';
@@ -71,15 +68,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         elements.forEach(el => {
             if (el.getAttribute('data-lang') === lang) {
+                // Ensure correct display for block/inline elements
                 const tag = el.tagName.toLowerCase();
-                const computedDisplay = window.getComputedStyle(el).display;
-
                 if (['span', 'a', 'p', 'h1', 'h2', 'h3', 'h4', 'li'].includes(tag)) {
-                    if (computedDisplay === 'inline') {
-                        el.style.display = 'inline';
-                    } else {
-                        el.style.display = 'block';
-                    }
+                    el.style.display = el.getAttribute('data-initial-display') || ''; 
                 } else {
                     el.style.display = 'block';
                 }
@@ -93,20 +85,22 @@ document.addEventListener('DOMContentLoaded', () => {
         if (langToggleMobile) langToggleMobile.textContent = buttonText;
     }
 
-    if (langToggleDesktop) {
-        langToggleDesktop.addEventListener('click', toggleLanguage);
-    }
-    if (langToggleMobile) {
-        langToggleMobile.addEventListener('click', toggleLanguage);
-    }
+    if (langToggleDesktop) { langToggleDesktop.addEventListener('click', toggleLanguage); }
+    if (langToggleMobile) { langToggleMobile.addEventListener('click', toggleLanguage); }
+    
+    // Store initial display style (especially for inline elements like span and list items)
+    document.querySelectorAll('[data-lang]').forEach(el => {
+        if (!el.getAttribute('data-initial-display')) {
+            const computedStyle = window.getComputedStyle(el).display;
+            el.setAttribute('data-initial-display', computedStyle === 'none' ? '' : computedStyle);
+        }
+    });
 
     // ===== 3. MOBILE NAV (Hamburger) =====
     function toggleMobileNav() {
         if (!hamburger || !mobileNav) return;
         hamburger.classList.toggle('active');
         mobileNav.classList.toggle('active');
-
-        // update aria-expanded untuk aksesibilitas
         const expanded = hamburger.classList.contains('active');
         hamburger.setAttribute('aria-expanded', expanded ? 'true' : 'false');
     }
@@ -126,9 +120,20 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ===== 4. PREVIEW MODAL (Images / PDF / Iframe) =====
-    const previewModal = document.getElementById('preview-modal');
-    const modalClose = document.getElementById('preview-modal-close');
-    const modalBody = document.getElementById('preview-modal-body');
+    function openModal(src, type) {
+        modalBody.innerHTML = '';
+        if (type === 'image') {
+            modalBody.innerHTML = `<img src="${src}" alt="Preview">`;
+        } else if (type === 'pdf' || type === 'iframe') {
+            modalBody.innerHTML = `<iframe src="${src}" frameborder="0"></iframe>`;
+        }
+        previewModal.style.display = 'flex';
+    }
+
+    const closeModal = () => {
+        previewModal.style.display = 'none';
+        modalBody.innerHTML = '';
+    };
 
     if (previewModal && modalClose && modalBody) {
         const previewLinks = document.querySelectorAll('.scroll-item a, .certificate-grid a');
@@ -136,29 +141,15 @@ document.addEventListener('DOMContentLoaded', () => {
         previewLinks.forEach(link => {
             link.addEventListener('click', e => {
                 const type = link.getAttribute('data-type');
+                const src = link.getAttribute('href');
 
-                // External links: biarkan perilaku default
-                if (type === 'external') return;
+                // Skip external links from showing in the modal
+                if (type === 'external') return; 
 
                 e.preventDefault();
-
-                const src = link.getAttribute('href');
-                modalBody.innerHTML = '';
-
-                if (type === 'image') {
-                    modalBody.innerHTML = `<img src="${src}" alt="Preview">`;
-                } else if (type === 'pdf' || type === 'iframe') {
-                    modalBody.innerHTML = `<iframe src="${src}" frameborder="0"></iframe>`;
-                }
-
-                previewModal.style.display = 'flex';
+                openModal(src, type);
             });
         });
-
-        const closeModal = () => {
-            previewModal.style.display = 'none';
-            modalBody.innerHTML = '';
-        };
 
         modalClose.addEventListener('click', closeModal);
 
@@ -168,7 +159,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // ESC to close modal
         document.addEventListener('keydown', e => {
             if (e.key === 'Escape' && previewModal.style.display === 'flex') {
                 closeModal();
