@@ -1,0 +1,434 @@
+/* ===== Glass Cards ===== */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition:
+    transform var(--transition-base),
+    box-shadow var(--transition-base),
+    border-color var(--transition-base);
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-md), var(--shadow-glow);
+  border-color: var(--border-hover);
+}
+
+/* Tilt Wrapper */
+.tilt-wrapper {
+  transform-style: preserve-3d;
+  height: 100%;
+}
+.tilt-wrapper .skill-card,
+.tilt-wrapper .project-card,
+.tilt-wrapper .certificate-card,
+.tilt-wrapper .honor-card {
+  transform: translateZ(20px);
+}
+
+/* ===== Timeline ===== */
+.timeline {
+  position: relative;
+  padding-left: 2rem;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--gradient-accent);
+  border-radius: 999px;
+  opacity: 0.3;
+}
+
+.timeline-item {
+  position: relative;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  transition:
+    transform var(--transition-base),
+    box-shadow var(--transition-base),
+    border-color var(--transition-base);
+}
+
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  left: -2.55rem;
+  top: 1.8rem;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--accent-primary);
+  border: 3px solid var(--bg-primary);
+  box-shadow: 0 0 0 3px rgba(124, 111, 255, 0.2);
+  z-index: 1;
+}
+
+.timeline-item:hover {
+  transform: translateX(6px);
+  box-shadow: var(--shadow-md), var(--shadow-glow);
+  border-color: var(--border-hover);
+}
+
+.timeline-item h3 {
+  font-size: 1.15rem;
+  margin-bottom: 0.3rem;
+}
+
+.timeline-sub {
+  font-size: 0.85rem;
+  font-weight: 500;
+  margin-bottom: 1rem;
+  color: var(--accent-primary);
+  opacity: 0.8;
+}
+
+.timeline-item p {
+  font-size: 0.95rem;
+}
+
+.timeline-item ul {
+  margin-top: 0.5rem;
+  padding-left: 0;
+}
+
+.timeline-item li {
+  position: relative;
+  padding-left: 1.25rem;
+  margin-bottom: 0.4rem;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+
+.timeline-item li::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: var(--accent-secondary);
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+/* ===== Skill Cards ===== */
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.25rem;
+}
+
+.skill-card {
+  text-align: center;
+  padding: 2rem 1.5rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  transition:
+    transform var(--transition-base),
+    box-shadow var(--transition-base),
+    border-color var(--transition-base);
+}
+
+.skill-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-md), var(--shadow-glow);
+  border-color: var(--border-hover);
+}
+
+.skill-card-icon {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  background: var(--gradient-accent);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  display: inline-block;
+}
+
+.skill-card h3 {
+  font-size: 1.05rem;
+  margin-bottom: 0.75rem;
+}
+
+.skill-card p {
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+/* ===== Project Cards ===== */
+.project-category {
+  margin-bottom: 2.5rem;
+}
+
+.project-category:last-child {
+  margin-bottom: 0;
+}
+
+.project-category h3 {
+  font-size: 1.2rem;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px dashed var(--border-color);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.project-category h3 .category-icon {
+  color: var(--accent-primary);
+  font-size: 1.3rem;
+}
+
+.horizontal-scroll {
+  display: flex;
+  overflow-x: auto;
+  gap: 1.25rem;
+  padding: 0.5rem 0.25rem 1.25rem;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: thin;
+}
+
+.horizontal-scroll::-webkit-scrollbar {
+  height: 4px;
+}
+
+.horizontal-scroll::-webkit-scrollbar-thumb {
+  background: var(--accent-primary);
+  border-radius: 999px;
+  opacity: 0.5;
+}
+
+.project-card {
+  flex: 0 0 280px;
+  height: 230px;
+  border-radius: var(--radius-lg);
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  overflow: hidden;
+  cursor: pointer;
+  scroll-snap-align: start;
+  position: relative;
+  transition:
+    transform var(--transition-base),
+    box-shadow var(--transition-base),
+    border-color var(--transition-base);
+}
+
+.project-card:hover {
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: var(--shadow-md), var(--shadow-glow);
+  border-color: var(--border-hover);
+}
+
+.project-card-link {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  color: var(--text-primary);
+}
+
+.project-card-link:hover {
+  color: var(--text-primary);
+}
+
+.project-image-preview {
+  width: 100%;
+  flex: 1;
+  object-fit: cover;
+  transition: transform var(--transition-slow);
+}
+
+.project-card:hover .project-image-preview {
+  transform: scale(1.05);
+}
+
+.project-card-title {
+  padding: 0.75rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  background: var(--bg-elevated);
+  border-top: 1px solid var(--border-color);
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.project-card .external-badge {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  background: var(--accent-primary);
+  color: #fff;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 0.2rem 0.5rem;
+  border-radius: var(--radius-pill);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* ===== Certificate Grid ===== */
+.certificate-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.25rem;
+}
+
+.certificate-card {
+  border-radius: var(--radius-lg);
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  overflow: hidden;
+  cursor: pointer;
+  aspect-ratio: 16 / 10;
+  position: relative;
+  transition:
+    transform var(--transition-base),
+    box-shadow var(--transition-base),
+    border-color var(--transition-base);
+}
+
+.certificate-card:hover {
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: var(--shadow-md), var(--shadow-glow);
+  border-color: var(--border-hover);
+}
+
+.certificate-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--transition-slow);
+}
+
+.certificate-card:hover img {
+  transform: scale(1.05);
+}
+
+/* ===== Honor Cards ===== */
+.honor-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.5rem;
+}
+
+.honor-card {
+  border-radius: var(--radius-lg);
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  overflow: hidden;
+  cursor: pointer;
+  transition:
+    transform var(--transition-base),
+    box-shadow var(--transition-base),
+    border-color var(--transition-base);
+}
+
+.honor-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-md), var(--shadow-glow);
+  border-color: var(--border-hover);
+}
+
+.honor-card-image {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  transition: transform var(--transition-slow);
+}
+
+.honor-card:hover .honor-card-image {
+  transform: scale(1.05);
+}
+
+.honor-card-body {
+  padding: 1.25rem;
+}
+
+.honor-card-body h4 {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+/* ===== Contact ===== */
+.contact-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.contact-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.8rem 1.5rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border-color);
+  font-weight: 600;
+  font-size: 0.9rem;
+  background: var(--bg-card);
+  color: var(--text-primary);
+  transition:
+    background-color var(--transition-fast),
+    border-color var(--transition-fast),
+    transform var(--transition-fast),
+    box-shadow var(--transition-fast),
+    color var(--transition-fast);
+}
+
+.contact-btn:hover {
+  background: var(--gradient-accent);
+  border-color: transparent;
+  color: #fff;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(124, 111, 255, 0.3);
+}
+
+.contact-btn svg {
+  font-size: 1.2rem;
+}
+
+/* ===== Responsive Cards ===== */
+@media (max-width: 768px) {
+  .skills-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .project-card {
+    flex: 0 0 85%;
+  }
+
+  .certificate-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .honor-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .contact-grid {
+    justify-content: center;
+  }
+
+  .timeline {
+    padding-left: 1.5rem;
+  }
+
+  .timeline-item::before {
+    left: -2.05rem;
+    width: 10px;
+    height: 10px;
+  }
+}

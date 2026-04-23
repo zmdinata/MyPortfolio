@@ -1,0 +1,138 @@
+export const projects = [
+  // === Data Analysis ===
+  {
+    id: 'data-1',
+    category: 'data',
+    title: { en: 'Sales Analysis Case Study', id: 'Studi Kasus Analisis Penjualan' },
+    file: '/assets/projects/Data/data1.pdf',
+    preview: '/assets/projects/Data/data1.png',
+    type: 'pdf',
+  },
+  {
+    id: 'data-2',
+    category: 'data',
+    title: { en: 'Optimized Superstore Strategy', id: 'Strategi Superstore yang Dioptimalkan' },
+    file: '/assets/projects/Data/data2.pdf',
+    preview: '/assets/projects/Data/data2.png',
+    type: 'pdf',
+  },
+  // === Competitions ===
+  {
+    id: 'lomba-1',
+    category: 'lomba',
+    title: { en: 'Dompi: Digital Financial Innovations', id: 'Dompi: Inovasi Keuangan Digital' },
+    file: '/assets/projects/Lomba/lomba1.pdf',
+    preview: '/assets/projects/Lomba/lomba1.png',
+    type: 'pdf',
+  },
+  {
+    id: 'lomba-2',
+    category: 'lomba',
+    title: { en: 'Herbelice: Ice Cream Herbal (Business Plan)', id: 'Herbelice: Es Krim Jamu (Rencana Bisnis)' },
+    file: '/assets/projects/Lomba/lomba2.pdf',
+    preview: '/assets/projects/Lomba/lomba2.png',
+    type: 'pdf',
+  },
+  // === Coursework ===
+  {
+    id: 'tugas-1',
+    category: 'tugas',
+    title: { en: 'ML Algorithm Report (Manual Calc)', id: 'Laporan Algoritma ML (Hitungan Manual)' },
+    file: '/assets/projects/Tugas/Tugas1.pdf',
+    preview: '/assets/projects/Tugas/Tugas1.png',
+    type: 'pdf',
+  },
+  {
+    id: 'tugas-2',
+    category: 'tugas',
+    title: { en: 'Fuel Efficiency Analysis (MPG)', id: 'Analisis Efisiensi BBM (Dataset MPG)' },
+    file: '/assets/projects/Tugas/Tugas2.pdf',
+    preview: '/assets/projects/Tugas/Tugas2.png',
+    type: 'pdf',
+  },
+  {
+    id: 'tugas-3',
+    category: 'tugas',
+    title: { en: 'NusantaraFood MIS Analysis', id: 'Analisis SIM NusantaraFood' },
+    file: '/assets/projects/Tugas/Tugas3.pdf',
+    preview: '/assets/projects/Tugas/Tugas3.png',
+    type: 'pdf',
+  },
+  {
+    id: 'tugas-4',
+    category: 'tugas',
+    title: { en: 'Cluster Analysis Report (gapminder)', id: 'Laporan Analisis Cluster (gapminder)' },
+    file: '/assets/projects/Tugas/Tugas4.pdf',
+    preview: '/assets/projects/Tugas/Tugas4.png',
+    type: 'pdf',
+  },
+  // === Web Development ===
+  {
+    id: 'web-1',
+    category: 'web',
+    title: { en: 'Web Programming Group Assignments', id: 'Kumpulan Tugas Kelompok Pemrograman Web' },
+    file: 'https://zmdinata.github.io/Kumpulan_Tugas_Kelompok_PWD/',
+    preview: '/assets/projects/Tugas/PWD.png',
+    type: 'iframe',
+  },
+  // === Design ===
+  {
+    id: 'desain-1',
+    category: 'desain',
+    title: { en: 'FlockyApe NFT Art', id: 'Seni NFT FlockyApe' },
+    file: 'https://www.instagram.com/flokyape/',
+    preview: '/assets/projects/Desain/proyek1.jpeg',
+    type: 'external',
+  },
+  {
+    id: 'desain-2',
+    category: 'desain',
+    title: { en: 'Class Structure Design', id: 'Desain Struktur Kelas' },
+    file: '/assets/projects/Desain/proyek2.jpeg',
+    preview: '/assets/projects/Desain/proyek2.jpeg',
+    type: 'image',
+  },
+  {
+    id: 'desain-3',
+    category: 'desain',
+    title: { en: 'IS Program Parade Illustration', id: 'Ilustrasi Parade Prodi SI' },
+    file: '/assets/projects/Desain/proyek3.jpeg',
+    preview: '/assets/projects/Desain/proyek3.jpeg',
+    type: 'image',
+  },
+  {
+    id: 'desain-4',
+    category: 'desain',
+    title: { en: 'Other Design Portfolio', id: 'Portofolio Desain Lainnya' },
+    file: 'https://www.instagram.com/zmdinata',
+    preview: '/assets/projects/Desain/zmdinata_insta.png',
+    type: 'external',
+  },
+  // === Web3 & Crypto ===
+  {
+    id: 'web3-1',
+    category: 'web3',
+    title: { en: 'Blockchain & Web3 (Presentation)', id: 'Blockchain & Web3 (Presentasi)' },
+    file: '/assets/projects/Lainnya/Lain1.pdf',
+    preview: '/assets/projects/Lainnya/Lain1.png',
+    type: 'pdf',
+  },
+  {
+    id: 'web3-2',
+    category: 'web3',
+    title: { en: 'Grass Token Research', id: 'Riset Token Grass' },
+    file: '/assets/projects/Lainnya/Lain2.pdf',
+    preview: '/assets/projects/Lainnya/Lain2.png',
+    type: 'pdf',
+  },
+  {
+    id: 'web3-3',
+    category: 'web3',
+    title: { en: 'MBOX Token Research', id: 'Riset Token MBOX' },
+    file: '/assets/projects/Lainnya/Lain3.pdf',
+    preview: '/assets/projects/Lainnya/Lain3.png',
+    type: 'pdf',
+  },
+];
+
+export const projectCategories = ['data', 'lomba', 'tugas', 'web', 'desain', 'web3'];

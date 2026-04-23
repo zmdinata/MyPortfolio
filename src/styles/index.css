@@ -1,0 +1,308 @@
+@import './variables.css';
+@import './animations.css';
+@import './components/navbar.css';
+@import './components/hero.css';
+@import './components/cards.css';
+@import './components/modal.css';
+@import './components/footer.css';
+@import './components/sections.css';
+
+/* ===== Global Reset & Base ===== */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  min-height: 100vh;
+  line-height: 1.7;
+  transition:
+    background-color var(--transition-slow),
+    color var(--transition-slow);
+  overflow-x: hidden;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--scrollbar-bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-primary);
+}
+
+/* Scroll Progress Bar */
+.scroll-progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--gradient-accent);
+  transform-origin: 0%;
+  z-index: 10000;
+}
+
+/* Hide default cursor globally when hovering links if custom cursor is active */
+@media (pointer: fine) {
+  a, button, .project-card, .certificate-card, .honor-card {
+    cursor: none;
+  }
+}
+
+/* ===== Typography ===== */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+
+h1 { font-size: clamp(2.5rem, 6vw, 4rem); font-weight: 800; }
+h2 { font-size: clamp(1.75rem, 4vw, 2.5rem); }
+h3 { font-size: clamp(1.1rem, 2.5vw, 1.4rem); }
+h4 { font-size: 1rem; }
+
+p {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  line-height: 1.8;
+}
+
+a {
+  color: var(--text-primary);
+  text-decoration: none;
+  transition: color var(--transition-fast), opacity var(--transition-fast);
+}
+
+a:hover {
+  color: var(--accent-primary);
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+/* ===== Layout ===== */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+main {
+  flex: 1 0 auto;
+  position: relative;
+}
+
+.container {
+  max-width: var(--max-width);
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+/* ===== Section Styles ===== */
+.section {
+  padding: 5rem 0;
+  position: relative;
+}
+
+.section + .section {
+  border-top: 1px solid var(--border-color);
+}
+
+/* ===== Section Heading ===== */
+.section-heading {
+  margin-bottom: 3rem;
+}
+
+.section-heading h2 {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 0.75rem;
+}
+
+.section-heading h2::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -8px;
+  width: 50px;
+  height: 3px;
+  background: var(--gradient-accent);
+  border-radius: var(--radius-pill);
+}
+
+.section-heading p {
+  font-size: 1.05rem;
+  max-width: 600px;
+}
+
+/* ===== Gradient Text Utility ===== */
+.gradient-text {
+  background: var(--gradient-hero);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradientShift 4s ease infinite;
+}
+
+/* ===== Hiring Status Badge ===== */
+.nav-logo-group {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.hire-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.8rem;
+  background: rgba(34, 197, 94, 0.1);
+  border: 1px solid rgba(34, 197, 94, 0.2);
+  border-radius: var(--radius-pill);
+  color: #22c55e;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  backdrop-filter: blur(4px);
+}
+
+.pulse-dot {
+  width: 8px;
+  height: 8px;
+  background-color: #22c55e;
+  border-radius: 50%;
+  position: relative;
+}
+
+.pulse-dot::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background-color: inherit;
+  animation: pulseGreen 2s infinite;
+}
+
+.hero-status {
+  margin-bottom: 1.5rem;
+}
+
+.hide-mobile {
+  display: flex;
+}
+
+@media (max-width: 768px) {
+  .hide-mobile {
+    display: none;
+  }
+}
+
+/* ===== Glass Card Utility ===== */
+.glass-card {
+  background: var(--bg-glass);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  transition:
+    transform var(--transition-base),
+    box-shadow var(--transition-base),
+    border-color var(--transition-base);
+}
+
+.glass-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md), var(--shadow-glow);
+  border-color: var(--border-hover);
+}
+
+/* ===== Floating Orbs Background ===== */
+.floating-orbs {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.floating-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.25;
+  animation: floatSlow 20s ease-in-out infinite;
+}
+
+.floating-orb:nth-child(1) {
+  width: 400px;
+  height: 400px;
+  background: var(--accent-primary);
+  top: -10%;
+  right: -5%;
+  animation-delay: 0s;
+}
+
+.floating-orb:nth-child(2) {
+  width: 350px;
+  height: 350px;
+  background: var(--accent-secondary);
+  bottom: 10%;
+  left: -8%;
+  animation-delay: -7s;
+}
+
+.floating-orb:nth-child(3) {
+  width: 250px;
+  height: 250px;
+  background: var(--accent-tertiary);
+  top: 40%;
+  right: 20%;
+  animation-delay: -14s;
+}
+
+/* ===== Page Wrapper ===== */
+.page-wrapper {
+  position: relative;
+  z-index: 1;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+  .container {
+    padding: 0 1rem;
+  }
+
+  .section {
+    padding: 3.5rem 0;
+  }
+}
