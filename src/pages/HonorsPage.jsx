@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Tilt from 'react-parallax-tilt';
 import { useLang } from '../context/LangContext';
@@ -32,7 +32,7 @@ const stagger = {
 };
 
 export default function HonorsPage() {
-  const { t, tObj } = useLang();
+  const { t, tObj, lang } = useLang();
   const [modal, setModal] = useState({ open: false, src: '', type: '' });
   const [dbHonors, setDbHonors] = useState([]);
 

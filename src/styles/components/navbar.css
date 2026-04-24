@@ -218,11 +218,22 @@
 
   .nav-hamburger {
     display: flex;
-    margin-left: auto; /* Push to the right */
+    margin-left: auto;
+    width: 44px;
+    height: 44px;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 5px;
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    padding: 0.6rem;
     border-radius: 12px;
     backdrop-filter: blur(10px);
+    cursor: pointer;
+  }
+
+  .nav-hamburger span {
+    width: 20px;
+    margin: 0;
   }
 }
