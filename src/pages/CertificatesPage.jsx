@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import Tilt from 'react-parallax-tilt';
 import { useLang } from '../context/LangContext';
-import { certificates } from '../data/certificates';
+import { supabase } from '../lib/supabase';
 import PreviewModal from '../components/ui/PreviewModal';
 
 const fadeLeft = {
@@ -34,9 +34,18 @@ const stagger = {
 export default function CertificatesPage() {
   const { t } = useLang();
   const [modal, setModal] = useState({ open: false, src: '', type: '' });
+  const [dbCertificates, setDbCertificates] = useState([]);
+
+  useEffect(() => {
+    const fetchCerts = async () => {
+      const { data } = await supabase.from('certificates').select('*').order('created_at', { ascending: false });
+      if (data) setDbCertificates(data);
+    };
+    fetchCerts();
+  }, []);
 
   const handleClick = (cert) => {
-    setModal({ open: true, src: cert.file, type: cert.type });
+    setModal({ open: true, src: cert.file_path, type: cert.type });
   };
 
   return (
@@ -62,7 +71,7 @@ export default function CertificatesPage() {
         viewport={{ once: true, margin: '-40px' }}
         variants={stagger}
       >
-        {certificates.map((cert, idx) => (
+        {dbCertificates.map((cert, idx) => (
           <Tilt
             key={cert.id}
             tiltMaxAngleX={15}
@@ -77,7 +86,7 @@ export default function CertificatesPage() {
               custom={idx}
               onClick={() => handleClick(cert)}
             >
-              <img src={cert.preview} alt={cert.title} loading="lazy" />
+              <img src={cert.preview_path} alt={cert.title} loading="lazy" />
             </motion.div>
           </Tilt>
         ))}

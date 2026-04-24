@@ -7,7 +7,7 @@ const DashboardPage = () => {
   const [stats, setStats] = useState({
     projects: 0,
     certificates: 0,
-    views: 0
+    honors: 0
   });
 
   useEffect(() => {
@@ -20,10 +20,14 @@ const DashboardPage = () => {
         .from('certificates')
         .select('*', { count: 'exact', head: true });
 
+      const { count: honorCount } = await supabase
+        .from('honors')
+        .select('*', { count: 'exact', head: true });
+
       setStats({
         projects: projectCount || 0,
         certificates: certCount || 0,
-        views: 1250 // Placeholder for views
+        honors: honorCount || 0
       });
     };
 
@@ -33,7 +37,7 @@ const DashboardPage = () => {
   const cards = [
     { label: 'Total Projects', value: stats.projects, icon: <FiBriefcase />, color: '#00d2ff' },
     { label: 'Certificates', value: stats.certificates, icon: <FiAward />, color: '#ffd700' },
-    { label: 'Site Views', value: stats.views, icon: <FiEye />, color: '#4cd137' },
+    { label: 'Honors', value: stats.honors, icon: <FiEye />, color: '#4cd137' },
   ];
 
   return (

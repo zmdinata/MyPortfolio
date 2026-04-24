@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import Tilt from 'react-parallax-tilt';
 import { useLang } from '../context/LangContext';
-import { honors } from '../data/honors';
+import { supabase } from '../lib/supabase';
 import PreviewModal from '../components/ui/PreviewModal';
 
 const fadeLeft = {
@@ -34,9 +34,18 @@ const stagger = {
 export default function HonorsPage() {
   const { t, tObj } = useLang();
   const [modal, setModal] = useState({ open: false, src: '', type: '' });
+  const [dbHonors, setDbHonors] = useState([]);
+
+  useEffect(() => {
+    const fetchHonors = async () => {
+      const { data } = await supabase.from('honors').select('*').order('created_at', { ascending: false });
+      if (data) setDbHonors(data);
+    };
+    fetchHonors();
+  }, []);
 
   const handleClick = (honor) => {
-    setModal({ open: true, src: honor.image, type: honor.type });
+    setModal({ open: true, src: honor.image_path, type: honor.type });
   };
 
   return (
@@ -62,7 +71,7 @@ export default function HonorsPage() {
         viewport={{ once: true, margin: '-40px' }}
         variants={stagger}
       >
-        {honors.map((honor, idx) => (
+        {dbHonors.map((honor, idx) => (
           <Tilt
             key={honor.id}
             tiltMaxAngleX={12}
@@ -78,13 +87,13 @@ export default function HonorsPage() {
               onClick={() => handleClick(honor)}
             >
               <img
-                src={honor.image}
-                alt={tObj(honor.title)}
+                src={honor.image_path}
+                alt={lang === 'en' ? honor.title_en : honor.title_id}
                 className="honor-card-image"
                 loading="lazy"
               />
               <div className="honor-card-body">
-                <h4>{tObj(honor.title)}</h4>
+                <h4>{lang === 'en' ? honor.title_en : honor.title_id}</h4>
               </div>
             </motion.div>
           </Tilt>

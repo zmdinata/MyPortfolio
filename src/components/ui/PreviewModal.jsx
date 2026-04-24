@@ -41,7 +41,13 @@ export default function PreviewModal({ isOpen, onClose, src, type }) {
             </button>
             <div className="modal-body">
               {type === 'image' && <img src={src} alt="Preview" />}
-              {(type === 'pdf' || type === 'iframe') && (
+              {type === 'pdf' && (
+                <iframe 
+                  src={`https://docs.google.com/viewer?url=${encodeURIComponent(window.location.origin + src)}&embedded=true`} 
+                  title="PDF Preview" 
+                />
+              )}
+              {type === 'iframe' && (
                 <iframe src={src} title="Preview" />
               )}
             </div>

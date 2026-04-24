@@ -1,93 +1,55 @@
-# Zacky Muhammad Dinata — Professional Portfolio 🚀
+# ZMDINATA | Personal Portfolio & Journey
 
-Welcome to my personal portfolio website! This project is a modern, high-performance Single Page Application (SPA) built to showcase my journey as an AI Engineer Scholar, Data Scientist, and Blockchain Enthusiast. 
+Sebuah website portofolio modern yang dibangun dengan fokus pada estetika premium, performa tinggi, dan kemudahan manajemen konten melalui Admin Panel yang terintegrasi dengan Supabase.
 
-Designed with a **Premium Monochrome Tech Aesthetic**, this portfolio focuses on high-end interactivity and smooth user experience.
+![Portfolio Preview](https://zmdinata-portfolio.vercel.app/og-image.png) <!-- Ganti dengan URL preview jika ada -->
 
----
+## ✨ Fitur Utama
 
-## ✨ Key Features
+- **🚀 Full-Stack Integration**: Terhubung sepenuhnya dengan Supabase untuk manajemen data dinamis.
+- **🛠️ Admin Panel Premium**: Dashboard khusus untuk mengelola Profil, Pengalaman, Pendidikan, Keterampilan, Proyek, Sertifikat, dan Penghargaan.
+- **🌍 Multilingual Support**: Tersedia dalam Bahasa Indonesia dan Inggris (EN/ID).
+- **🌓 Mode Gelap/Terang**: Transisi tema yang halus dengan dukungan *glassmorphism*.
+- **📱 Responsive Design**: Optimal di semua ukuran layar, dari smartphone hingga desktop.
+- **📄 PDF Viewer**: Integrasi penampil PDF yang stabil di perangkat mobile.
+- **📊 Real-time Stats**: Statistik proyek dan pencapaian yang diperbarui secara otomatis di Dashboard Admin.
 
-- **💎 Premium Interactivity**:
-    - **Custom Animated Cursor**: A dynamic cursor that reacts to hover states.
-    - **3D Tilt Effects**: Interactive cards (Projects, Skills, Honors) that follow your mouse movement using `react-parallax-tilt`.
-    - **Parallax Hero Section**: Smooth scroll-based animations for a deep, immersive feel.
-- **🌍 Bilingual Support**: Seamlessly switch between **English** and **Indonesian** with dynamic context-based translations.
-- **🌓 Adaptive Theme**: Intelligent Dark/Light mode with persistence (localStorage).
-- **🟢 Live Hiring Status**: Real-time "Available for Hire" indicator with a pulsing glow animation.
-- **📱 Fully Responsive**: Optimized for every screen size—from desktop monitors to mobile devices.
-- **🚀 Built for Speed**: Powered by **Vite** for near-instant load times and optimized production builds.
+## 🛠️ Teknologi yang Digunakan
 
----
-
-## 🛠️ Tech Stack
-
-- **Frontend**: [React.js](https://reactjs.org/) (Hooks, Context API)
+- **Frontend**: [React.js](https://reactjs.org/) + [Vite](https://vitejs.dev/)
+- **Styling**: Vanilla CSS (Custom Design System)
+- **Database & Auth**: [Supabase](https://supabase.com/)
 - **Animations**: [Framer Motion](https://www.framer.com/motion/)
-- **Styling**: Vanilla CSS (Modern CSS Variables & Glassmorphism)
-- **Icons**: [React Icons](https://react-icons.github.io/react-icons/)
-- **Build Tool**: [Vite](https://vitejs.dev/)
 - **Deployment**: [Vercel](https://vercel.com/)
+- **Icons**: React Icons (Lucide & FontAwesome)
 
----
+## 📦 Instalasi Lokal
 
-## 📂 Project Structure
-
-```text
-src/
-├── components/      # Reusable UI & Layout components
-├── context/         # Theme and Language context providers
-├── data/            # JSON/JS files for projects, skills, and translations
-├── pages/           # Main page components (Home, Projects, etc.)
-├── styles/          # Modular CSS system
-└── App.jsx          # Root component & Routing
-```
-
----
-
-## 🚀 Getting Started
-
-Follow these steps to run the project locally:
-
-1. **Clone the repository**:
+1. Clone repositori ini:
    ```bash
-   git clone https://github.com/your-username/your-repo-name.git
+   git clone https://github.com/zmdinata/MyPortfolio.git
    ```
-
-2. **Navigate to the directory**:
+2. Masuk ke direktori proyek:
    ```bash
    cd MyPortfolio
    ```
-
-3. **Install dependencies**:
+3. Instal dependensi:
    ```bash
    npm install
    ```
-
-4. **Run the development server**:
+4. Buat file `.env` dan masukkan kredensial Supabase Anda:
+   ```env
+   VITE_SUPABASE_URL=your_supabase_url
+   VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+   ```
+5. Jalankan aplikasi:
    ```bash
    npm run dev
    ```
 
-5. **Build for production**:
-   ```bash
-   npm run build
-   ```
+## 📄 Lisensi
+
+Proyek ini dibuat untuk penggunaan pribadi sebagai portofolio profesional.
 
 ---
-
-## 🤝 Contact & Socials
-
-- **LinkedIn**: [Zacky Muhammad Dinata](https://linkedin.com/in/zmdinata)
-- **Email**: [your-email@example.com]
-- **Instagram**: [@zmdinata](https://instagram.com/zmdinata)
-
----
-
-## 📄 License
-
-This project is licensed under the MIT License - feel free to use it as an inspiration for your own portfolio!
-
----
-
-*Built with ❤️ by Zacky Muhammad Dinata*
+Dikembangkan dengan ❤️ oleh **Zacky Muhammad Dinata**

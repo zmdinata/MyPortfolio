@@ -84,6 +84,23 @@ export default function ProjectsPage() {
         </motion.p>
       </div>
 
+      {!loading && dbProjects.length === 0 && (
+        <motion.div 
+          className="empty-state"
+          initial="hidden"
+          animate="visible"
+          variants={fadeUp}
+          style={{ textAlign: 'center', padding: '100px 20px', color: 'rgba(255,255,255,0.6)' }}
+        >
+          <h2 style={{ fontSize: '2rem', marginBottom: '10px', color: '#fff' }}>
+            {lang === 'en' ? 'Coming Soon' : 'Segera Hadir'}
+          </h2>
+          <p style={{ fontSize: '1.2rem' }}>
+            {lang === 'en' ? 'Work in Progress. I am currently curating my best projects to showcase here.' : 'Sedang dalam pengerjaan. Saya sedang menyusun proyek-proyek terbaik saya untuk ditampilkan di sini.'}
+          </p>
+        </motion.div>
+      )}
+
       {projectCategories.map((cat, catIdx) => {
         const items = dbProjects.filter((p) => p.category === cat);
         if (items.length === 0) return null;

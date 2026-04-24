@@ -15,6 +15,9 @@ import ManageProfile from './pages/admin/ManageProfile';
 import ManageExperience from './pages/admin/ManageExperience';
 import ManageEducation from './pages/admin/ManageEducation';
 import ManageSkills from './pages/admin/ManageSkills';
+import ManageProjects from './pages/admin/ManageProjects';
+import ManageCertificates from './pages/admin/ManageCertificates';
+import ManageHonors from './pages/admin/ManageHonors';
 import AdminLayout from './components/admin/AdminLayout';
 import ProtectedRoute from './components/admin/ProtectedRoute';
 
@@ -44,8 +47,8 @@ export default function App() {
                 <Route path="education" element={<ManageEducation />} />
                 <Route path="skills" element={<ManageSkills />} />
                 <Route path="projects" element={<ManageProjects />} />
-                <Route path="certificates" element={<div>Manage Certificates (Coming Soon)</div>} />
-                <Route path="honors" element={<div>Manage Honors (Coming Soon)</div>} />
+                <Route path="certificates" element={<ManageCertificates />} />
+                <Route path="honors" element={<ManageHonors />} />
               </Route>
             </Route>
           </Routes>
