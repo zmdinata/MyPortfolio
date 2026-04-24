@@ -1,12 +1,13 @@
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import Tilt from 'react-parallax-tilt';
+import { useEffect, useState } from 'react';
+import { supabase } from '../lib/supabase';
 import { useLang } from '../context/LangContext';
 import { skills } from '../data/skills';
-import {
-  FaInstagram, FaLinkedinIn, FaGithub,
-  FaChartBar, FaPaintBrush, FaCubes, FaBrain
-} from 'react-icons/fa';
+import * as FaIcons from 'react-icons/fa';
+import * as SiIcons from 'react-icons/si';
+import * as FiIcons from 'react-icons/fi';
 import { HiOutlineMail } from 'react-icons/hi';
 import { FiArrowRight } from 'react-icons/fi';
 
@@ -54,14 +55,93 @@ const staggerFast = {
 };
 
 const skillIcons = {
-  data: <FaChartBar />,
-  design: <FaPaintBrush />,
-  web3: <FaCubes />,
-  ml: <FaBrain />,
+  data: <FaIcons.FaChartBar />,
+  design: <FaIcons.FaPaintBrush />,
+  web3: <FaIcons.FaCubes />,
+  ml: <FaIcons.FaBrain />,
 };
 
 export default function HomePage() {
-  const { t, tObj } = useLang();
+  const { t, tObj, lang } = useLang();
+  const [profile, setProfile] = useState(null);
+  const [dbExperiences, setDbExperiences] = useState([]);
+  const [dbEducation, setDbEducation] = useState([]);
+  const [dbSkills, setDbSkills] = useState([]);
+  
+  useEffect(() => {
+    const fetchData = async () => {
+      const { data: prof } = await supabase.from('profile').select('*').eq('id', 1).single();
+      if (prof) setProfile(prof);
+
+      const { data: exp } = await supabase.from('experience').select('*').order('year', { ascending: false });
+      if (exp) setDbExperiences(exp);
+
+      const { data: edu } = await supabase.from('education').select('*').order('year_start', { ascending: false });
+      if (edu) setDbEducation(edu);
+
+      const { data: skl } = await supabase.from('skills').select('*').order('name', { ascending: true });
+      if (skl) setDbSkills(skl);
+    };
+    fetchData();
+  }, []);
+
+  // Helpers for icons
+  const getSkillIcon = (iconName) => {
+    const Icon = FaIcons[iconName] || SiIcons[iconName] || FiIcons[iconName];
+    return Icon ? <Icon /> : <FaIcons.FaBrain />;
+  };
+
+  const formatPeriod = (start, end, loc_en, loc_id, type) => {
+    if (!start) return '';
+    const startDate = new Date(start);
+    const endDate = end ? new Date(end) : new Date();
+    
+    const options = { month: 'short', year: 'numeric' };
+    const startStr = startDate.toLocaleDateString(lang === 'en' ? 'en-US' : 'id-ID', options);
+    const endStr = end ? new Date(end).toLocaleDateString(lang === 'en' ? 'en-US' : 'id-ID', options) : (lang === 'en' ? 'Present' : 'Saat ini');
+    
+    // Duration
+    let months = (endDate.getFullYear() - startDate.getFullYear()) * 12;
+    months -= startDate.getMonth();
+    months += endDate.getMonth();
+    months = Math.max(1, months);
+    const years = Math.floor(months / 12);
+    const remMonths = months % 12;
+    let durStr = '';
+    if (years > 0) durStr += `${years} yr${years > 1 ? 's' : ''} `;
+    if (remMonths > 0 || years === 0) durStr += `${remMonths} mo${remMonths > 1 ? 's' : ''}`;
+
+    const location = lang === 'en' ? loc_en : loc_id;
+    
+    return `${startStr} — ${endStr} · ${durStr.trim()} · ${location} · ${type}`;
+  };
+
+  // Fallback Logic
+  const experiences = dbExperiences.length > 0 ? dbExperiences.map(e => ({
+    role: lang === 'en' ? e.role_en : e.role_id,
+    company: lang === 'en' ? e.company_en : e.company_id,
+    period: formatPeriod(e.date_start, e.date_end, e.location_en, e.location_id, e.work_type),
+    description: lang === 'en' ? e.description_en : e.description_id,
+    responsibilities: e.responsibilities || [],
+    achievements: e.achievements || []
+  })) : t('experience.items');
+
+  const education = dbEducation.length > 0 ? dbEducation.map(e => ({
+    school: e.school,
+    degree: lang === 'en' ? e.level_en : e.level_id,
+    major: lang === 'en' ? e.major_en : e.major_id,
+    period: formatPeriod(e.date_start, e.date_end, 'Global', 'Global', '').split('·')[0].trim(), // Reusing formatPeriod but ignoring location/type
+    grade_type: e.grade_type,
+    grade_value: e.grade_value,
+    description: lang === 'en' ? e.description_en : e.description_id
+  })) : t('education.items');
+
+  const displaySkills = dbSkills.length > 0 ? dbSkills : [];
+
+  // Data dynamic from Supabase (fallback to translations)
+  const heroJob = profile ? (lang === 'en' ? profile.hero_description_en : profile.hero_description_id) : t('hero.job');
+  const aboutContent = profile ? (lang === 'en' ? profile.about_description_en : profile.about_description_id) : t('about.content');
+  const isAvailable = profile ? profile.available_for_hire : true;
   
   // Parallax effects
   const { scrollY } = useScroll();
@@ -90,12 +170,14 @@ export default function HomePage() {
             variants={stagger}
             style={{ y: heroTextY, opacity: heroOpacity }}
           >
-            <motion.div className="hero-status" variants={fadeLeft}>
-              <div className="hire-status-badge">
-                <span className="pulse-dot"></span>
-                {t('hero.available')}
-              </div>
-            </motion.div>
+            {isAvailable && (
+              <motion.div className="hero-status" variants={fadeLeft}>
+                <div className="hire-status-badge">
+                  <span className="pulse-dot"></span>
+                  {t('hero.available')}
+                </div>
+              </motion.div>
+            )}
             <motion.p className="hero-kicker" variants={fadeLeft}>
               {t('hero.kicker')}
             </motion.p>
@@ -103,7 +185,7 @@ export default function HomePage() {
               {t('hero.name')}
             </motion.h1>
             <motion.p className="hero-job" variants={fadeUp} custom={2}>
-              {t('hero.job')}
+              {heroJob}
             </motion.p>
             <motion.div className="hero-meta" variants={staggerFast} initial="hidden" animate="visible">
               <motion.span className="hero-pill" variants={scaleUp}>{t('hero.langId')}</motion.span>
@@ -184,7 +266,7 @@ export default function HomePage() {
             custom={1}
             style={{ maxWidth: '750px' }}
           >
-            {t('about.content')}
+            {aboutContent}
           </motion.p>
         </div>
       </section>
@@ -202,7 +284,7 @@ export default function HomePage() {
             <h2>{t('experience.title')}</h2>
           </motion.div>
           <div className="timeline">
-            {t('experience.items').map((item, idx) => (
+            {experiences.map((item, idx) => (
               <motion.div
                 key={idx}
                 className="timeline-item"
@@ -212,7 +294,8 @@ export default function HomePage() {
                 variants={fadeRight}
                 custom={idx * 0.5}
               >
-                <h3>{item.role}</h3>
+                <h3 style={{ marginBottom: '0.2rem' }}>{item.role}</h3>
+                {item.company && <div style={{ fontSize: '1.1rem', fontWeight: 600, color: '#00d2ff', marginBottom: '0.5rem' }}>{item.company}</div>}
                 <p className="timeline-sub">{item.period}</p>
                 {item.description && <p>{item.description}</p>}
                 {item.responsibilities?.length > 0 && (
@@ -254,7 +337,7 @@ export default function HomePage() {
             <h2>{t('education.title')}</h2>
           </motion.div>
           <div className="timeline">
-            {t('education.items').map((item, idx) => (
+            {education.map((item, idx) => (
               <motion.div
                 key={idx}
                 className="timeline-item"
@@ -264,9 +347,27 @@ export default function HomePage() {
                 variants={fadeRight}
               >
                 <h3>{item.school}</h3>
-                <p className="timeline-sub">{item.degree}</p>
-                <p>{item.grade}</p>
-                <p style={{ marginTop: '0.5rem' }}>{item.activities}</p>
+                <div style={{ display: 'flex', gap: '8px', alignItems: 'center', marginBottom: '0.25rem' }}>
+                  <span style={{ fontSize: '1rem', fontWeight: 600, color: '#00d2ff' }}>{item.degree}</span>
+                  {item.major && (
+                    <>
+                      <span style={{ opacity: 0.5 }}>•</span>
+                      <span style={{ opacity: 0.8 }}>{item.major}</span>
+                    </>
+                  )}
+                </div>
+                <p className="timeline-sub">{item.period || item.years}</p>
+                {item.grade_type && item.grade_type !== 'None' && (
+                  <p style={{ fontWeight: 600, marginTop: '0.5rem', display: 'inline-block', background: 'var(--bg-secondary)', padding: '2px 8px', borderRadius: '4px' }}>
+                    {item.grade_type}: {item.grade_value}
+                  </p>
+                )}
+                {item.grade && !item.grade_type && (
+                  <p style={{ fontWeight: 600, marginTop: '0.5rem', display: 'inline-block', background: 'var(--bg-secondary)', padding: '2px 8px', borderRadius: '4px' }}>
+                    {item.grade}
+                  </p>
+                )}
+                <p style={{ marginTop: '0.75rem' }}>{item.description || item.activities}</p>
               </motion.div>
             ))}
           </div>
@@ -292,7 +393,26 @@ export default function HomePage() {
             viewport={{ once: true, margin: '-60px' }}
             variants={stagger}
           >
-            {skills.map((skill, idx) => (
+            {displaySkills.length > 0 ? displaySkills.map((skill, idx) => (
+              <Tilt
+                key={skill.id}
+                tiltMaxAngleX={10}
+                tiltMaxAngleY={10}
+                scale={1.05}
+                transitionSpeed={2500}
+                className="tilt-wrapper"
+              >
+                <motion.div
+                  className="skill-card"
+                  variants={scaleUp}
+                  custom={idx}
+                >
+                  <div className="skill-card-icon" style={{ color: 'var(--text-primary)' }}>{getSkillIcon(skill.icon)}</div>
+                  <h3>{skill.name}</h3>
+                  <p style={{ opacity: 0.8, fontSize: '0.9rem', marginTop: '10px' }}>{lang === 'en' ? skill.description_en : skill.description_id}</p>
+                </motion.div>
+              </Tilt>
+            )) : skills.map((skill, idx) => (
               <Tilt
                 key={skill.id}
                 tiltMaxAngleX={10}
@@ -337,9 +457,9 @@ export default function HomePage() {
             variants={stagger}
           >
             {[
-              { href: 'https://www.instagram.com/zmdinataaa', icon: <FaInstagram />, label: 'Instagram', ext: true },
-              { href: 'https://www.linkedin.com/in/zacky-muhammad-dinata-463995280', icon: <FaLinkedinIn />, label: 'LinkedIn', ext: true },
-              { href: 'https://github.com/zmdinata', icon: <FaGithub />, label: 'GitHub', ext: true },
+              { href: 'https://www.instagram.com/zmdinataaa', icon: <FaIcons.FaInstagram />, label: 'Instagram', ext: true },
+              { href: 'https://www.linkedin.com/in/zacky-muhammad-dinata-463995280', icon: <FaIcons.FaLinkedinIn />, label: 'LinkedIn', ext: true },
+              { href: 'https://github.com/zmdinata', icon: <FaIcons.FaGithub />, label: 'GitHub', ext: true },
               { href: 'mailto:zmdinata@gmail.com', icon: <HiOutlineMail />, label: 'Email', ext: false },
             ].map((item, idx) => (
               <motion.a

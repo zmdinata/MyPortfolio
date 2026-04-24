@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '../../context/ThemeContext';
 import { useLang } from '../../context/LangContext';
 import { FiSun, FiMoon } from 'react-icons/fi';
+import { supabase } from '../../lib/supabase';
 
 const overlayVariants = {
   hidden: { opacity: 0 },
@@ -22,7 +23,16 @@ export default function Navbar() {
   const { lang, toggleLang, t } = useLang();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [isAvailable, setIsAvailable] = useState(true);
   const location = useLocation();
+
+  useEffect(() => {
+    const fetchStatus = async () => {
+      const { data } = await supabase.from('profile').select('available_for_hire').eq('id', 1).single();
+      if (data) setIsAvailable(data.available_for_hire);
+    };
+    fetchStatus();
+  }, []);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -55,10 +65,12 @@ export default function Navbar() {
         <div className="navbar-container">
           <div className="nav-logo-group">
             <Link to="/" className="nav-logo">ZMDINATA</Link>
-            <div className="hire-status-badge hide-mobile">
-              <span className="pulse-dot"></span>
-              {t('hero.available')}
-            </div>
+            {isAvailable && (
+              <div className="hire-status-badge hide-mobile">
+                <span className="pulse-dot"></span>
+                {t('hero.available')}
+              </div>
+            )}
           </div>
 
           <ul className="nav-menu">

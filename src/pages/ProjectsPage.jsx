@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Tilt from 'react-parallax-tilt';
+import { supabase } from '../lib/supabase';
 import { useLang } from '../context/LangContext';
-import { projects, projectCategories } from '../data/projects';
+import { projectCategories } from '../data/projects';
 import PreviewModal from '../components/ui/PreviewModal';
 import { HiOutlineExternalLink } from 'react-icons/hi';
 import {
@@ -44,8 +45,20 @@ const categoryIcons = {
 };
 
 export default function ProjectsPage() {
-  const { t, tObj } = useLang();
+  const { t, lang } = useLang();
   const [modal, setModal] = useState({ open: false, src: '', type: '' });
+  const [dbProjects, setDbProjects] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchProjects = async () => {
+      setLoading(true);
+      const { data } = await supabase.from('projects').select('*');
+      if (data) setDbProjects(data);
+      setLoading(false);
+    };
+    fetchProjects();
+  }, []);
 
   const handleClick = (project) => {
     if (project.type === 'external') {
@@ -72,7 +85,7 @@ export default function ProjectsPage() {
       </div>
 
       {projectCategories.map((cat, catIdx) => {
-        const items = projects.filter((p) => p.category === cat);
+        const items = dbProjects.filter((p) => p.category === cat);
         if (items.length === 0) return null;
 
         return (
@@ -116,12 +129,12 @@ export default function ProjectsPage() {
                       )}
                       <img
                         src={project.preview}
-                        alt={tObj(project.title)}
+                        alt={lang === 'en' ? project.title_en : project.title_id}
                         className="project-image-preview"
                         loading="lazy"
                       />
                       <div className="project-card-title">
-                        {tObj(project.title)}
+                        {lang === 'en' ? project.title_en : project.title_id}
                       </div>
                     </div>
                   </motion.div>
