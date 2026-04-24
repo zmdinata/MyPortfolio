@@ -39,11 +39,16 @@ export default function CertificatesPage() {
 
   useEffect(() => {
     const fetchCerts = async () => {
-      const { data } = await supabase.from('certificates').select('*').order('created_at', { ascending: false });
-      if (data && data.length > 0) {
-        setDbCertificates(data);
-      } else {
-        // Fallback to local data if DB is empty
+      try {
+        const { data, error } = await supabase.from('certificates').select('*').order('created_at', { ascending: false });
+        
+        if (!error && data && data.length > 0) {
+          setDbCertificates(data);
+        } else {
+          throw new Error('No data or Supabase error');
+        }
+      } catch (err) {
+        // Fallback to local data if DB is empty or fails
         const formattedLocal = localCertificates.map(c => ({
           id: c.id,
           title: c.title,
@@ -95,6 +100,9 @@ export default function CertificatesPage() {
           >
             <motion.div
               className="certificate-card"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: '-20px' }}
               variants={scaleUp}
               custom={idx}
               onClick={() => handleClick(cert)}

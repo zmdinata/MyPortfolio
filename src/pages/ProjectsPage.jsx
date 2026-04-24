@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import Tilt from 'react-parallax-tilt';
 import { supabase } from '../lib/supabase';
 import { useLang } from '../context/LangContext';
-import { projectCategories } from '../data/projects';
+import { projects as localProjects, projectCategories } from '../data/projects';
 import PreviewModal from '../components/ui/PreviewModal';
 import { HiOutlineExternalLink } from 'react-icons/hi';
 import {
@@ -54,7 +54,21 @@ export default function ProjectsPage() {
     const fetchProjects = async () => {
       setLoading(true);
       const { data } = await supabase.from('projects').select('*');
-      if (data) setDbProjects(data);
+      if (data && data.length > 0) {
+        setDbProjects(data);
+      } else {
+        // Fallback to local data
+        const formattedLocal = localProjects.map(p => ({
+          id: p.id,
+          category: p.category,
+          title_en: p.title.en,
+          title_id: p.title.id,
+          file: p.file,
+          preview: p.preview,
+          type: p.type
+        }));
+        setDbProjects(formattedLocal);
+      }
       setLoading(false);
     };
     fetchProjects();
@@ -83,23 +97,6 @@ export default function ProjectsPage() {
           {t('projects.subtitle')}
         </motion.p>
       </div>
-
-      {!loading && dbProjects.length === 0 && (
-        <motion.div 
-          className="empty-state"
-          initial="hidden"
-          animate="visible"
-          variants={fadeUp}
-          style={{ textAlign: 'center', padding: '100px 20px', color: 'rgba(255,255,255,0.6)' }}
-        >
-          <h2 style={{ fontSize: '2rem', marginBottom: '10px', color: '#fff' }}>
-            {lang === 'en' ? 'Coming Soon' : 'Segera Hadir'}
-          </h2>
-          <p style={{ fontSize: '1.2rem' }}>
-            {lang === 'en' ? 'Work in Progress. I am currently curating my best projects to showcase here.' : 'Sedang dalam pengerjaan. Saya sedang menyusun proyek-proyek terbaik saya untuk ditampilkan di sini.'}
-          </p>
-        </motion.div>
-      )}
 
       {projectCategories.map((cat, catIdx) => {
         const items = dbProjects.filter((p) => p.category === cat);

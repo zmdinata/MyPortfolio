@@ -207,9 +207,14 @@
   opacity: 0.5;
 }
 
-.project-card {
+.horizontal-scroll .tilt-wrapper {
   flex: 0 0 280px;
+  scroll-snap-align: start;
+}
+
+.project-card {
   height: 230px;
+  width: 100%;
   border-radius: var(--radius-lg);
   background: var(--bg-card);
   border: 1px solid var(--border-color);
@@ -406,7 +411,7 @@
     grid-template-columns: 1fr;
   }
 
-  .project-card {
+  .horizontal-scroll .tilt-wrapper {
     flex: 0 0 85%;
   }
 

@@ -39,10 +39,15 @@ export default function HonorsPage() {
 
   useEffect(() => {
     const fetchHonors = async () => {
-      const { data } = await supabase.from('honors').select('*').order('created_at', { ascending: false });
-      if (data && data.length > 0) {
-        setDbHonors(data);
-      } else {
+      try {
+        const { data, error } = await supabase.from('honors').select('*').order('created_at', { ascending: false });
+        
+        if (!error && data && data.length > 0) {
+          setDbHonors(data);
+        } else {
+          throw new Error('No data or Supabase error');
+        }
+      } catch (err) {
         // Fallback to local data
         const formattedLocal = localHonors.map(h => ({
           id: h.id,
@@ -95,6 +100,9 @@ export default function HonorsPage() {
           >
             <motion.div
               className="honor-card"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: '-20px' }}
               variants={scaleUp}
               custom={idx}
               onClick={() => handleClick(honor)}
