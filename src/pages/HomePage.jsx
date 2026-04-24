@@ -10,6 +10,7 @@ import * as SiIcons from 'react-icons/si';
 import * as FiIcons from 'react-icons/fi';
 import { HiOutlineMail } from 'react-icons/hi';
 import { FiArrowRight } from 'react-icons/fi';
+import HeroAnimation from '../components/ui/HeroAnimation';
 
 /* ===== Animation Variants ===== */
 const fadeUp = {
@@ -153,6 +154,7 @@ export default function HomePage() {
     <>
       {/* ===== Hero Section ===== */}
       <section className="hero-section" id="home">
+        <HeroAnimation />
         {/* Particle dots */}
         <div className="hero-particles" aria-hidden="true">
           <div className="hero-particle"></div>
