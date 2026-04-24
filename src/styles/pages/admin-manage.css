@@ -320,3 +320,45 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
 
 .cancel-btn { background: transparent; border: 1px solid rgba(255, 255, 255, 0.1); color: #fff; padding: 10px 20px; border-radius: 8px; cursor: pointer; }
 .save-btn { background: #00d2ff; border: none; color: #000; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+
+/* Responsive Styles for Admin Manage Pages */
+@media (max-width: 768px) {
+  .action-bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 15px;
+  }
+
+  .search-box {
+    max-width: 100%;
+  }
+
+  .add-btn {
+    justify-content: center;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+    padding: 20px;
+    gap: 15px;
+  }
+
+  .modal-content {
+    max-height: 95vh;
+    border-radius: 15px;
+  }
+
+  .modal-header, .modal-footer {
+    padding: 15px 20px;
+  }
+
+  .admin-table th, .admin-table td {
+    padding: 12px 15px;
+    font-size: 0.85rem;
+  }
+
+  .table-preview {
+    width: 50px;
+    height: 35px;
+  }
+}

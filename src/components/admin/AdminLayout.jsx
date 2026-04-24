@@ -1,11 +1,16 @@
 import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
 import { supabase } from '../../lib/supabase';
-import { FiGrid, FiBriefcase, FiAward, FiLogOut, FiHome, FiUser, FiBook, FiStar, FiFolder } from 'react-icons/fi';
+import { FiGrid, FiBriefcase, FiAward, FiLogOut, FiHome, FiUser, FiBook, FiStar, FiFolder, FiMenu, FiX } from 'react-icons/fi';
+import { useState } from 'react';
 import '../../styles/components/admin-layout.css';
 
 const AdminLayout = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
+  const closeSidebar = () => setIsSidebarOpen(false);
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -24,7 +29,10 @@ const AdminLayout = () => {
 
   return (
     <div className="admin-container">
-      <aside className="admin-sidebar">
+      {/* Mobile Overlay */}
+      {isSidebarOpen && <div className="sidebar-overlay" onClick={closeSidebar}></div>}
+
+      <aside className={`admin-sidebar ${isSidebarOpen ? 'open' : ''}`}>
         <div className="sidebar-header">
           <h2>Admin Panel</h2>
         </div>
@@ -35,6 +43,7 @@ const AdminLayout = () => {
               key={item.path} 
               to={item.path} 
               className={`nav-item ${location.pathname === item.path ? 'active' : ''}`}
+              onClick={closeSidebar}
             >
               {item.icon}
               <span>{item.label}</span>
@@ -57,6 +66,9 @@ const AdminLayout = () => {
 
       <main className="admin-content">
         <header className="content-header">
+          <button className="sidebar-toggle" onClick={toggleSidebar}>
+            {isSidebarOpen ? <FiX /> : <FiMenu />}
+          </button>
           <h1>{navItems.find(i => i.path === location.pathname)?.label || 'Admin'}</h1>
         </header>
         <div className="content-body">

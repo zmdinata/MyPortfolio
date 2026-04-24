@@ -42,13 +42,20 @@ export default function HonorsPage() {
       try {
         const { data, error } = await supabase.from('honors').select('*').order('created_at', { ascending: false });
         
+        const formattedLocal = localHonors.map(h => ({
+          id: h.id,
+          title_en: h.title.en,
+          title_id: h.title.id,
+          image_path: h.image,
+          type: h.type
+        }));
+
         if (!error && data && data.length > 0) {
-          setDbHonors(data);
+          setDbHonors([...data, ...formattedLocal]);
         } else {
-          throw new Error('No data or Supabase error');
+          setDbHonors(formattedLocal);
         }
       } catch (err) {
-        // Fallback to local data
         const formattedLocal = localHonors.map(h => ({
           id: h.id,
           title_en: h.title.en,

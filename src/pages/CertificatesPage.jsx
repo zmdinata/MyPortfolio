@@ -42,13 +42,20 @@ export default function CertificatesPage() {
       try {
         const { data, error } = await supabase.from('certificates').select('*').order('created_at', { ascending: false });
         
+        const formattedLocal = localCertificates.map(c => ({
+          id: c.id,
+          title: c.title,
+          file_path: c.file,
+          preview_path: c.preview,
+          type: c.type
+        }));
+
         if (!error && data && data.length > 0) {
-          setDbCertificates(data);
+          setDbCertificates([...data, ...formattedLocal]);
         } else {
-          throw new Error('No data or Supabase error');
+          setDbCertificates(formattedLocal);
         }
       } catch (err) {
-        // Fallback to local data if DB is empty or fails
         const formattedLocal = localCertificates.map(c => ({
           id: c.id,
           title: c.title,

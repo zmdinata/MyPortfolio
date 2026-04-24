@@ -53,11 +53,26 @@ export default function ProjectsPage() {
   useEffect(() => {
     const fetchProjects = async () => {
       setLoading(true);
-      const { data } = await supabase.from('projects').select('*');
-      if (data && data.length > 0) {
-        setDbProjects(data);
-      } else {
-        // Fallback to local data
+      try {
+        const { data, error } = await supabase.from('projects').select('*');
+        
+        // Always prepare local data
+        const formattedLocal = localProjects.map(p => ({
+          id: p.id,
+          category: p.category,
+          title_en: p.title.en,
+          title_id: p.title.id,
+          file: p.file,
+          preview: p.preview,
+          type: p.type
+        }));
+
+        if (!error && data && data.length > 0) {
+          setDbProjects([...data, ...formattedLocal]);
+        } else {
+          setDbProjects(formattedLocal);
+        }
+      } catch (err) {
         const formattedLocal = localProjects.map(p => ({
           id: p.id,
           category: p.category,
