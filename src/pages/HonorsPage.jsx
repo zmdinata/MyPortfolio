@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import Tilt from 'react-parallax-tilt';
 import { useLang } from '../context/LangContext';
 import { supabase } from '../lib/supabase';
+import { honors as localHonors } from '../data/honors';
 import PreviewModal from '../components/ui/PreviewModal';
 
 const fadeLeft = {
@@ -39,7 +40,19 @@ export default function HonorsPage() {
   useEffect(() => {
     const fetchHonors = async () => {
       const { data } = await supabase.from('honors').select('*').order('created_at', { ascending: false });
-      if (data) setDbHonors(data);
+      if (data && data.length > 0) {
+        setDbHonors(data);
+      } else {
+        // Fallback to local data
+        const formattedLocal = localHonors.map(h => ({
+          id: h.id,
+          title_en: h.title.en,
+          title_id: h.title.id,
+          image_path: h.image,
+          type: h.type
+        }));
+        setDbHonors(formattedLocal);
+      }
     };
     fetchHonors();
   }, []);

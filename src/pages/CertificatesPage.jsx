@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import Tilt from 'react-parallax-tilt';
 import { useLang } from '../context/LangContext';
 import { supabase } from '../lib/supabase';
+import { certificates as localCertificates } from '../data/certificates';
 import PreviewModal from '../components/ui/PreviewModal';
 
 const fadeLeft = {
@@ -39,7 +40,19 @@ export default function CertificatesPage() {
   useEffect(() => {
     const fetchCerts = async () => {
       const { data } = await supabase.from('certificates').select('*').order('created_at', { ascending: false });
-      if (data) setDbCertificates(data);
+      if (data && data.length > 0) {
+        setDbCertificates(data);
+      } else {
+        // Fallback to local data if DB is empty
+        const formattedLocal = localCertificates.map(c => ({
+          id: c.id,
+          title: c.title,
+          file_path: c.file,
+          preview_path: c.preview,
+          type: c.type
+        }));
+        setDbCertificates(formattedLocal);
+      }
     };
     fetchCerts();
   }, []);
