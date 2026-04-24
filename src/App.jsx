@@ -10,7 +10,6 @@ import HonorsPage from './pages/HonorsPage';
 // Admin Pages
 import LoginPage from './pages/admin/LoginPage';
 import DashboardPage from './pages/admin/DashboardPage';
-import ManageProjects from './pages/admin/ManageProjects';
 import ManageProfile from './pages/admin/ManageProfile';
 import ManageExperience from './pages/admin/ManageExperience';
 import ManageEducation from './pages/admin/ManageEducation';
