@@ -2,7 +2,7 @@
 
 Sebuah website portofolio modern yang dibangun dengan fokus pada estetika premium, performa tinggi, dan kemudahan manajemen konten melalui Admin Panel yang terintegrasi dengan Supabase. Website ini menggabungkan kecanggihan database cloud dengan keamanan data lokal.
 
-![Portfolio Preview](https://zmdinata-portfolio.vercel.app/og-image.png)
+![alt text](image.png)
 
 ## ✨ Fitur Utama
 
