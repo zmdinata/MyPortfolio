@@ -363,7 +363,7 @@
   top: 1rem;
   right: 1rem;
   width: 32px;
-  height: 32px;
+  height: 42px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -383,7 +383,7 @@
 }
 
 .chatbot-close-btn:hover {
-  color: var(--text-primary, #fff);
+  color: var(--text-primary, #1dc3d5);
   background: rgba(255, 255, 255, 0.1);
 }
 
