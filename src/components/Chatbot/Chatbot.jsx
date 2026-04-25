@@ -8,7 +8,8 @@ import { FiMessageSquare, FiSend, FiX, FiTrash2 } from 'react-icons/fi';
 import './Chatbot.css';
 
 // Maks riwayat pesan yang dikirim ke AI sebagai konteks (sliding window)
-const CONTEXT_WINDOW = 10;
+// Dikecilkan ke 6 agar tidak melebihi batas token Groq (6000 TPM)
+const CONTEXT_WINDOW = 6;
 
 export default function Chatbot() {
   const { lang } = useLang();

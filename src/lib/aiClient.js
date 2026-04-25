@@ -1,57 +1,73 @@
 // aiClient.js
-// Logika Fallback: Gemini (Utama) → Groq (Cadangan)
+// Logika Fallback: Gemini 2.5 Flash (Utama) → Groq (Cadangan)
 // Setiap request SELALU mencoba Gemini terlebih dahulu.
-// Jika Gemini quota habis (429), otomatis fallback ke Groq.
+// Jika Gemini quota habis (429/503), otomatis fallback ke Groq.
 
 const GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions";
-const GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent";
+const GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-04-17:generateContent";
 
 /**
- * Membangun system prompt yang sama untuk semua provider AI
+ * Cek apakah error HTTP termasuk kategori "limit/quota habis"
+ * Mencakup: 429 (rate limit), 413 (request too large), 503 (overloaded)
  */
-function buildSystemPrompt(portfolioContext, lang) {
-  return `Kamu adalah "Agent-Z", sebuah AI asisten virtual eksklusif untuk portfolio Z. M. Dinata. Tugas UTAMAMU adalah menjawab pertanyaan pengunjung HANYA berdasarkan informasi portfolio yang diberikan di bawah ini.
-
-ATURAN KETAT:
-1. JANGAN PERNAH menjawab pertanyaan di luar konteks Z. M. Dinata (misalnya pertanyaan umum, cuaca, politik, resep, dll). Jika ditanya di luar konteks, tolak dengan sopan dan kembalikan topik ke portfolio Z. M. Dinata.
-2. Jawablah dengan nada formal, profesional, namun tetap engaging dan menarik (maksimal 2-3 paragraf singkat).
-3. Pengunjung saat ini menggunakan bahasa: ${lang === 'en' ? 'Inggris (English)' : 'Indonesia'}. Kamu HARUS membalas dalam bahasa tersebut.
-4. Kamu memiliki akses realtime ke data portfolio berikut.
-
---- DATA PORTFOLIO Z. M. DINATA ---
-Profil: ${portfolioContext.profile || "Tidak tersedia"}
-Kontak: ${portfolioContext.contact || "Tidak tersedia"}
-Pendidikan: ${portfolioContext.education || "Tidak tersedia"}
-Keahlian (Skills): ${portfolioContext.skills || "Tidak tersedia"}
-Pengalaman: ${portfolioContext.experience || "Tidak tersedia"}
-Proyek: ${portfolioContext.projects || "Tidak tersedia"}
-Sertifikasi: ${portfolioContext.certifications || "Tidak tersedia"}
-Penghargaan: ${portfolioContext.awards || "Tidak tersedia"}
------------------------------------
-
-Ingat: Fokus hanya mempromosikan dan menjelaskan Z. M. Dinata secara profesional.`;
+function isQuotaError(status, message = '') {
+  if (status === 429 || status === 413 || status === 503) return true;
+  const msg = message.toLowerCase();
+  return msg.includes('rate limit') || msg.includes('quota') || msg.includes('too large') || msg.includes('tpm') || msg.includes('tokens per minute');
 }
 
 /**
- * Coba panggil Gemini API sebagai provider UTAMA.
- * Melempar error jika kuota habis (HTTP 429 / 503).
+ * Pesan ramah ketika semua kuota habis — bilingual otomatis
+ */
+function quotaMessage(lang) {
+  return lang === 'en'
+    ? "TOKEN_LIMIT_REACHED|I'm sorry, my AI service has reached its usage limit for now. Please try again in a few minutes — I'll be back soon! 🙏"
+    : "TOKEN_LIMIT_REACHED|Mohon maaf, layanan AI saya sedang mencapai batas penggunaan saat ini. Silakan coba kembali beberapa menit lagi — saya akan segera kembali! 🙏";
+}
+
+/**
+ * Membangun system prompt — bahasa dideteksi OTOMATIS dari pesan user
+ */
+function buildSystemPrompt(portfolioContext, lang) {
+  return `You are "Agent-Z", an exclusive virtual AI assistant for Z. M. Dinata's portfolio. Your MAIN task is to answer visitor questions ONLY based on the portfolio information provided below.
+
+STRICT RULES:
+1. NEVER answer questions outside the context of Z. M. Dinata (e.g., general knowledge, weather, politics, recipes, etc.). If asked off-topic, politely decline and redirect back to Z. M. Dinata's portfolio.
+2. Reply in a formal, professional, yet engaging tone (max 2-3 short paragraphs).
+3. LANGUAGE RULE (IMPORTANT): Always detect the language of the user's LATEST message and respond in THAT SAME language. If the user writes in English → respond in English. If the user writes in Indonesian (Bahasa Indonesia) → respond in Indonesian. Do NOT mix languages.
+4. You have real-time access to the following portfolio data.
+
+--- Z. M. DINATA PORTFOLIO DATA ---
+Profile: ${portfolioContext.profile || "Not available"}
+Contact: ${portfolioContext.contact || "Not available"}
+Education: ${portfolioContext.education || "Not available"}
+Skills: ${portfolioContext.skills || "Not available"}
+Experience: ${portfolioContext.experience || "Not available"}
+Projects: ${portfolioContext.projects || "Not available"}
+Certifications: ${portfolioContext.certifications || "Not available"}
+Awards: ${portfolioContext.awards || "Not available"}
+-----------------------------------
+
+Remember: Focus exclusively on promoting and explaining Z. M. Dinata professionally. Respond in the SAME language as the user's last message.`;
+}
+
+/**
+ * Coba panggil Gemini 2.5 Flash API sebagai provider UTAMA.
  */
 async function callGemini(messages, portfolioContext, lang) {
   const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
-  if (!apiKey) throw new Error("GEMINI_KEY_MISSING");
+  if (!apiKey || apiKey === 'your_gemini_api_key_here') throw new Error("GEMINI_KEY_MISSING");
 
   const systemPrompt = buildSystemPrompt(portfolioContext, lang);
 
-  // Format riwayat pesan ke format Gemini (role: user / model)
   const historyMessages = messages.map(m => ({
     role: m.sender === 'user' ? 'user' : 'model',
     parts: [{ text: m.text }],
   }));
 
-  // Sisipkan system prompt sebagai pesan pertama dari 'user' lalu 'model' ack
   const contents = [
     { role: 'user', parts: [{ text: systemPrompt }] },
-    { role: 'model', parts: [{ text: 'Mengerti. Saya siap membantu sebagai Agent-Z.' }] },
+    { role: 'model', parts: [{ text: 'Understood. I am ready to assist as Agent-Z.' }] },
     ...historyMessages,
   ];
 
@@ -62,23 +78,22 @@ async function callGemini(messages, portfolioContext, lang) {
       contents,
       generationConfig: {
         temperature: 0.3,
-        maxOutputTokens: 500,
+        maxOutputTokens: 400,
       },
     }),
   });
 
   if (!response.ok) {
     const errorData = await response.json().catch(() => ({}));
-    const status = response.status;
-    // 429 = quota habis, 503 = overloaded — trigger fallback
-    if (status === 429 || status === 503) {
-      throw new Error(`GEMINI_QUOTA_EXCEEDED:${status}`);
+    const errMsg = errorData?.error?.message || response.statusText;
+    if (isQuotaError(response.status, errMsg)) {
+      throw new Error(`GEMINI_QUOTA_EXCEEDED:${response.status}`);
     }
-    throw new Error(`Gemini API Error: ${status} - ${errorData?.error?.message || response.statusText}`);
+    throw new Error(`Gemini Error: ${response.status} - ${errMsg}`);
   }
 
   const data = await response.json();
-  return data.candidates?.[0]?.content?.parts?.[0]?.text || "Tidak ada respons dari Gemini.";
+  return data.candidates?.[0]?.content?.parts?.[0]?.text || "No response from Gemini.";
 }
 
 /**
@@ -108,22 +123,18 @@ async function callGroq(messages, portfolioContext, lang) {
       model: "llama-3.1-8b-instant",
       messages: apiMessages,
       temperature: 0.3,
-      max_tokens: 500,
+      max_tokens: 400,
     }),
   });
 
   if (!response.ok) {
     const errorData = await response.json().catch(() => ({}));
-    const status = response.status;
-    const isTokenLimit =
-      status === 429 ||
-      (errorData?.error?.message || '').toLowerCase().includes('rate limit') ||
-      (errorData?.error?.message || '').toLowerCase().includes('quota');
-
-    if (isTokenLimit) {
+    const errMsg = errorData?.error?.message || response.statusText;
+    // Tangkap 413 (too large) dan 429 (rate limit) sebagai quota error
+    if (isQuotaError(response.status, errMsg)) {
       throw new Error("GROQ_QUOTA_EXCEEDED");
     }
-    throw new Error(`Groq API Error: ${status} - ${errorData?.error?.message || response.statusText}`);
+    throw new Error(`Groq Error: ${response.status} - ${errMsg}`);
   }
 
   const data = await response.json();
@@ -132,53 +143,42 @@ async function callGroq(messages, portfolioContext, lang) {
 
 /**
  * Fungsi utama dengan logika fallback otomatis:
- * 1. Coba Gemini terlebih dahulu (setiap request)
- * 2. Jika Gemini quota habis → fallback ke Groq
- * 3. Jika Groq juga habis → tampilkan pesan offline
- *
- * @param {Array} messages - Daftar pesan historis
- * @param {Object} portfolioContext - Data portofolio
- * @param {string} lang - Bahasa ('id' atau 'en')
- * @returns {Promise<string>} Balasan dari AI
+ * 1. Coba Gemini 2.5 Flash terlebih dahulu (setiap request)
+ * 2. Jika Gemini quota/limit habis → fallback ke Groq
+ * 3. Jika Groq juga habis → tampilkan pesan offline yang ramah
  */
 export async function generateChatResponse(messages, portfolioContext, lang = 'id') {
   // ── LANGKAH 1: Coba Gemini (Primary) ──────────────────────────────────
   try {
     const result = await callGemini(messages, portfolioContext, lang);
-    console.log("[Agent-Z] ✅ Menggunakan: Gemini");
+    console.log("[Agent-Z] ✅ Provider: Gemini 2.5 Flash");
     return result;
   } catch (geminiError) {
-    const isQuotaError = geminiError.message.startsWith("GEMINI_QUOTA_EXCEEDED");
-    const isMissingKey = geminiError.message === "GEMINI_KEY_MISSING";
-
-    if (!isQuotaError && !isMissingKey) {
-      // Error lain (network, dsb) — log tapi tetap coba Groq
-      console.warn("[Agent-Z] ⚠️ Gemini error (non-quota):", geminiError.message);
+    const isQuota = geminiError.message.startsWith("GEMINI_QUOTA_EXCEEDED");
+    const isMissing = geminiError.message === "GEMINI_KEY_MISSING";
+    if (isQuota || isMissing) {
+      console.warn(`[Agent-Z] ⚠️ Gemini ${isMissing ? 'key missing' : 'quota habis'} → beralih ke Groq...`);
     } else {
-      console.warn("[Agent-Z] ⚠️ Gemini quota habis atau key tidak ada. Beralih ke Groq...");
+      console.warn("[Agent-Z] ⚠️ Gemini error (non-quota):", geminiError.message, "→ beralih ke Groq...");
     }
   }
 
   // ── LANGKAH 2: Fallback ke Groq (Cadangan) ────────────────────────────
   try {
     const result = await callGroq(messages, portfolioContext, lang);
-    console.log("[Agent-Z] ✅ Menggunakan: Groq (fallback)");
+    console.log("[Agent-Z] ✅ Provider: Groq (fallback)");
     return result;
   } catch (groqError) {
-    const isGroqQuota = groqError.message === "GROQ_QUOTA_EXCEEDED";
     console.error("[Agent-Z] ❌ Groq juga error:", groqError.message);
 
-    // ── LANGKAH 3: Keduanya gagal → Pesan Offline ─────────────────────
-    if (isGroqQuota) {
-      return `TOKEN_LIMIT_REACHED|${
-        lang === 'en'
-          ? "Sorry, both AI services have reached their daily limits. Please try again later."
-          : "Maaf, kedua layanan AI sudah mencapai batas harian. Silakan coba lagi nanti."
-      }`;
+    // ── LANGKAH 3: Keduanya gagal → Pesan Offline Ramah ──────────────
+    if (groqError.message === "GROQ_QUOTA_EXCEEDED") {
+      return quotaMessage(lang);
     }
 
+    // Error lain (network, dsb)
     return lang === 'en'
-      ? `A technical error occurred. Please try again later. (${groqError.message})`
-      : `Terjadi kendala teknis. Silakan coba lagi nanti. (${groqError.message})`;
+      ? "TOKEN_LIMIT_REACHED|A technical issue occurred and I'm temporarily unavailable. Please try again shortly!"
+      : "TOKEN_LIMIT_REACHED|Terjadi kendala teknis dan saya sedang tidak tersedia sementara. Silakan coba lagi sebentar!";
   }
 }
