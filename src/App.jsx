@@ -6,6 +6,7 @@ import HomePage from './pages/HomePage';
 import ProjectsPage from './pages/ProjectsPage';
 import CertificatesPage from './pages/CertificatesPage';
 import HonorsPage from './pages/HonorsPage';
+import Chatbot from './components/Chatbot/Chatbot';
 
 // Admin Pages
 import LoginPage from './pages/admin/LoginPage';
@@ -52,6 +53,7 @@ export default function App() {
             </Route>
           </Routes>
         </HashRouter>
+        <Chatbot />
       </LangProvider>
     </ThemeProvider>
   );

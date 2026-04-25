@@ -1,0 +1,603 @@
+/* =============================================================
+   CHATBOT WRAPPER — Posisi fixed di pojok kanan bawah layar
+   ============================================================= */
+.chatbot-wrapper {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+/* =============================================================
+   KONTAINER MASKOT + TOMBOL
+   ============================================================= */
+.agentz-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* =============================================================
+   BALON TEKS — Posisi kiri atas maskot
+   Ujung lancip di KANAN BAWAH mengarah ke maskot
+   ============================================================= */
+.speech-bubble {
+  position: absolute;
+  bottom: 220%;      /* Di atas maskot */
+  right: 90%;        /* Di kiri maskot */
+  background: rgba(15, 23, 42, 0.95);
+  border: 1px solid rgba(0, 255, 204, 0.4);
+  backdrop-filter: blur(10px);
+  color: #ffffff;
+  padding: 14px 18px;
+  border-radius: 16px 16px 0 16px;
+  width: max-content;
+  max-width: 280px;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+  pointer-events: none;
+  z-index: 5;
+}
+
+.speech-bubble p {
+  margin: 0;
+}
+
+/* =============================================================
+   MASCOT WRAPPER — Kontainer relatif untuk maskot & tombol
+   ============================================================= */
+.mascot-wrapper {
+  position: relative;
+  width: 65px;
+  height: 65px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* =============================================================
+   MASCOT FLOAT CONTAINER — Membungkus HANYA badan + lengan
+   Kontainer ini yang mendapat animasi melayang.
+   Tombol chat TIDAK berada di dalam kontainer ini.
+   ============================================================= */
+.mascot-float-container {
+  position: absolute;
+  /*
+   * [KALIBRASI POSISI MASKOT]
+   * bottom : jarak maskot di atas tombol (naikkan = maskot makin tinggi)
+   * right  : geser horizontal (positif = ke kiri, negatif = ke kanan)
+   */
+  bottom: 35px;
+  right: -25px;
+  width: 130px;
+  z-index: 1;
+  pointer-events: none;
+  overflow: visible;
+
+  /* >>> ANIMASI MELAYANG <<< */
+  animation: floatMascot 3.5s ease-in-out infinite;
+}
+
+/* =============================================================
+   ANIMASI MELAYANG (Anti-Gravity)
+   Badan + lengan melayang bersamaan, tombol tetap diam.
+   ============================================================= */
+@keyframes floatMascot {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-10px); }
+}
+
+/* =============================================================
+   LAYER 1: TUBUH UTAMA
+   ============================================================= */
+.mascot-body {
+  position: relative;
+  width: 100%;
+  height: auto;
+  z-index: 2;
+  display: block;
+}
+
+/* =============================================================
+   LAYER 2: SISTEM KERANGKA LENGAN (SKELETAL ANIMATION)
+   
+   PENTING: Gambar lengan 1500x1500 pixel tapi konten hanya ~30%.
+   Setiap joint container HARUS punya dimensi eksplisit agar
+   positioning anak-anaknya bekerja. Gunakan PIXEL bukan %.
+   ============================================================= */
+.arm-system {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+  overflow: visible;
+}
+
+/* Gambar lengan: BUKAN absolute, biarkan ikut flow joint */
+.arm-part {
+  display: block;
+}
+
+/* -------------------------------------------------------------
+   ENGSEL 1: BAHU → LENGAN ATAS
+   
+   [KALIBRASI] Posisi relatif terhadap arm-system (= body)
+   Body 130px wide. Bahu kanan karakter ≈ posisi kiri-atas body.
+   Gambar upperarm 1500x1500, konten di area kiri-tengah.
+   ------------------------------------------------------------- */
+.upper-arm-joint {
+  position: absolute;
+  top: 30px;          /* [KALIBRASI] ↑ naik agar pas dengan bahu */
+  left: 44px;          /* [KALIBRASI] → geser kanan agar menempel di bahu body */
+  width: 100px;
+  height: 100px;
+  transform-origin: 15px 22px;  /* [KALIBRASI] titik putar = bahu */
+  animation: waveShoulder 2.5s ease-in-out infinite;
+}
+
+.upper-arm-img {
+  width: 100px;
+  height: auto;
+}
+
+/* -------------------------------------------------------------
+   ENGSEL 2: SIKU → LENGAN BAWAH
+   Bersarang di dalam upper-arm-joint.
+   
+   [KALIBRASI] Posisi relatif terhadap upper-arm-joint (100x100)
+   ------------------------------------------------------------- */
+.forearm-joint {
+  position: absolute;
+  top: 9px;          /* [KALIBRASI] jarak ke siku dari atas upper-arm */
+  left: 6.5px;        /* [KALIBRASI] offset horizontal siku */
+  width: 85px;
+  height: 85px;
+  transform-origin: 15px 40px;  /* [KALIBRASI] titik putar = siku */
+  animation: waveElbow 2.5s ease-in-out infinite;
+}
+
+.forearm-img {
+  width: 85px;
+  height: auto;
+}
+
+/* -------------------------------------------------------------
+   ENGSEL 3: PERGELANGAN → TELAPAK TANGAN
+   Bersarang di dalam forearm-joint.
+   
+   [KALIBRASI] Posisi relatif terhadap forearm-joint (85x85)
+   ------------------------------------------------------------- */
+.hand-joint {
+  position: absolute;
+  top: 9px;          /* [KALIBRASI] jarak ke pergelangan dari atas forearm */
+  left: 13px;          /* [KALIBRASI] offset horizontal pergelangan */
+  width: 65px;
+  height: 65px;
+  transform-origin: 42px 25px;  /* [KALIBRASI] titik putar = pergelangan */
+  animation: waveWrist 2.5s ease-in-out infinite;
+}
+
+.hand-img {
+  width: 65px;
+  height: auto;
+}
+
+/* =============================================================
+   KEYFRAMES ANIMASI ENGSEL
+   
+   Pose referensi: Lengan terangkat ke samping ~45°, telapak tangan
+   terbuka melambai. Animasi dimulai dari posisi TERANGKAT,
+   bukan dari posisi tangan di bawah.
+   
+   [KALIBRASI SUDUT]
+   Ubah nilai rotate() untuk mengatur seberapa lebar lambaian.
+   Nilai negatif = rotasi berlawanan arah jarum jam (mengangkat)
+   Nilai positif = rotasi searah jarum jam (menurunkan)
+   ============================================================= */
+
+/* Bahu: Lengan sudah terangkat ~45°, bergoyang pelan ±8° */
+@keyframes waveShoulder {
+  0%, 100% { transform: rotate(-45deg); }
+  50%      { transform: rotate(-38deg); }
+}
+
+/* Siku: Lengan bawah sedikit ditekuk, bergoyang sinkron ±10° */
+@keyframes waveElbow {
+  0%, 100% { transform: rotate(2deg); }
+  50%      { transform: rotate(0deg); }
+}
+
+/* 3. Pergelangan (Telapak Tangan): Menggunakan efek Follow-Through.
+   Saat siku bergerak ke dalam (positif), tangan tertinggal tertekuk ke luar (negatif). */
+@keyframes waveWrist {
+  0%, 100% { transform: rotate(25deg); }  /* Tangan membalik saat di ujung ayunan luar */
+  50%      { transform: rotate(-15deg); } /* Tangan tertinggal saat siku menekuk ke dalam */
+}
+
+/* =============================================================
+   TOMBOL CHAT (FAB) — STATIS, tidak ikut melayang
+   z-index lebih tinggi dari maskot agar di depan
+   ============================================================= */
+.chatbot-toggle-btn {
+  position: relative;
+  z-index: 10;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: var(--accent-primary, #00d2ff);
+  color: #fff;
+  border: none;
+  box-shadow: 0 4px 15px rgba(0, 210, 255, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.chatbot-toggle-btn:hover {
+  background: var(--accent-secondary, #3a7bd5);
+}
+
+/* =============================================================
+   CHAT WINDOW
+   ============================================================= */
+.chatbot-window {
+  position: relative;
+  width: 350px;
+  height: 500px;
+  max-height: calc(100vh - 100px);
+  background: var(--bg-secondary, #1a1a1a);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+}
+
+/* =============================================================
+   CHAT HEADER
+   ============================================================= */
+.chatbot-header {
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.2);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;  /* Title kiri, clear button kanan */
+  width: 100%;
+}
+
+.chatbot-header-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.chatbot-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: linear-gradient(135deg, #00d2ff, #3a7bd5);
+  flex-shrink: 0;
+}
+
+.chatbot-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.chatbot-header-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.chatbot-header h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: var(--text-primary, #fff);
+  white-space: nowrap;
+}
+
+/* Tombol hapus memory */
+.chatbot-clear-btn {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.4);
+  border-radius: 8px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s, background 0.2s;
+  flex-shrink: 0;
+}
+
+.chatbot-clear-btn:hover {
+  color: #ff6b6b;
+  border-color: rgba(255, 107, 107, 0.4);
+  background: rgba(255, 107, 107, 0.1);
+}
+
+/* Status Indicator */
+.chatbot-status {
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.chatbot-status.online { color: #4cd137; }
+.chatbot-status.offline { color: #e84118; }
+
+.chatbot-status::before {
+  content: '';
+  display: block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.chatbot-status.online::before { background: #4cd137; }
+.chatbot-status.offline::before { background: #e84118; }
+
+/* =============================================================
+   CLOSE BUTTON
+   ============================================================= */
+.chatbot-close-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: transparent;
+  border: none;
+  color: var(--text-secondary, #aaa);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  z-index: 100;
+}
+
+.chatbot-close-btn svg {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+}
+
+.chatbot-close-btn:hover {
+  color: var(--text-primary, #fff);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* =============================================================
+   MESSAGES
+   ============================================================= */
+.chatbot-messages {
+  flex: 1;
+  padding: 1rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.chatbot-messages::-webkit-scrollbar { width: 6px; }
+.chatbot-messages::-webkit-scrollbar-track { background: transparent; }
+.chatbot-messages::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
+.chatbot-messages::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.chatbot-message {
+  display: flex;
+  max-width: 85%;
+}
+
+.chatbot-message.user { align-self: flex-end; }
+.chatbot-message.ai   { align-self: flex-start; }
+
+.chatbot-message-content {
+  padding: 10px 14px;
+  border-radius: 14px;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  white-space: pre-wrap;
+}
+
+.chatbot-message.user .chatbot-message-content {
+  background: var(--accent-primary, #00d2ff);
+  color: #fff;
+  border-bottom-right-radius: 4px;
+}
+
+.chatbot-message.ai .chatbot-message-content {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-primary, #fff);
+  border-bottom-left-radius: 4px;
+}
+
+/* =============================================================
+   INPUT AREA
+   ============================================================= */
+.chatbot-input-area {
+  padding: 1rem;
+  display: flex;
+  gap: 10px;
+  background: rgba(0, 0, 0, 0.2);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.chatbot-input-area input {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 10px 15px;
+  color: var(--text-primary, #fff);
+  font-size: 0.95rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.chatbot-input-area input:focus {
+  border-color: var(--accent-primary, #00d2ff);
+}
+
+.chatbot-input-area button {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--accent-primary, #00d2ff);
+  color: white;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.chatbot-input-area button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.chatbot-input-area button:not(:disabled):hover {
+  background: var(--accent-secondary, #3a7bd5);
+}
+
+/* =============================================================
+   TYPING INDICATOR
+   Muncul ketika Agent-Z sedang "mengetik" balasan
+   ============================================================= */
+.typing-indicator {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  padding: 10px 14px !important;
+}
+
+.typing-indicator span {
+  width: 8px;
+  height: 8px;
+  background: var(--accent-primary, #00d2ff);
+  border-radius: 50%;
+  animation: bounce 1s infinite ease-in-out both;
+  opacity: 0.85;
+}
+
+.typing-indicator span:nth-child(1) { animation-delay: 0s; }
+.typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+.typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes bounce {
+  0%, 60%, 100% { transform: translateY(0) scale(1);   opacity: 0.5; }
+  30%            { transform: translateY(-6px) scale(1.2); opacity: 1; }
+}
+
+/* =============================================================
+   RESPONSIVE (MOBILE)
+   
+   Skala proporsional dari desktop:
+   Desktop body = 130px → Mobile body = 100px
+   Rasio = 100/130 ≈ 0.77
+   Semua koordinat engsel di-scale dengan rasio ini.
+   ============================================================= */
+@media (max-width: 480px) {
+  .chatbot-wrapper {
+    bottom: 1rem;
+    right: 1rem;
+  }
+
+  .chatbot-window {
+    width: calc(100vw - 2rem);
+    height: 60vh;
+  }
+
+  /* Tombol lebih kecil di mobile */
+  .chatbot-toggle-btn {
+    width: 50px;
+    height: 50px;
+  }
+
+  .mascot-wrapper {
+    width: 50px;
+    height: 50px;
+  }
+
+  /* Maskot di-scale ke 100px */
+  .mascot-float-container {
+    width: 100px;
+    bottom: 28px;       /* 35 * 0.77 ≈ 27 */
+    right: -19px;       /* -25 * 0.77 ≈ -19 */
+  }
+
+  /* Engsel 1: Bahu (scale 0.77) */
+  .upper-arm-joint {
+    top: 23px;          /* 30 * 0.77 */
+    left: 34px;         /* 44 * 0.77 */
+    width: 77px;        /* 100 * 0.77 */
+    height: 77px;
+    transform-origin: 12px 17px;  /* 15*0.77, 22*0.77 */
+  }
+
+  .upper-arm-img {
+    width: 77px;
+  }
+
+  /* Engsel 2: Siku (scale 0.77) */
+  .forearm-joint {
+    top: 7px;           /* 9 * 0.77 */
+    left: 5px;          /* 6.5 * 0.77 */
+    width: 65px;        /* 85 * 0.77 */
+    height: 65px;
+    transform-origin: 12px 31px;  /* 15*0.77, 40*0.77 */
+  }
+
+  .forearm-img {
+    width: 65px;
+  }
+
+  /* Engsel 3: Pergelangan (scale 0.77) */
+  .hand-joint {
+    top: 7px;           /* 9 * 0.77 */
+    left: 10px;         /* 13 * 0.77 */
+    width: 50px;        /* 65 * 0.77 */
+    height: 50px;
+    transform-origin: 32px 19px;  /* 42*0.77, 25*0.77 */
+  }
+
+  .hand-img {
+    width: 50px;
+  }
+
+  /* Speech bubble: lebih kecil, posisi disesuaikan */
+  .speech-bubble {
+    bottom: 220%;
+    right: 90%;
+    max-width: 200px;
+    font-size: 0.78rem;
+    padding: 10px 14px;
+  }
+}
