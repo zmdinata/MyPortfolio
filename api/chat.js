@@ -19,6 +19,31 @@ function quotaMessage(lang) {
 }
 
 function buildSystemPrompt(portfolioContext, lang) {
+  let contextText = "";
+  
+  // Deteksi jika semua field berisi string yang sama (akibat duplikasi dari frontend)
+  const values = Object.values(portfolioContext).filter(v => typeof v === 'string' && v.trim() !== "");
+  const uniqueValues = [...new Set(values)];
+  
+  if (uniqueValues.length === 1 && uniqueValues[0] !== "Not available") {
+    // Jika semua field sama, cetak 1x saja dan batasi ke 4000 karakter (~1000 token)
+    contextText = `--- Z. M. DINATA PORTFOLIO DATA ---
+${uniqueValues[0].substring(0, 4000)}
+-----------------------------------`;
+  } else {
+    // Jika datanya rapi per kategori, batasi max 1000 karakter per bagian
+    contextText = `--- Z. M. DINATA PORTFOLIO DATA ---
+Profile: ${(portfolioContext.profile || "Not available").substring(0, 1000)}
+Contact: ${(portfolioContext.contact || "Not available").substring(0, 1000)}
+Education: ${(portfolioContext.education || "Not available").substring(0, 1000)}
+Skills: ${(portfolioContext.skills || "Not available").substring(0, 1000)}
+Experience: ${(portfolioContext.experience || "Not available").substring(0, 1000)}
+Projects: ${(portfolioContext.projects || "Not available").substring(0, 1000)}
+Certifications: ${(portfolioContext.certifications || "Not available").substring(0, 1000)}
+Awards: ${(portfolioContext.awards || "Not available").substring(0, 1000)}
+-----------------------------------`;
+  }
+
   return `You are "Agent-Z", an exclusive virtual AI assistant for Z. M. Dinata's portfolio. Your MAIN task is to answer visitor questions ONLY based on the portfolio information provided below.
 
 STRICT RULES:
@@ -27,16 +52,7 @@ STRICT RULES:
 3. LANGUAGE RULE (IMPORTANT): Always detect the language of the user's LATEST message and respond in THAT SAME language. If the user writes in English → respond in English. If the user writes in Indonesian (Bahasa Indonesia) → respond in Indonesian. Do NOT mix languages.
 4. You have real-time access to the following portfolio data.
 
---- Z. M. DINATA PORTFOLIO DATA ---
-Profile: ${portfolioContext.profile || "Not available"}
-Contact: ${portfolioContext.contact || "Not available"}
-Education: ${portfolioContext.education || "Not available"}
-Skills: ${portfolioContext.skills || "Not available"}
-Experience: ${portfolioContext.experience || "Not available"}
-Projects: ${portfolioContext.projects || "Not available"}
-Certifications: ${portfolioContext.certifications || "Not available"}
-Awards: ${portfolioContext.awards || "Not available"}
------------------------------------
+${contextText}
 
 Remember: Focus exclusively on promoting and explaining Z. M. Dinata professionally. Respond in the SAME language as the user's last message.`;
 }
