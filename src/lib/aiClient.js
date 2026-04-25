@@ -1,10 +1,12 @@
 // aiClient.js
-// Logika Fallback: Gemini 2.5 Flash (Utama) → Groq (Cadangan)
+// Logika Fallback: Gemini 2.5 Flash (Utama) → Groq (Cadangan) → OpenRouter (Terakhir)
 // Setiap request SELALU mencoba Gemini terlebih dahulu.
 // Jika Gemini quota habis (429/503), otomatis fallback ke Groq.
+// Jika Groq juga habis, fallback terakhir ke OpenRouter.
 
 const GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions";
 const GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-04-17:generateContent";
+const OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions";
 
 /**
  * Cek apakah error HTTP termasuk kategori "limit/quota habis"
@@ -142,10 +144,58 @@ async function callGroq(messages, portfolioContext, lang) {
 }
 
 /**
+ * Coba panggil OpenRouter API sebagai provider TERAKHIR.
+ * Menggunakan model gratis: meta-llama/llama-3.1-8b-instruct:free
+ */
+async function callOpenRouter(messages, portfolioContext, lang) {
+  const apiKey = import.meta.env.VITE_OPENROUTER_API_KEY;
+  if (!apiKey || apiKey === 'your_openrouter_api_key_here') throw new Error("OPENROUTER_KEY_MISSING");
+
+  const systemPrompt = buildSystemPrompt(portfolioContext, lang);
+
+  const apiMessages = [
+    { role: "system", content: systemPrompt },
+    ...messages.map(m => ({
+      role: m.sender === 'user' ? 'user' : 'assistant',
+      content: m.text,
+    })),
+  ];
+
+  const response = await fetch(OPENROUTER_API_URL, {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${apiKey}`,
+      "Content-Type": "application/json",
+      "HTTP-Referer": "https://zmdinata.com",  // Wajib untuk OpenRouter
+      "X-Title": "Agent-Z Portfolio Chatbot",
+    },
+    body: JSON.stringify({
+      model: "meta-llama/llama-3.1-8b-instruct:free",
+      messages: apiMessages,
+      temperature: 0.3,
+      max_tokens: 400,
+    }),
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    const errMsg = errorData?.error?.message || response.statusText;
+    if (isQuotaError(response.status, errMsg)) {
+      throw new Error("OPENROUTER_QUOTA_EXCEEDED");
+    }
+    throw new Error(`OpenRouter Error: ${response.status} - ${errMsg}`);
+  }
+
+  const data = await response.json();
+  return data.choices[0].message.content;
+}
+
+/**
  * Fungsi utama dengan logika fallback otomatis:
  * 1. Coba Gemini 2.5 Flash terlebih dahulu (setiap request)
  * 2. Jika Gemini quota/limit habis → fallback ke Groq
- * 3. Jika Groq juga habis → tampilkan pesan offline yang ramah
+ * 3. Jika Groq juga habis → fallback ke OpenRouter
+ * 4. Jika semua habis → tampilkan pesan offline yang ramah
  */
 export async function generateChatResponse(messages, portfolioContext, lang = 'id') {
   // ── LANGKAH 1: Coba Gemini (Primary) ──────────────────────────────────
@@ -159,26 +209,28 @@ export async function generateChatResponse(messages, portfolioContext, lang = 'i
     if (isQuota || isMissing) {
       console.warn(`[Agent-Z] ⚠️ Gemini ${isMissing ? 'key missing' : 'quota habis'} → beralih ke Groq...`);
     } else {
-      console.warn("[Agent-Z] ⚠️ Gemini error (non-quota):", geminiError.message, "→ beralih ke Groq...");
+      console.warn("[Agent-Z] ⚠️ Gemini error:", geminiError.message, "→ beralih ke Groq...");
     }
   }
 
   // ── LANGKAH 2: Fallback ke Groq (Cadangan) ────────────────────────────
   try {
     const result = await callGroq(messages, portfolioContext, lang);
-    console.log("[Agent-Z] ✅ Provider: Groq (fallback)");
+    console.log("[Agent-Z] ✅ Provider: Groq (fallback #1)");
     return result;
   } catch (groqError) {
-    console.error("[Agent-Z] ❌ Groq juga error:", groqError.message);
+    console.warn("[Agent-Z] ⚠️ Groq error:", groqError.message, "→ beralih ke OpenRouter...");
+  }
 
-    // ── LANGKAH 3: Keduanya gagal → Pesan Offline Ramah ──────────────
-    if (groqError.message === "GROQ_QUOTA_EXCEEDED") {
-      return quotaMessage(lang);
-    }
+  // ── LANGKAH 3: Fallback ke OpenRouter (Terakhir) ──────────────────────
+  try {
+    const result = await callOpenRouter(messages, portfolioContext, lang);
+    console.log("[Agent-Z] ✅ Provider: OpenRouter (fallback #2)");
+    return result;
+  } catch (openRouterError) {
+    console.error("[Agent-Z] ❌ OpenRouter juga error:", openRouterError.message);
 
-    // Error lain (network, dsb)
-    return lang === 'en'
-      ? "TOKEN_LIMIT_REACHED|A technical issue occurred and I'm temporarily unavailable. Please try again shortly!"
-      : "TOKEN_LIMIT_REACHED|Terjadi kendala teknis dan saya sedang tidak tersedia sementara. Silakan coba lagi sebentar!";
+    // ── LANGKAH 4: Semua gagal → Pesan Offline Ramah ─────────────────
+    return quotaMessage(lang);
   }
 }
