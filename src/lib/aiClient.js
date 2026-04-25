@@ -170,7 +170,7 @@ async function callOpenRouter(messages, portfolioContext, lang) {
       "X-Title": "Agent-Z Portfolio Chatbot",
     },
     body: JSON.stringify({
-      model: "meta-llama/llama-3.1-8b-instruct:free",
+      model: "openrouter/free",
       messages: apiMessages,
       temperature: 0.3,
       max_tokens: 400,
