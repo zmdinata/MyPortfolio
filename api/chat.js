@@ -83,9 +83,10 @@ async function callGemini(messages, portfolioContext, lang) {
   return data.candidates?.[0]?.content?.parts?.[0]?.text || "No response from Gemini.";
 }
 
-async function callGroq(messages, portfolioContext, lang) {
-  const apiKey = process.env.VITE_GROQ_API_KEY;
-  if (!apiKey) throw new Error("GROQ_KEY_MISSING");
+async function callGroq(messages, portfolioContext, lang, keyIndex = 1) {
+  const envKeyName = keyIndex === 1 ? 'VITE_GROQ_API_KEY' : 'VITE_GROQ_API_KEY_2';
+  const apiKey = process.env[envKeyName];
+  if (!apiKey || apiKey === 'your_groq_api_key_here') throw new Error(`GROQ_KEY_${keyIndex}_MISSING`);
 
   const systemPrompt = buildSystemPrompt(portfolioContext, lang);
 
@@ -115,9 +116,9 @@ async function callGroq(messages, portfolioContext, lang) {
     const errorData = await response.json().catch(() => ({}));
     const errMsg = errorData?.error?.message || response.statusText;
     if (isQuotaError(response.status, errMsg)) {
-      throw new Error("GROQ_QUOTA_EXCEEDED");
+      throw new Error(`GROQ_QUOTA_EXCEEDED_KEY_${keyIndex}`);
     }
-    throw new Error(`Groq Error: ${response.status} - ${errMsg}`);
+    throw new Error(`Groq Key #${keyIndex} Error: ${response.status} - ${errMsg}`);
   }
 
   const data = await response.json();
@@ -138,66 +139,94 @@ async function callOpenRouter(messages, portfolioContext, lang) {
     })),
   ];
 
-  const response = await fetch(OPENROUTER_API_URL, {
-    method: "POST",
-    headers: {
-      "Authorization": `Bearer ${apiKey}`,
-      "Content-Type": "application/json",
-      "HTTP-Referer": "https://zmdinata.com",
-      "X-Title": "Agent-Z Portfolio Chatbot",
-    },
-    body: JSON.stringify({
-      model: "meta-llama/llama-3.2-3b-instruct:free",
-      messages: apiMessages,
-      temperature: 0.3,
-      max_tokens: 400,
-    }),
-  });
+  // Tambahkan Timeout 30 Detik menggunakan AbortController
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 30000);
 
-  if (!response.ok) {
-    const errorData = await response.json().catch(() => ({}));
-    const errMsg = errorData?.error?.message || response.statusText;
-    if (isQuotaError(response.status, errMsg)) {
-      throw new Error("OPENROUTER_QUOTA_EXCEEDED");
+  try {
+    const response = await fetch(OPENROUTER_API_URL, {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+        "HTTP-Referer": "https://zmdinata.com",
+        "X-Title": "Agent-Z Portfolio Chatbot",
+      },
+      body: JSON.stringify({
+        model: "openrouter/free",
+        messages: apiMessages,
+        temperature: 0.3,
+        max_tokens: 400,
+      }),
+      signal: controller.signal,
+    });
+
+    clearTimeout(timeoutId);
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      const errMsg = errorData?.error?.message || response.statusText;
+      if (isQuotaError(response.status, errMsg)) {
+        throw new Error("OPENROUTER_QUOTA_EXCEEDED");
+      }
+      throw new Error(`OpenRouter Error: ${response.status} - ${errMsg}`);
     }
-    throw new Error(`OpenRouter Error: ${response.status} - ${errMsg}`);
-  }
 
-  const data = await response.json();
-  return data.choices[0].message.content;
+    const data = await response.json();
+    return data.choices[0].message.content;
+  } catch (err) {
+    clearTimeout(timeoutId);
+    if (err.name === 'AbortError') {
+      throw new Error("OPENROUTER_TIMEOUT");
+    }
+    throw err;
+  }
 }
 
 // Handler utama Serverless Vercel
 export default async function handler(req, res) {
-  // Hanya terima POST
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method Not Allowed' });
   }
 
   const { messages, portfolioContext, lang } = req.body;
 
+  // ── 1. Coba Gemini ──────────────────────────────────────────
   try {
     const result = await callGemini(messages, portfolioContext, lang);
-    console.log("[Agent-Z Server] ✅ Provider: Gemini 2.5 Flash");
     return res.status(200).json({ reply: result });
   } catch (geminiError) {
-    console.warn("[Agent-Z Server] ⚠️ Gemini error:", geminiError.message, "➔ beralih ke Groq...");
+    console.warn("[Agent-Z Server] ⚠️ Gemini gagal, beralih ke Groq Key #1...");
   }
 
+  // ── 2. Coba Groq Key #1 ─────────────────────────────────────
   try {
-    const result = await callGroq(messages, portfolioContext, lang);
-    console.log("[Agent-Z Server] ✅ Provider: Groq");
+    const result = await callGroq(messages, portfolioContext, lang, 1);
     return res.status(200).json({ reply: result });
-  } catch (groqError) {
-    console.warn("[Agent-Z Server] ⚠️ Groq error:", groqError.message, "➔ beralih ke OpenRouter...");
+  } catch (groqError1) {
+    console.warn(`[Agent-Z Server] ⚠️ Groq Key #1 gagal (${groqError1.message}), beralih ke Groq Key #2...`);
   }
 
+  // ── 3. Coba Groq Key #2 ─────────────────────────────────────
+  try {
+    const result = await callGroq(messages, portfolioContext, lang, 2);
+    return res.status(200).json({ reply: result });
+  } catch (groqError2) {
+    console.warn(`[Agent-Z Server] ⚠️ Groq Key #2 gagal (${groqError2.message}), beralih ke OpenRouter...`);
+  }
+
+  // ── 4. Coba OpenRouter (Dengan Timeout 30s) ─────────────────
   try {
     const result = await callOpenRouter(messages, portfolioContext, lang);
-    console.log("[Agent-Z Server] ✅ Provider: OpenRouter");
     return res.status(200).json({ reply: result });
   } catch (openRouterError) {
-    console.error("[Agent-Z Server] ❌ Semua provider gagal:", openRouterError.message);
+    if (openRouterError.message === "OPENROUTER_TIMEOUT") {
+      console.error("[Agent-Z Server] ❌ OpenRouter Timeout setelah 30 detik.");
+    } else {
+      console.error("[Agent-Z Server] ❌ Semua provider gagal:", openRouterError.message);
+    }
+    
+    // Kembalikan pesan ramah jika timeout/limit
     return res.status(200).json({ reply: quotaMessage(lang) });
   }
 }
