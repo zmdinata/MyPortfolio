@@ -5,17 +5,18 @@ import { useTheme } from '../../context/ThemeContext';
 import { useLang } from '../../context/LangContext';
 import { FiSun, FiMoon } from 'react-icons/fi';
 import { supabase } from '../../lib/supabase';
+import { smoothEase, smoothSpring } from '../../lib/motionConfig';
 
 const overlayVariants = {
   hidden: { opacity: 0 },
-  visible: { opacity: 1, transition: { duration: 0.3, staggerChildren: 0.07 } },
-  exit: { opacity: 0, transition: { duration: 0.25 } },
+  visible: { opacity: 1, transition: { duration: 0.34, ease: smoothEase, staggerChildren: 0.055 } },
+  exit: { opacity: 0, transition: { duration: 0.22, ease: [0.4, 0, 1, 1] } },
 };
 
 const linkVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: [0.22, 1, 0.36, 1] } },
-  exit: { opacity: 0, y: -10, transition: { duration: 0.2 } },
+  hidden: { opacity: 0, y: 18, filter: 'blur(4px)' },
+  visible: { opacity: 1, y: 0, filter: 'blur(0px)', transition: { duration: 0.48, ease: smoothEase } },
+  exit: { opacity: 0, y: -8, filter: 'blur(3px)', transition: { duration: 0.18 } },
 };
 
 export default function Navbar() {
@@ -92,7 +93,7 @@ export default function Navbar() {
               onClick={toggleTheme}
               aria-label="Toggle theme"
               whileTap={{ scale: 0.85, rotate: 180 }}
-              transition={{ duration: 0.3 }}
+              transition={smoothSpring}
             >
               {theme === 'dark' ? <FiSun /> : <FiMoon />}
             </motion.button>
@@ -145,6 +146,7 @@ export default function Navbar() {
                 onClick={toggleTheme}
                 aria-label="Toggle theme"
                 whileTap={{ scale: 0.85, rotate: 180 }}
+                transition={smoothSpring}
               >
                 {theme === 'dark' ? <FiSun /> : <FiMoon />}
               </motion.button>

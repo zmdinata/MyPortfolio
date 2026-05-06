@@ -11,49 +11,7 @@ import * as FiIcons from 'react-icons/fi';
 import { HiOutlineMail } from 'react-icons/hi';
 import { FiArrowRight } from 'react-icons/fi';
 import HeroAnimation from '../components/ui/HeroAnimation';
-
-/* ===== Animation Variants ===== */
-const fadeUp = {
-  hidden: { opacity: 0, y: 40 },
-  visible: (i = 0) => ({
-    opacity: 1, y: 0,
-    transition: { duration: 0.6, delay: i * 0.12, ease: [0.22, 1, 0.36, 1] },
-  }),
-};
-
-const fadeLeft = {
-  hidden: { opacity: 0, x: -40 },
-  visible: (i = 0) => ({
-    opacity: 1, x: 0,
-    transition: { duration: 0.6, delay: i * 0.12, ease: [0.22, 1, 0.36, 1] },
-  }),
-};
-
-const fadeRight = {
-  hidden: { opacity: 0, x: 40 },
-  visible: (i = 0) => ({
-    opacity: 1, x: 0,
-    transition: { duration: 0.6, delay: i * 0.12, ease: [0.22, 1, 0.36, 1] },
-  }),
-};
-
-const scaleUp = {
-  hidden: { opacity: 0, scale: 0.8 },
-  visible: (i = 0) => ({
-    opacity: 1, scale: 1,
-    transition: { duration: 0.7, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] },
-  }),
-};
-
-const stagger = {
-  hidden: {},
-  visible: { transition: { staggerChildren: 0.12 } },
-};
-
-const staggerFast = {
-  hidden: {},
-  visible: { transition: { staggerChildren: 0.06 } },
-};
+import { fadeLeft, fadeRight, fadeUp, scaleUp, smoothEase, stagger, staggerFast } from '../lib/motionConfig';
 
 const skillIcons = {
   data: <FaIcons.FaChartBar />,
@@ -220,7 +178,7 @@ export default function HomePage() {
             className="hero-image-wrapper"
             initial={{ opacity: 0, scale: 0.7, rotate: -5 }}
             animate={{ opacity: 1, scale: 1, rotate: 0 }}
-            transition={{ duration: 0.9, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 1, delay: 0.12, ease: smoothEase }}
             style={{ y: heroImageY, opacity: heroOpacity }}
           >
             <div className="hero-image-ring" aria-hidden="true"></div>
@@ -240,7 +198,7 @@ export default function HomePage() {
           className="scroll-indicator"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 1.8, duration: 0.8 }}
+          transition={{ delay: 1.15, duration: 0.7, ease: smoothEase }}
           aria-hidden="true"
         >
           <div className="scroll-indicator-dot"></div>
@@ -475,7 +433,7 @@ export default function HomePage() {
                 whileHover={{
                   y: -5,
                   scale: 1.04,
-                  transition: { duration: 0.25, ease: [0.34, 1.56, 0.64, 1] },
+                  transition: { duration: 0.28, ease: smoothEase },
                 }}
                 whileTap={{ scale: 0.96 }}
               >

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
+import { cursorSpring } from '../../lib/motionConfig';
 
 export default function CustomCursor() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
@@ -59,7 +60,7 @@ export default function CustomCursor() {
       border: '2px solid var(--accent-primary)',
       height: 16,
       width: 16,
-      transition: { type: 'spring', mass: 0.1, stiffness: 800, damping: 50 },
+      transition: cursorSpring,
     },
     hover: {
       x: mousePosition.x - 24,
@@ -68,7 +69,7 @@ export default function CustomCursor() {
       border: '1px solid var(--accent-secondary)',
       height: 48,
       width: 48,
-      transition: { type: 'spring', mass: 0.1, stiffness: 800, damping: 50 },
+      transition: cursorSpring,
     },
   };
 

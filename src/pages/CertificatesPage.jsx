@@ -5,32 +5,7 @@ import { useLang } from '../context/LangContext';
 import { supabase } from '../lib/supabase';
 import { certificates as localCertificates } from '../data/certificates';
 import PreviewModal from '../components/ui/PreviewModal';
-
-const fadeLeft = {
-  hidden: { opacity: 0, x: -30 },
-  visible: { opacity: 1, x: 0, transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] } },
-};
-
-const fadeUp = {
-  hidden: { opacity: 0, y: 40 },
-  visible: (i = 0) => ({
-    opacity: 1, y: 0,
-    transition: { duration: 0.5, delay: i * 0.1, ease: [0.22, 1, 0.36, 1] },
-  }),
-};
-
-const scaleUp = {
-  hidden: { opacity: 0, scale: 0.85 },
-  visible: (i = 0) => ({
-    opacity: 1, scale: 1,
-    transition: { duration: 0.45, delay: i * 0.04, ease: [0.22, 1, 0.36, 1] },
-  }),
-};
-
-const stagger = {
-  hidden: {},
-  visible: { transition: { staggerChildren: 0.04 } },
-};
+import { fadeLeft, fadeUp, scaleUp, staggerFast } from '../lib/motionConfig';
 
 export default function CertificatesPage() {
   const { t } = useLang();
@@ -94,7 +69,7 @@ export default function CertificatesPage() {
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, margin: '-40px' }}
-        variants={stagger}
+        variants={staggerFast}
       >
         {dbCertificates.map((cert, idx) => (
           <Tilt

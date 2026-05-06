@@ -3,11 +3,12 @@ import { motion, AnimatePresence, useScroll } from 'framer-motion';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import CustomCursor from '../ui/CustomCursor';
+import { exitTransition, pageTransition } from '../../lib/motionConfig';
 
 const pageVariants = {
-  initial: { opacity: 0, y: 20 },
-  animate: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] } },
-  exit: { opacity: 0, y: -10, transition: { duration: 0.3 } },
+  initial: { opacity: 0, y: 18, filter: 'blur(6px)' },
+  animate: { opacity: 1, y: 0, filter: 'blur(0px)', transition: pageTransition },
+  exit: { opacity: 0, y: -8, filter: 'blur(4px)', transition: exitTransition },
 };
 
 export default function Layout() {
