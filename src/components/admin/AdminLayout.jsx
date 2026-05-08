@@ -25,6 +25,7 @@ const AdminLayout = () => {
     { path: '/admin/skills', icon: <FiStar />, label: 'Skills' },
     { path: '/admin/projects', icon: <FiFolder />, label: 'Projects' },
     { path: '/admin/certificates', icon: <FiAward />, label: 'Certificates' },
+    { path: '/admin/honors', icon: <FiEye />, label: 'Honors' },
   ];
 
   return (

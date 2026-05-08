@@ -283,6 +283,47 @@
   letter-spacing: 0.05em;
 }
 
+.certificate-card .external-badge,
+.honor-card .external-badge {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  background: var(--accent-primary);
+  color: #fff;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 0.2rem 0.5rem;
+  border-radius: var(--radius-pill);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.featured-projects-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.25rem;
+}
+
+.featured-project-card {
+  height: 260px;
+}
+
+.featured-projects-cta {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: center;
+}
+
+.featured-projects-cta .btn-outline {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
 /* ===== Certificate Grid ===== */
 .certificate-grid {
   display: grid;
@@ -334,6 +375,7 @@
   border: 1px solid var(--border-color);
   overflow: hidden;
   cursor: pointer;
+  position: relative;
   transition:
     transform var(--transition-base),
     box-shadow var(--transition-base),
@@ -420,6 +462,10 @@
   }
 
   .honor-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .featured-projects-grid {
     grid-template-columns: 1fr;
   }
 
