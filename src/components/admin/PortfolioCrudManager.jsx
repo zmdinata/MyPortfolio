@@ -32,6 +32,7 @@ import {
   portfolioItemTypes,
   uploadPortfolioFile,
 } from '../../lib/portfolioMedia';
+import { mergePortfolioCategories, mergePortfolioItems } from '../../lib/portfolioFallbacks';
 import '../../styles/pages/admin-manage.css';
 
 const blankCategory = {
@@ -115,15 +116,40 @@ function categoryLabel(category) {
   return category.name_en || category.name_id || category.slug || 'Uncategorized';
 }
 
+function isUuid(value) {
+  return /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(String(value || ''));
+}
+
+function getStaticSourceKey(formData) {
+  if (formData.source_key) return formData.source_key;
+  if (formData.id && !isUuid(formData.id)) return `static:${formData.id}`;
+  return null;
+}
+
+function resolveCategory(formData, categories) {
+  const category = categories.find((item) => (
+    item.id === formData.category_id ||
+    item.slug === formData.category_id ||
+    item.slug === formData.category
+  ));
+
+  return {
+    id: isUuid(category?.id) ? category.id : null,
+    slug: category?.slug || formData.category || formData.category_id || null,
+  };
+}
+
 function makeItemPayload(formData, contentType, categories) {
   const type = getDisplayType(formData.type);
-  const category = categories.find((item) => item.id === formData.category_id);
+  const category = resolveCategory(formData, categories);
+  const sourceKey = getStaticSourceKey(formData);
 
   if (contentType === 'projects') {
     return {
+      source_key: sourceKey,
       id_string: formData.id_string || null,
-      category_id: formData.category_id || null,
-      category: category?.slug || null,
+      category_id: category.id,
+      category: category.slug,
       title_en: formData.title_en.trim(),
       title_id: formData.title_id.trim(),
       file: type === 'link' ? normalizeLinkUrl(formData.file) : formData.file.trim(),
@@ -137,7 +163,8 @@ function makeItemPayload(formData, contentType, categories) {
 
   if (contentType === 'certificates') {
     return {
-      category_id: formData.category_id || null,
+      source_key: sourceKey,
+      category_id: category.id,
       title: formData.title.trim(),
       file_path: type === 'link' ? normalizeLinkUrl(formData.file_path) : formData.file_path.trim(),
       preview_path: formData.preview_path.trim() || null,
@@ -150,7 +177,8 @@ function makeItemPayload(formData, contentType, categories) {
   const previewPath = formData.preview_path.trim() || (type === 'image' ? filePath : null);
 
   return {
-    category_id: formData.category_id || null,
+    source_key: sourceKey,
+    category_id: category.id,
     title_en: formData.title_en.trim(),
     title_id: formData.title_id.trim(),
     file_path: filePath,
@@ -189,12 +217,13 @@ export default function PortfolioCrudManager({
   const [editingItemId, setEditingItemId] = useState(null);
   const [editingCategoryId, setEditingCategoryId] = useState(null);
   const [saving, setSaving] = useState(false);
+  const [savingFeaturedId, setSavingFeaturedId] = useState('');
   const [uploading, setUploading] = useState('');
   const [previewLoading, setPreviewLoading] = useState(false);
   const [iconSearch, setIconSearch] = useState('');
 
   const categoryMap = useMemo(
-    () => new Map(categories.map((category) => [category.id, category])),
+    () => new Map(categories.flatMap((category) => [[category.id, category], [category.slug, category]])),
     [categories]
   );
 
@@ -247,8 +276,16 @@ export default function PortfolioCrudManager({
     if (categoryError) console.error(`Error fetching ${categoryTable}:`, categoryError);
     if (itemError) console.error(`Error fetching ${itemTable}:`, itemError);
 
-    const nextCategories = !categoryError && categoryData?.length ? categoryData : categoryFallbacks;
-    const nextItems = !itemError && itemData?.length ? itemData : itemFallbacks;
+    const nextCategories = mergePortfolioCategories(
+      !categoryError ? categoryData || [] : [],
+      categoryFallbacks
+    );
+    const nextItems = mergePortfolioItems(
+      !itemError ? itemData || [] : [],
+      itemFallbacks,
+      nextCategories,
+      contentType
+    );
 
     setCategories(nextCategories || []);
     setItems(nextItems || []);
@@ -300,6 +337,11 @@ export default function PortfolioCrudManager({
   const deleteItem = async (item) => {
     if (!window.confirm(`Delete this ${label.singular.toLowerCase()}?`)) return;
 
+    if (!isUuid(item.id)) {
+      setItems((current) => current.filter((candidate) => candidate.id !== item.id));
+      return;
+    }
+
     const { error } = await supabase.from(itemTable).delete().eq('id', item.id);
     if (error) {
       alert(error.message);
@@ -311,6 +353,11 @@ export default function PortfolioCrudManager({
 
   const deleteCategory = async (category) => {
     if (!window.confirm(`Delete category "${categoryLabel(category)}"? Existing items will become uncategorized.`)) return;
+
+    if (!isUuid(category.id)) {
+      setCategories((current) => current.filter((candidate) => candidate.id !== category.id));
+      return;
+    }
 
     const { error } = await supabase.from(categoryTable).delete().eq('id', category.id);
     if (error) {
@@ -333,7 +380,7 @@ export default function PortfolioCrudManager({
       sort_order: Number(categoryForm.sort_order) || 0,
     };
 
-    const request = editingCategoryId
+    const request = editingCategoryId && isUuid(editingCategoryId)
       ? supabase.from(categoryTable).update(payload).eq('id', editingCategoryId)
       : supabase.from(categoryTable).insert([payload]);
 
@@ -362,12 +409,8 @@ export default function PortfolioCrudManager({
       }
     }
 
-    const payload = makeItemPayload(itemForm, contentType, categories);
-    const request = editingItemId
-      ? supabase.from(itemTable).update(payload).eq('id', editingItemId)
-      : supabase.from(itemTable).insert([payload]);
+    const { error } = await saveItemRecord(itemForm, editingItemId);
 
-    const { error } = await request;
     setSaving(false);
 
     if (error) {
@@ -376,6 +419,94 @@ export default function PortfolioCrudManager({
     }
 
     setItemModalOpen(false);
+    fetchData();
+  };
+
+  const saveItemRecord = async (formData, itemId = null) => {
+    const payload = makeItemPayload(formData, contentType, categories);
+    const shouldUpdateExisting = itemId && isUuid(itemId);
+    let error = null;
+
+    const runSave = async (nextPayload) => {
+      if (shouldUpdateExisting) {
+        return supabase.from(itemTable).update(nextPayload).eq('id', itemId);
+      }
+
+      if (nextPayload.source_key) {
+        const { data: existingRows, error: lookupError } = await supabase
+          .from(itemTable)
+          .select('id')
+          .eq('source_key', nextPayload.source_key)
+          .limit(1);
+
+        if (lookupError) return { error: lookupError };
+        if (existingRows?.[0]?.id) {
+          return supabase.from(itemTable).update(nextPayload).eq('id', existingRows[0].id);
+        }
+      }
+
+      return supabase.from(itemTable).insert([nextPayload]);
+    };
+
+    ({ error } = await runSave(payload));
+
+    if (
+      error &&
+      contentType === 'projects' &&
+      payload.type === 'link' &&
+      String(error.message || '').includes('projects_type_check')
+    ) {
+      ({ error } = await runSave({ ...payload, type: 'external' }));
+    }
+
+    return { error };
+  };
+
+  const getNextFeaturedOrder = (currentItemId) => {
+    const usedOrders = new Set(
+      items
+        .filter((item) => item.is_featured && item.id !== currentItemId)
+        .map((item) => Number(item.featured_order))
+        .filter(Boolean)
+    );
+
+    return [1, 2, 3].find((order) => !usedOrders.has(order)) || usedOrders.size + 1;
+  };
+
+  const toggleFeaturedProject = async (item) => {
+    if (contentType !== 'projects' || savingFeaturedId) return;
+
+    const nextFeatured = !item.is_featured;
+    if (nextFeatured) {
+      const featuredCount = items.filter((project) => project.is_featured && project.id !== item.id).length;
+      if (featuredCount >= 3) {
+        alert('Only 3 featured projects are allowed. Unpin one project first.');
+        return;
+      }
+    }
+
+    setSavingFeaturedId(item.id);
+    const nextItem = {
+      ...item,
+      is_featured: nextFeatured,
+      featured_order: nextFeatured ? getNextFeaturedOrder(item.id) : '',
+    };
+
+    setItems((current) => current.map((project) => (
+      project.id === item.id
+        ? { ...nextItem, featured_order: nextFeatured ? nextItem.featured_order : null }
+        : project
+    )));
+
+    const { error } = await saveItemRecord(nextItem, item.id);
+    setSavingFeaturedId('');
+
+    if (error) {
+      alert(error.message);
+      fetchData();
+      return;
+    }
+
     fetchData();
   };
 
@@ -565,32 +696,6 @@ export default function PortfolioCrudManager({
           </label>
         </div>
 
-        {contentType === 'projects' && (
-          <>
-            <div className="form-group">
-              <label className="checkbox-row">
-                <input
-                  type="checkbox"
-                  checked={Boolean(itemForm.is_featured)}
-                  onChange={(event) => setItemForm({ ...itemForm, is_featured: event.target.checked })}
-                />
-                <span>Pin to Home Featured Projects</span>
-              </label>
-            </div>
-            <div className="form-group">
-              <label>Featured Order (1-3)</label>
-              <input
-                type="number"
-                min="1"
-                max="3"
-                value={itemForm.featured_order ?? ''}
-                onChange={(event) => setItemForm({ ...itemForm, featured_order: event.target.value })}
-                disabled={!itemForm.is_featured}
-              />
-            </div>
-          </>
-        )}
-
         <div className="media-preview-panel" style={{ gridColumn: '1 / -1' }}>
           <span>Preview</span>
           {itemForm[previewField] ? (
@@ -670,11 +775,17 @@ export default function PortfolioCrudManager({
                         </td>
                         {contentType === 'projects' && (
                           <td>
-                            {item.is_featured ? (
-                              <span className="badge featured-badge"><FiStar /> #{item.featured_order || '-'}</span>
-                            ) : (
-                              <span className="muted">No</span>
-                            )}
+                            <button
+                              type="button"
+                              className={`featured-toggle-btn ${item.is_featured ? 'active' : ''}`}
+                              onClick={() => toggleFeaturedProject(item)}
+                              disabled={savingFeaturedId === item.id}
+                              title={item.is_featured ? 'Unpin from Home' : 'Pin to Home'}
+                              aria-pressed={Boolean(item.is_featured)}
+                            >
+                              <FiStar />
+                              <span>{item.is_featured ? `#${item.featured_order || '-'}` : 'Off'}</span>
+                            </button>
                           </td>
                         )}
                         <td>

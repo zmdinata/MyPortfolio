@@ -16,15 +16,20 @@ export function isExternalUrl(url) {
 }
 
 export function isLinkType(type) {
-  return type === 'link' || type === 'external' || type === 'iframe';
+  const value = String(type || '').trim().toLowerCase();
+  return value === 'link' || value === 'external' || value === 'iframe';
 }
 
 export function getDisplayType(type) {
-  return isLinkType(type) ? 'link' : type || 'pdf';
+  const value = String(type || 'pdf').trim().toLowerCase();
+  if (isLinkType(value)) return 'link';
+  if (value === 'image' || value === 'pdf') return value;
+  return 'pdf';
 }
 
 export function getPreviewForItem(item, fallback = '') {
-  return item?.preview || item?.preview_path || item?.image_path || fallback;
+  const imageFileFallback = getDisplayType(item?.type) === 'image' ? getFileForItem(item) : '';
+  return item?.preview || item?.preview_path || item?.image_path || imageFileFallback || fallback;
 }
 
 export function getFileForItem(item) {

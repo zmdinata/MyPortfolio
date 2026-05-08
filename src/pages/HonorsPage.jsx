@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import Tilt from 'react-parallax-tilt';
 import { useLang } from '../context/LangContext';
 import { supabase } from '../lib/supabase';
-import { honorCategoryFallbacks, honorItemFallbacks } from '../lib/portfolioFallbacks';
+import { honorCategoryFallbacks, honorItemFallbacks, mergePortfolioCategories, mergePortfolioItems } from '../lib/portfolioFallbacks';
 import { CategoryIcon } from '../lib/categoryIcons';
 import { getDisplayType, getFileForItem, getPreviewForItem, isLinkType } from '../lib/portfolioMedia';
 import PreviewModal from '../components/ui/PreviewModal';
@@ -31,8 +31,17 @@ export default function HonorsPage() {
             supabase.from('honors').select('*').order('sort_order', { ascending: true }),
           ]);
 
-        setCategories(!categoryError && categoryData?.length ? categoryData : honorCategoryFallbacks);
-        setHonors(!honorError && honorData?.length ? honorData : honorItemFallbacks);
+        const nextCategories = mergePortfolioCategories(
+          !categoryError ? categoryData || [] : [],
+          honorCategoryFallbacks
+        );
+        setCategories(nextCategories);
+        setHonors(mergePortfolioItems(
+          !honorError ? honorData || [] : [],
+          honorItemFallbacks,
+          nextCategories,
+          'honors'
+        ));
       } catch (err) {
         setCategories(honorCategoryFallbacks);
         setHonors(honorItemFallbacks);

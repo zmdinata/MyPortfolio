@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import Tilt from 'react-parallax-tilt';
 import { useLang } from '../context/LangContext';
 import { supabase } from '../lib/supabase';
-import { certificateCategoryFallbacks, certificateItemFallbacks } from '../lib/portfolioFallbacks';
+import { certificateCategoryFallbacks, certificateItemFallbacks, mergePortfolioCategories, mergePortfolioItems } from '../lib/portfolioFallbacks';
 import { CategoryIcon } from '../lib/categoryIcons';
 import { getDisplayType, getFileForItem, getPreviewForItem, isLinkType } from '../lib/portfolioMedia';
 import PreviewModal from '../components/ui/PreviewModal';
@@ -31,8 +31,17 @@ export default function CertificatesPage() {
             supabase.from('certificates').select('*').order('sort_order', { ascending: true }),
           ]);
 
-        setCategories(!categoryError && categoryData?.length ? categoryData : certificateCategoryFallbacks);
-        setCertificates(!certificateError && certificateData?.length ? certificateData : certificateItemFallbacks);
+        const nextCategories = mergePortfolioCategories(
+          !categoryError ? categoryData || [] : [],
+          certificateCategoryFallbacks
+        );
+        setCategories(nextCategories);
+        setCertificates(mergePortfolioItems(
+          !certificateError ? certificateData || [] : [],
+          certificateItemFallbacks,
+          nextCategories,
+          'certificates'
+        ));
       } catch (err) {
         setCategories(certificateCategoryFallbacks);
         setCertificates(certificateItemFallbacks);

@@ -13,7 +13,7 @@ import { FiArrowRight } from 'react-icons/fi';
 import HeroAnimation from '../components/ui/HeroAnimation';
 import PreviewModal from '../components/ui/PreviewModal';
 import { fadeLeft, fadeRight, fadeUp, scaleUp, smoothEase, stagger, staggerFast } from '../lib/motionConfig';
-import { projectItemFallbacks } from '../lib/portfolioFallbacks';
+import { projectCategoryFallbacks, projectItemFallbacks, mergePortfolioItems } from '../lib/portfolioFallbacks';
 import { getDisplayType, getFileForItem, getPreviewForItem, isLinkType } from '../lib/portfolioMedia';
 
 const skillIcons = {
@@ -33,27 +33,58 @@ export default function HomePage() {
   const [projectModal, setProjectModal] = useState({ open: false, src: '', type: '' });
   
   useEffect(() => {
-    const fetchData = async () => {
-      const { data: prof } = await supabase.from('profile').select('*').eq('id', 1).single();
-      if (prof) setProfile(prof);
+    let isMounted = true;
+    let featuredChannel = null;
 
-      const { data: exp } = await supabase.from('experience').select('*').order('year', { ascending: false });
-      if (exp) setDbExperiences(exp);
-
-      const { data: edu } = await supabase.from('education').select('*').order('year_start', { ascending: false });
-      if (edu) setDbEducation(edu);
-
-      const { data: skl } = await supabase.from('skills').select('*').order('name', { ascending: true });
-      if (skl) setDbSkills(skl);
-
-      const { data: featured, error: featuredError } = await supabase
+    const loadFeaturedProjects = async () => {
+      const { data: projectRows, error: projectError } = await supabase
         .from('projects')
         .select('*')
-        .eq('is_featured', true)
-        .order('featured_order', { ascending: true });
-      if (!featuredError && featured?.length) setFeaturedProjects(featured.slice(0, 3));
+        .order('sort_order', { ascending: true });
+
+      const mergedProjects = mergePortfolioItems(
+        !projectError ? projectRows || [] : [],
+        projectItemFallbacks,
+        projectCategoryFallbacks,
+        'projects'
+      );
+
+      if (!isMounted) return;
+      setFeaturedProjects(
+        mergedProjects
+          .filter((project) => project.is_featured)
+          .sort((a, b) => (a.featured_order ?? 999) - (b.featured_order ?? 999))
+          .slice(0, 3)
+      );
     };
+
+    const fetchData = async () => {
+      const { data: prof } = await supabase.from('profile').select('*').eq('id', 1).single();
+      if (prof && isMounted) setProfile(prof);
+
+      const { data: exp } = await supabase.from('experience').select('*').order('year', { ascending: false });
+      if (exp && isMounted) setDbExperiences(exp);
+
+      const { data: edu } = await supabase.from('education').select('*').order('year_start', { ascending: false });
+      if (edu && isMounted) setDbEducation(edu);
+
+      const { data: skl } = await supabase.from('skills').select('*').order('name', { ascending: true });
+      if (skl && isMounted) setDbSkills(skl);
+
+      if (!isMounted) return;
+      loadFeaturedProjects();
+      featuredChannel = supabase
+        .channel('home-featured-projects')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'projects' }, loadFeaturedProjects)
+        .subscribe();
+    };
+
     fetchData();
+
+    return () => {
+      isMounted = false;
+      if (featuredChannel) supabase.removeChannel(featuredChannel);
+    };
   }, []);
 
   // Helpers for icons
@@ -296,10 +327,16 @@ export default function HomePage() {
                       <div className="project-card-link">
                         {isLinkType(type) && <span className="external-badge">Link</span>}
                         <img
-                          src={getPreviewForItem(project, '/assets/images/preview.png')}
+                          src={getPreviewForItem(project, getFileForItem(project) || '/assets/images/preview.png')}
                           alt={lang === 'en' ? project.title_en : project.title_id}
                           className="project-image-preview"
                           loading="lazy"
+                          onError={(event) => {
+                            const fallbackSrc = getFileForItem(project) || '/assets/images/preview.png';
+                            if (event.currentTarget.src !== new URL(fallbackSrc, window.location.origin).href) {
+                              event.currentTarget.src = fallbackSrc;
+                            }
+                          }}
                         />
                         <div className="project-card-title">
                           {lang === 'en' ? project.title_en : project.title_id}

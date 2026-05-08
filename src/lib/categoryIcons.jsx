@@ -1,31 +1,63 @@
-import { DynamicIcon, iconNames } from 'lucide-react/dynamic';
+import {
+  Award,
+  BadgeCheck,
+  Blocks,
+  BookOpen,
+  Brain,
+  Briefcase,
+  ChartBar,
+  Code,
+  Cpu,
+  Database,
+  FileText,
+  Folder,
+  Globe,
+  GraduationCap,
+  Image,
+  Languages,
+  Link,
+  Medal,
+  Mic,
+  Palette,
+  Presentation,
+  ShieldCheck,
+  Star,
+  Table,
+  Trophy,
+} from 'lucide-react';
 
 const fallbackIcon = 'folder';
 
-export const commonCategoryIcons = [
-  'folder',
-  'database',
-  'trophy',
-  'graduation-cap',
-  'globe',
-  'palette',
-  'blocks',
-  'badge-check',
-  'brain',
-  'table',
-  'code',
-  'languages',
-  'presentation',
-  'award',
-  'mic',
-  'medal',
-  'image',
-  'file-text',
-  'link',
-  'star',
-];
+const iconRegistry = {
+  award: Award,
+  'badge-check': BadgeCheck,
+  blocks: Blocks,
+  'book-open': BookOpen,
+  brain: Brain,
+  briefcase: Briefcase,
+  'chart-bar': ChartBar,
+  code: Code,
+  cpu: Cpu,
+  database: Database,
+  'file-text': FileText,
+  folder: Folder,
+  globe: Globe,
+  'graduation-cap': GraduationCap,
+  image: Image,
+  languages: Languages,
+  link: Link,
+  medal: Medal,
+  mic: Mic,
+  palette: Palette,
+  presentation: Presentation,
+  'shield-check': ShieldCheck,
+  star: Star,
+  table: Table,
+  trophy: Trophy,
+};
 
-export const allCategoryIconNames = iconNames;
+export const commonCategoryIcons = Object.keys(iconRegistry);
+export const allCategoryIconNames = commonCategoryIcons;
 
 export function normalizeIconName(name) {
   return String(name || fallbackIcon)
@@ -36,12 +68,12 @@ export function normalizeIconName(name) {
 }
 
 export function isValidLucideIcon(name) {
-  return iconNames.includes(normalizeIconName(name));
+  return Boolean(iconRegistry[normalizeIconName(name)]);
 }
 
 export function CategoryIcon({ name, ...props }) {
   const normalized = normalizeIconName(name);
-  const safeName = isValidLucideIcon(normalized) ? normalized : fallbackIcon;
+  const Icon = iconRegistry[normalized] || iconRegistry[fallbackIcon];
 
-  return <DynamicIcon name={safeName} aria-hidden="true" {...props} />;
+  return <Icon aria-hidden="true" {...props} />;
 }

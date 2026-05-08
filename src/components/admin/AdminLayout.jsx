@@ -1,6 +1,6 @@
 import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
 import { supabase } from '../../lib/supabase';
-import { FiGrid, FiBriefcase, FiAward, FiLogOut, FiHome, FiUser, FiBook, FiStar, FiFolder, FiMenu, FiX } from 'react-icons/fi';
+import { FiGrid, FiBriefcase, FiAward, FiEye, FiLogOut, FiHome, FiUser, FiBook, FiStar, FiFolder, FiMenu, FiX } from 'react-icons/fi';
 import { useState } from 'react';
 import '../../styles/components/admin-layout.css';
 

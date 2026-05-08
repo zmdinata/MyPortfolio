@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import Tilt from 'react-parallax-tilt';
 import { supabase } from '../lib/supabase';
 import { useLang } from '../context/LangContext';
-import { projectCategoryFallbacks, projectItemFallbacks } from '../lib/portfolioFallbacks';
+import { projectCategoryFallbacks, projectItemFallbacks, mergePortfolioCategories, mergePortfolioItems } from '../lib/portfolioFallbacks';
 import { CategoryIcon } from '../lib/categoryIcons';
 import { getDisplayType, getFileForItem, getPreviewForItem, isLinkType } from '../lib/portfolioMedia';
 import PreviewModal from '../components/ui/PreviewModal';
@@ -31,8 +31,17 @@ export default function ProjectsPage() {
             supabase.from('projects').select('*').order('sort_order', { ascending: true }),
           ]);
 
-        setCategories(!categoryError && categoryData?.length ? categoryData : projectCategoryFallbacks);
-        setProjects(!projectError && projectData?.length ? projectData : projectItemFallbacks);
+        const nextCategories = mergePortfolioCategories(
+          !categoryError ? categoryData || [] : [],
+          projectCategoryFallbacks
+        );
+        setCategories(nextCategories);
+        setProjects(mergePortfolioItems(
+          !projectError ? projectData || [] : [],
+          projectItemFallbacks,
+          nextCategories,
+          'projects'
+        ));
       } catch (err) {
         setCategories(projectCategoryFallbacks);
         setProjects(projectItemFallbacks);
