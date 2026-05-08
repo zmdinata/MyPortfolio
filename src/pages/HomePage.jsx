@@ -11,7 +11,10 @@ import * as FiIcons from 'react-icons/fi';
 import { HiOutlineMail } from 'react-icons/hi';
 import { FiArrowRight } from 'react-icons/fi';
 import HeroAnimation from '../components/ui/HeroAnimation';
+import PreviewModal from '../components/ui/PreviewModal';
 import { fadeLeft, fadeRight, fadeUp, scaleUp, smoothEase, stagger, staggerFast } from '../lib/motionConfig';
+import { projectCategoryFallbacks, projectItemFallbacks, mergePortfolioItems } from '../lib/portfolioFallbacks';
+import { getDisplayType, getFileForItem, getPreviewForItem, isLinkType } from '../lib/portfolioMedia';
 
 const skillIcons = {
   data: <FaIcons.FaChartBar />,
@@ -26,22 +29,62 @@ export default function HomePage() {
   const [dbExperiences, setDbExperiences] = useState([]);
   const [dbEducation, setDbEducation] = useState([]);
   const [dbSkills, setDbSkills] = useState([]);
+  const [featuredProjects, setFeaturedProjects] = useState(projectItemFallbacks.filter((project) => project.is_featured).slice(0, 3));
+  const [projectModal, setProjectModal] = useState({ open: false, src: '', type: '' });
   
   useEffect(() => {
+    let isMounted = true;
+    let featuredChannel = null;
+
+    const loadFeaturedProjects = async () => {
+      const { data: projectRows, error: projectError } = await supabase
+        .from('projects')
+        .select('*')
+        .order('sort_order', { ascending: true });
+
+      const mergedProjects = mergePortfolioItems(
+        !projectError ? projectRows || [] : [],
+        projectItemFallbacks,
+        projectCategoryFallbacks,
+        'projects'
+      );
+
+      if (!isMounted) return;
+      setFeaturedProjects(
+        mergedProjects
+          .filter((project) => project.is_featured)
+          .sort((a, b) => (a.featured_order ?? 999) - (b.featured_order ?? 999))
+          .slice(0, 3)
+      );
+    };
+
     const fetchData = async () => {
       const { data: prof } = await supabase.from('profile').select('*').eq('id', 1).single();
-      if (prof) setProfile(prof);
+      if (prof && isMounted) setProfile(prof);
 
       const { data: exp } = await supabase.from('experience').select('*').order('year', { ascending: false });
-      if (exp) setDbExperiences(exp);
+      if (exp && isMounted) setDbExperiences(exp);
 
       const { data: edu } = await supabase.from('education').select('*').order('year_start', { ascending: false });
-      if (edu) setDbEducation(edu);
+      if (edu && isMounted) setDbEducation(edu);
 
       const { data: skl } = await supabase.from('skills').select('*').order('name', { ascending: true });
-      if (skl) setDbSkills(skl);
+      if (skl && isMounted) setDbSkills(skl);
+
+      if (!isMounted) return;
+      loadFeaturedProjects();
+      featuredChannel = supabase
+        .channel('home-featured-projects')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'projects' }, loadFeaturedProjects)
+        .subscribe();
     };
+
     fetchData();
+
+    return () => {
+      isMounted = false;
+      if (featuredChannel) supabase.removeChannel(featuredChannel);
+    };
   }, []);
 
   // Helpers for icons
@@ -107,6 +150,18 @@ export default function HomePage() {
   const heroTextY = useTransform(scrollY, [0, 800], [0, 100]);
   const heroImageY = useTransform(scrollY, [0, 800], [0, -40]);
   const heroOpacity = useTransform(scrollY, [0, 800], [1, 0.1]);
+
+  const handleFeaturedProjectClick = (project) => {
+    const type = getDisplayType(project.type);
+    const file = getFileForItem(project);
+
+    if (isLinkType(type)) {
+      window.open(file, '_blank', 'noopener,noreferrer');
+      return;
+    }
+
+    setProjectModal({ open: true, src: file, type });
+  };
 
   return (
     <>
@@ -230,6 +285,82 @@ export default function HomePage() {
           </motion.p>
         </div>
       </section>
+
+      {/* ===== Featured Projects Section ===== */}
+      {featuredProjects.length > 0 && (
+        <section className="section featured-projects-section" id="featured-projects">
+          <div className="container">
+            <motion.div
+              className="section-heading"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: '-100px' }}
+              variants={fadeLeft}
+            >
+              <h2>{t('featuredProjects.title')}</h2>
+              <p>{t('featuredProjects.subtitle')}</p>
+            </motion.div>
+            <motion.div
+              className="featured-projects-grid"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: '-60px' }}
+              variants={stagger}
+            >
+              {featuredProjects.map((project, idx) => {
+                const type = getDisplayType(project.type);
+                return (
+                  <Tilt
+                    key={project.id}
+                    tiltMaxAngleX={8}
+                    tiltMaxAngleY={8}
+                    scale={1.03}
+                    transitionSpeed={2500}
+                    className="tilt-wrapper"
+                  >
+                    <motion.div
+                      className="project-card featured-project-card"
+                      variants={scaleUp}
+                      custom={idx}
+                      onClick={() => handleFeaturedProjectClick(project)}
+                    >
+                      <div className="project-card-link">
+                        {isLinkType(type) && <span className="external-badge">Link</span>}
+                        <img
+                          src={getPreviewForItem(project, getFileForItem(project) || '/assets/images/preview.png')}
+                          alt={lang === 'en' ? project.title_en : project.title_id}
+                          className="project-image-preview"
+                          loading="lazy"
+                          onError={(event) => {
+                            const fallbackSrc = getFileForItem(project) || '/assets/images/preview.png';
+                            if (event.currentTarget.src !== new URL(fallbackSrc, window.location.origin).href) {
+                              event.currentTarget.src = fallbackSrc;
+                            }
+                          }}
+                        />
+                        <div className="project-card-title">
+                          {lang === 'en' ? project.title_en : project.title_id}
+                        </div>
+                      </div>
+                    </motion.div>
+                  </Tilt>
+                );
+              })}
+            </motion.div>
+            <motion.div
+              className="featured-projects-cta"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: '-60px' }}
+              variants={fadeUp}
+            >
+              <Link to="/projects" className="btn-outline">
+                {t('featuredProjects.viewAll')} <FiArrowRight />
+              </Link>
+            </motion.div>
+          </div>
+        </section>
+      )}
 
       {/* ===== Experience Section ===== */}
       <section className="section" id="experience">
@@ -443,6 +574,13 @@ export default function HomePage() {
           </motion.div>
         </div>
       </section>
+
+      <PreviewModal
+        isOpen={projectModal.open}
+        onClose={() => setProjectModal({ open: false, src: '', type: '' })}
+        src={projectModal.src}
+        type={projectModal.type}
+      />
     </>
   );
 }

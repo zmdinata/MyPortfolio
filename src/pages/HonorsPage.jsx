@@ -1,51 +1,83 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 import Tilt from 'react-parallax-tilt';
 import { useLang } from '../context/LangContext';
 import { supabase } from '../lib/supabase';
-import { honors as localHonors } from '../data/honors';
+import { honorCategoryFallbacks, honorItemFallbacks, mergePortfolioCategories, mergePortfolioItems } from '../lib/portfolioFallbacks';
+import { CategoryIcon } from '../lib/categoryIcons';
+import { getDisplayType, getFileForItem, getPreviewForItem, isLinkType } from '../lib/portfolioMedia';
 import PreviewModal from '../components/ui/PreviewModal';
+import { HiOutlineExternalLink } from 'react-icons/hi';
 import { fadeLeft, fadeUp, scaleUp, stagger } from '../lib/motionConfig';
 
+function getCategoryName(category, lang) {
+  return lang === 'en'
+    ? category.name_en || category.name_id || category.slug
+    : category.name_id || category.name_en || category.slug;
+}
+
 export default function HonorsPage() {
-  const { t, tObj, lang } = useLang();
+  const { t, lang } = useLang();
   const [modal, setModal] = useState({ open: false, src: '', type: '' });
-  const [dbHonors, setDbHonors] = useState([]);
+  const [honors, setHonors] = useState(honorItemFallbacks);
+  const [categories, setCategories] = useState(honorCategoryFallbacks);
 
   useEffect(() => {
     const fetchHonors = async () => {
       try {
-        const { data, error } = await supabase.from('honors').select('*').order('created_at', { ascending: false });
-        
-        const formattedLocal = localHonors.map(h => ({
-          id: h.id,
-          title_en: h.title.en,
-          title_id: h.title.id,
-          image_path: h.image,
-          type: h.type
-        }));
+        const [{ data: categoryData, error: categoryError }, { data: honorData, error: honorError }] =
+          await Promise.all([
+            supabase.from('honor_categories').select('*').order('sort_order', { ascending: true }),
+            supabase.from('honors').select('*').order('sort_order', { ascending: true }),
+          ]);
 
-        if (!error && data && data.length > 0) {
-          setDbHonors([...data, ...formattedLocal]);
-        } else {
-          setDbHonors(formattedLocal);
-        }
+        const nextCategories = mergePortfolioCategories(
+          !categoryError ? categoryData || [] : [],
+          honorCategoryFallbacks
+        );
+        setCategories(nextCategories);
+        setHonors(mergePortfolioItems(
+          !honorError ? honorData || [] : [],
+          honorItemFallbacks,
+          nextCategories,
+          'honors'
+        ));
       } catch (err) {
-        const formattedLocal = localHonors.map(h => ({
-          id: h.id,
-          title_en: h.title.en,
-          title_id: h.title.id,
-          image_path: h.image,
-          type: h.type
-        }));
-        setDbHonors(formattedLocal);
+        setCategories(honorCategoryFallbacks);
+        setHonors(honorItemFallbacks);
       }
     };
+
     fetchHonors();
   }, []);
 
+  const categoryGroups = useMemo(() => {
+    const categoryMap = new Map(categories.map((category) => [category.id, category]));
+    const uncategorized = honors.filter((honor) => !categoryMap.has(honor.category_id));
+
+    return categories
+      .map((category) => ({
+        category,
+        items: honors.filter((honor) => honor.category_id === category.id),
+      }))
+      .filter((group) => group.items.length > 0)
+      .concat(
+        uncategorized.length
+          ? [{ category: { id: 'uncategorized', name_en: 'Uncategorized', name_id: 'Tanpa Kategori', icon_name: 'folder' }, items: uncategorized }]
+          : []
+      );
+  }, [categories, honors]);
+
   const handleClick = (honor) => {
-    setModal({ open: true, src: honor.image_path, type: honor.type });
+    const type = getDisplayType(honor.type);
+    const file = getFileForItem(honor);
+
+    if (isLinkType(type)) {
+      window.open(file, '_blank', 'noopener,noreferrer');
+      return;
+    }
+
+    setModal({ open: true, src: file, type });
   };
 
   return (
@@ -64,44 +96,68 @@ export default function HonorsPage() {
         </motion.p>
       </div>
 
-      <motion.div
-        className="honor-grid"
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: '-40px' }}
-        variants={stagger}
-      >
-        {dbHonors.map((honor, idx) => (
-          <Tilt
-            key={honor.id}
-            tiltMaxAngleX={12}
-            tiltMaxAngleY={12}
-            scale={1.03}
-            transitionSpeed={2500}
-            className="tilt-wrapper"
+      {categoryGroups.map(({ category, items }, catIdx) => (
+        <motion.div
+          key={category.id || category.slug}
+          className="project-category honor-category-section"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: '-60px' }}
+          variants={fadeUp}
+          custom={catIdx * 0.3}
+        >
+          <h3>
+            <span className="category-icon"><CategoryIcon name={category.icon_name} /></span>
+            {getCategoryName(category, lang)}
+          </h3>
+          <motion.div
+            className="honor-grid"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-40px' }}
+            variants={stagger}
           >
-            <motion.div
-              className="honor-card"
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: '-20px' }}
-              variants={scaleUp}
-              custom={idx}
-              onClick={() => handleClick(honor)}
-            >
-              <img
-                src={honor.image_path}
-                alt={lang === 'en' ? honor.title_en : honor.title_id}
-                className="honor-card-image"
-                loading="lazy"
-              />
-              <div className="honor-card-body">
-                <h4>{lang === 'en' ? honor.title_en : honor.title_id}</h4>
-              </div>
-            </motion.div>
-          </Tilt>
-        ))}
-      </motion.div>
+            {items.map((honor, idx) => {
+              const type = getDisplayType(honor.type);
+              return (
+                <Tilt
+                  key={honor.id}
+                  tiltMaxAngleX={12}
+                  tiltMaxAngleY={12}
+                  scale={1.03}
+                  transitionSpeed={2500}
+                  className="tilt-wrapper"
+                >
+                  <motion.div
+                    className="honor-card"
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, margin: '-20px' }}
+                    variants={scaleUp}
+                    custom={idx}
+                    onClick={() => handleClick(honor)}
+                  >
+                    {isLinkType(type) && (
+                      <span className="external-badge">
+                        <HiOutlineExternalLink /> Link
+                      </span>
+                    )}
+                    <img
+                      src={getPreviewForItem(honor, '/assets/images/preview.png')}
+                      alt={lang === 'en' ? honor.title_en : honor.title_id}
+                      className="honor-card-image"
+                      loading="lazy"
+                    />
+                    <div className="honor-card-body">
+                      <h4>{lang === 'en' ? honor.title_en : honor.title_id}</h4>
+                    </div>
+                  </motion.div>
+                </Tilt>
+              );
+            })}
+          </motion.div>
+        </motion.div>
+      ))}
 
       <PreviewModal
         isOpen={modal.open}

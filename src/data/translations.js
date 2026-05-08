@@ -89,6 +89,11 @@ export const translations = {
         web3: 'Web3 & Crypto Research',
       },
     },
+    featuredProjects: {
+      title: 'Featured Projects',
+      subtitle: 'Three highlighted works selected from the portfolio.',
+      viewAll: 'View All Projects',
+    },
     certificates: {
       title: 'Professional Certifications',
       subtitle: 'A collection of certificates and verifiable training documents acquired from various platforms. Click any item to preview.',
@@ -190,6 +195,11 @@ export const translations = {
         desain: 'Seni Digital & Desain',
         web3: 'Riset Web3 & Mata Uang Kripto',
       },
+    },
+    featuredProjects: {
+      title: 'Proyek Unggulan',
+      subtitle: 'Tiga karya pilihan yang ditampilkan dari portofolio.',
+      viewAll: 'Lihat Semua Proyek',
     },
     certificates: {
       title: 'Sertifikasi Profesional',
