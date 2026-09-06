@@ -9,6 +9,7 @@
 @import './components/modal.css';
 @import './components/footer.css';
 @import './components/sections.css';
+@import './components/skeleton.css';
 
 /* ===== Global Reset & Base ===== */
 *, *::before, *::after {

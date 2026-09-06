@@ -1,0 +1,7 @@
+﻿# Robots.txt for Zacky Muhammad Dinata (zmdinata) Portfolio
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://zmdinata.web.id/sitemap.xml
+

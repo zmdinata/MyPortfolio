@@ -39,9 +39,10 @@
   transition: opacity 0.25s ease;
   will-change: opacity;
   background: radial-gradient(
-    380px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
-    var(--spotlight-color, rgba(124, 111, 255, 0.14)),
-    transparent 70%
+    420px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    var(--spotlight-color, rgba(0, 221, 179, 0.18)),
+    rgba(124, 111, 255, 0.05) 50%,
+    transparent 75%
   );
 }
 

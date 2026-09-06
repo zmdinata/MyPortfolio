@@ -8,6 +8,8 @@ import PreviewModal from '../components/ui/PreviewModal';
 import { HiOutlineExternalLink } from 'react-icons/hi';
 import { fadeLeft, fadeUp, scaleUp } from '../lib/motionConfig';
 import { getCachedHonors } from '../lib/portfolioCache';
+import { useDocumentTitle } from '../hooks/useDocumentTitle';
+import { SkeletonGrid } from '../components/ui/SkeletonCard';
 
 function getCategoryName(category, lang) {
   return lang === 'en'
@@ -17,9 +19,17 @@ function getCategoryName(category, lang) {
 
 export default function HonorsPage() {
   const { t, lang } = useLang();
+  useDocumentTitle(
+    lang === 'en' ? 'Honors & Accolades' : 'Penghargaan & Prestasi',
+    lang === 'en'
+      ? 'Honors, full scholarships, national hackathon milestones, and academic awards of Zacky Muhammad Dinata (zmdinata).'
+      : 'Penghargaan bergengsi, beasiswa penuh, capaian hackathon nasional, dan prestasi akademis Zacky Muhammad Dinata (zmdinata).'
+  );
+
   const [modal, setModal] = useState({ open: false, src: '', type: '' });
   const [honors, setHonors] = useState(honorItemFallbacks);
   const [categories, setCategories] = useState(honorCategoryFallbacks);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     let isMounted = true;
@@ -27,6 +37,7 @@ export default function HonorsPage() {
       if (isMounted) {
         setCategories(nextCats);
         setHonors(nextHonors);
+        setIsLoading(false);
       }
     });
     return () => {
@@ -79,7 +90,12 @@ export default function HonorsPage() {
         </motion.p>
       </div>
 
-      {categoryGroups.map(({ category, items }, catIdx) => (
+      {isLoading ? (
+        <div style={{ marginTop: '2rem' }}>
+          <SkeletonGrid type="honor" count={4} />
+        </div>
+      ) : (
+        categoryGroups.map(({ category, items }, catIdx) => (
         <motion.div
           key={category.id || category.slug}
           className="project-category honor-category-section"
@@ -131,7 +147,7 @@ export default function HonorsPage() {
             })}
           </div>
         </motion.div>
-      ))}
+      )))}
 
       <PreviewModal
         isOpen={modal.open}

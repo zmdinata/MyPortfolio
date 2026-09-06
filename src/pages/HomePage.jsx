@@ -19,6 +19,7 @@ import AmbientGridMesh from '../components/ui/AmbientGridMesh';
 import { fadeLeft, fadeRight, fadeUp, scaleUp, smoothEase, stagger, staggerFast } from '../lib/motionConfig';
 import { projectCategoryFallbacks, projectItemFallbacks, mergePortfolioItems } from '../lib/portfolioFallbacks';
 import { getDisplayType, getFileForItem, getPreviewForItem, isLinkType } from '../lib/portfolioMedia';
+import { useDocumentTitle } from '../hooks/useDocumentTitle';
 
 const skillIcons = {
   data: <FaIcons.FaChartBar />,
@@ -29,6 +30,14 @@ const skillIcons = {
 
 export default function HomePage() {
   const { t, tObj, lang } = useLang();
+
+  useDocumentTitle(
+    '',
+    lang === 'en'
+      ? 'Official portfolio of Zacky Muhammad Dinata (zmdinata) — AI Engineer & Autonomous Agent Architect. LLM Automation, Quantitative Risk, Homelab Telemetry.'
+      : 'Portofolio resmi Zacky Muhammad Dinata (zmdinata) — AI Engineer & Arsitek Agen Mandiri. Otomasi LLM, Sistem Risiko Kuantitatif, dan Telemetri Homelab.'
+  );
+
   const [profile, setProfile] = useState(null);
   const [dbExperiences, setDbExperiences] = useState([]);
   const [dbEducation, setDbEducation] = useState([]);

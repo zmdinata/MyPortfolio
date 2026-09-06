@@ -8,6 +8,8 @@ import PreviewModal from '../components/ui/PreviewModal';
 import { HiOutlineExternalLink } from 'react-icons/hi';
 import { fadeLeft, fadeUp, scaleUp } from '../lib/motionConfig';
 import { getCachedProjects } from '../lib/portfolioCache';
+import { useDocumentTitle } from '../hooks/useDocumentTitle';
+import { SkeletonGrid } from '../components/ui/SkeletonCard';
 
 function getCategoryName(category, lang) {
   return lang === 'en'
@@ -17,9 +19,17 @@ function getCategoryName(category, lang) {
 
 export default function ProjectsPage() {
   const { t, lang } = useLang();
+  useDocumentTitle(
+    lang === 'en' ? 'Projects Portfolio' : 'Portofolio Proyek',
+    lang === 'en'
+      ? 'Explore flagship AI engineering projects, multi-agent systems, and quantitative models by Zacky Muhammad Dinata (zmdinata).'
+      : 'Koleksi lengkap proyek rekayasa AI, orkestrasi multi-agent, dan sistem kuantitatif oleh Zacky Muhammad Dinata (zmdinata).'
+  );
+
   const [modal, setModal] = useState({ open: false, src: '', type: '' });
   const [projects, setProjects] = useState(projectItemFallbacks);
   const [categories, setCategories] = useState(projectCategoryFallbacks);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     let isMounted = true;
@@ -27,6 +37,7 @@ export default function ProjectsPage() {
       if (isMounted) {
         setCategories(nextCategories);
         setProjects(nextProjects);
+        setIsLoading(false);
       }
     });
     return () => {
@@ -83,7 +94,12 @@ export default function ProjectsPage() {
         </motion.p>
       </div>
 
-      {categoryGroups.map(({ category, items }, catIdx) => (
+      {isLoading ? (
+        <div style={{ marginTop: '2rem' }}>
+          <SkeletonGrid type="project" count={6} />
+        </div>
+      ) : (
+        categoryGroups.map(({ category, items }, catIdx) => (
         <motion.div
           key={category.id || category.slug}
           className="project-category"
@@ -135,7 +151,7 @@ export default function ProjectsPage() {
             })}
           </div>
         </motion.div>
-      ))}
+      )))}
 
       <PreviewModal
         isOpen={modal.open}

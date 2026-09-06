@@ -8,6 +8,8 @@ import PreviewModal from '../components/ui/PreviewModal';
 import { HiOutlineExternalLink } from 'react-icons/hi';
 import { fadeLeft, fadeUp, scaleUp, staggerFast } from '../lib/motionConfig';
 import { getCachedCertificates } from '../lib/portfolioCache';
+import { useDocumentTitle } from '../hooks/useDocumentTitle';
+import { SkeletonGrid } from '../components/ui/SkeletonCard';
 
 function getCategoryName(category, lang) {
   return lang === 'en'
@@ -17,9 +19,17 @@ function getCategoryName(category, lang) {
 
 export default function CertificatesPage() {
   const { t, lang } = useLang();
+  useDocumentTitle(
+    lang === 'en' ? 'Verified Certifications' : 'Sertifikasi Profesional',
+    lang === 'en'
+      ? 'Verified professional certifications and credentials from IBM, AMD, Cisco, and IAII SISFOTEK earned by Zacky Muhammad Dinata (zmdinata).'
+      : 'Kredensial dan sertifikasi profesional terverifikasi dari IBM, AMD, Cisco, dan IAII SISFOTEK milik Zacky Muhammad Dinata (zmdinata).'
+  );
+
   const [modal, setModal] = useState({ open: false, src: '', type: '' });
   const [certificates, setCertificates] = useState(certificateItemFallbacks);
   const [categories, setCategories] = useState(certificateCategoryFallbacks);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     let isMounted = true;
@@ -27,6 +37,7 @@ export default function CertificatesPage() {
       if (isMounted) {
         setCategories(nextCats);
         setCertificates(nextCerts);
+        setIsLoading(false);
       }
     });
     return () => {
@@ -79,7 +90,12 @@ export default function CertificatesPage() {
         </motion.p>
       </div>
 
-      {categoryGroups.map(({ category, items }, catIdx) => (
+      {isLoading ? (
+        <div style={{ marginTop: '2rem' }}>
+          <SkeletonGrid type="certificate" count={6} />
+        </div>
+      ) : (
+        categoryGroups.map(({ category, items }, catIdx) => (
         <motion.div
           key={category.id || category.slug}
           className="project-category certificate-category-section"
@@ -131,7 +147,7 @@ export default function CertificatesPage() {
             })}
           </motion.div>
         </motion.div>
-      ))}
+      )))}
 
       <PreviewModal
         isOpen={modal.open}
