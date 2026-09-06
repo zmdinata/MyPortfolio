@@ -119,12 +119,12 @@
   flex-direction: column;
   padding: 0.85rem 1rem;
   overflow-y: auto;
-  max-height: 240px;
+  min-height: 220px;
   cursor: text;
 }
 
 .ai-terminal-window.is-expanded .terminal-body {
-  max-height: 380px;
+  min-height: 380px;
 }
 
 .terminal-logs {
@@ -257,6 +257,8 @@
   border-top: 1px solid rgba(255, 255, 255, 0.08);
   position: relative;
   overflow: hidden;
+  margin-top: auto;
+  flex-shrink: 0;
 }
 
 [data-theme="light"] .terminal-quick-container {
