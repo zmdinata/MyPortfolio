@@ -1,4 +1,4 @@
-# ZMDINATA | AI Engineer & Full-Stack Portfolio
+# ZMDINATA | AI Engineer & Multi-Agent Systems Portfolio
 
 <div align="center">
 
@@ -19,9 +19,9 @@ Designed with a sleek **Linear / Vercel Clean-Tech Bento Grid**, real-time AI te
 
 ## 🌟 Overview
 
-Website portofolio profesional dan modern milik **Zacky Muhammad Dinata (ZMDinata)** — AI Engineer & Information Systems Student di STMIK IKMI Cirebon. Portofolio ini dibangun dari dasar dengan filosofi *performance-first*, estetika *clean-tech*, serta kemudahan pengelolaan data melalui Admin Panel terintegrasi.
+Website portofolio profesional dan modern milik **Zacky Muhammad Dinata (ZMDinata)** — AI Engineer & Autonomous Agent Architect di STMIK IKMI Cirebon. Portofolio ini dibangun dari dasar dengan filosofi *performance-first*, estetika *clean-tech*, serta kemudahan pengelolaan data melalui Admin Panel terintegrasi.
 
-Platform ini menggabungkan database cloud Supabase dengan sistem fail-safe lokal, animasi GPU hardware-accelerated 60+ FPS, dan viewer PDF interaktif instan (<60ms).
+Platform ini merefleksikan keahlian dalam **Autonomous Multi-Agent Orchestration**, **Quantitative Risk Management (Monte Carlo Merton Jump Diffusion VaR)**, riset Machine Learning, dan transisi karier dari Digital/NFT Artist ke AI/ML Engineering.
 
 ---
 
@@ -31,9 +31,9 @@ Platform ini menggabungkan database cloud Supabase dengan sistem fail-safe lokal
 - **Spotlight Cards (`SpotlightCard.jsx`)**: Efek kursor interaktif dengan radial glow dinamis dan aksen border laser shimmer yang diproses melalui akselerasi GPU.
 - **Ambient Grid Mesh (`AmbientGridMesh.jsx`)**: Latar belakang grid sirkuit modern dengan native CSS gradient murni tanpa beban blur berat.
 - **Profile Interactive Deck (`ProfileInteractiveDeck.jsx`)**: Kartu profil interaktif dengan 3 tab spesialisasi:
-  - 🤖 **LLM & Agents**: Homelab ThinkPad T440 daur ulang, OpenClaw, Hermes Agent, Gemini API, Docker.
+  - 🤖 **LLM & Agents**: Homelab ThinkPad T440, OpenClaw, Hermes Agent, sub-agent delegation, Docker.
   - ⚡ **Workflow & Cloud**: LestariRimba #JuaraVibeCoding di Google Cloud Run, FastAPI, n8n Automation.
-  - 📊 **ML & Research**: Makalah riset SISFOTEK 9 (Multiple Linear Regression 116K+ records).
+  - 📊 **ML & Quant**: AutoOverlay AI (Monte Carlo Merton Jump Diffusion VaR) & Makalah riset SISFOTEK 9 (MLR 116K+ records).
   - Dilengkapi *live pulse status* homelab dan tombol aksi cepat (*Hubungi*, *Salin Email* dengan feedback badge, dan *Trigger Agent-Z*).
 - **Mobile Touch Ergonomics & Smart Justify**:
   - **Tiered Button Hierarchy**: Tombol utama 100% full-width di baris atas, tombol aksi pendukung 50:50 di baris bawah dengan touch target ergonomis (min 48px) dan tactile feedback.
@@ -41,9 +41,9 @@ Platform ini menggabungkan database cloud Supabase dengan sistem fail-safe lokal
   - **Smart Justify Typography Engine**: Justifikasi cerdas dengan hyphenation otomatis (`hyphens: auto; text-justify: inter-word;`) pada narasi panjang untuk mencegah *rivers of white*, sambil menjaga teks pendek tetap rata kiri yang rapi.
 
 ### 2. 💻 Interactive AI Terminal (`InteractiveTerminal.jsx`)
-- Terminal UNIX emulator interaktif yang merefleksikan data telemetri nyata dari server homelab lokal Zacky.
-- Mendukung interaksi command prompt: `help`, `neofetch`, `skills`, `projects`, `telemetry`, `status`, dan `clear`.
-- Output informatif mengenai hardware specs (ThinkPad T440, Ubuntu Server 22.04 LTS, Tailscale VPN, Docker container stacks).
+- Terminal UNIX emulator interaktif yang merefleksikan data telemetri nyata dari server homelab lokal ThinkPad T440.
+- Mendukung interaksi command prompt: `help`, `neofetch`, `skills`, `projects`, `telemetry`, `whoami`, `education`, `experience`, `cert`, `contact`, `agent-z`, dan `clear`.
+- Menampilkan output sistem informatif (Linux Homelab T440, PM2, Docker container stacks, sub-agent orchestrators).
 
 ### 3. ⚡ Zero-Lag & High-Performance Engine
 - **Eliminasi GPU Blur Stall**: Menghilangkan seluruh `filter: blur(...)` pada transisi halaman Framer Motion dan kartu list yang sebelumnya membekukan Chromium compositor. Digantikan dengan transisi `opacity` dan `translateY` hardware-accelerated 60+ FPS.
@@ -58,7 +58,7 @@ Platform ini menggabungkan database cloud Supabase dengan sistem fail-safe lokal
 
 ### 5. 🛠️ Command-Grade Admin Suite & Migration Hub
 - **Unified Command Dashboard (`/admin/dashboard`)**:
-  - Telemetri realtime koneksi Supabase (`vafesoxvobxnvuhpffeb.supabase.co`).
+  - Telemetri realtime koneksi Supabase.
   - Matriks ringkasan status tabel: Projects, Certificates, Honors, Experience, Education, Skills, Profile.
   - **Hybrid Migration Hub**: Tombol **"Salin Skrip SQL Migrasi CV Terbaru (1-Click)"** ke clipboard untuk update instan di Supabase SQL Editor.
   - Tombol **"Direct In-App Sync"** untuk sinkronisasi otomatis satu klik dari frontend.
@@ -69,7 +69,7 @@ Platform ini menggabungkan database cloud Supabase dengan sistem fail-safe lokal
 - **Categorized Modern Sidebar (`AdminLayout.jsx`)**: Navigasi intuitif yang dikelompokkan ke dalam *Aksi Cepat*, *Konten Utama*, dan *Kredensial*.
 
 ### 6. 🤖 Agent-Z AI Assistant (`Chatbot.jsx`)
-- Chatbot AI floating interaktif yang ditenagai oleh model Groq (Llama 3) dengan failover otomatis ke OpenRouter.
+- Chatbot AI floating interaktif yang ditenagai oleh model Groq / Gemini dengan payload sliding window hemat token.
 - Paham seluruh riwayat, pencapaian, dan detail proyek ZMDinata untuk menjawab pertanyaan pengunjung secara akurat.
 
 ### 7. 🛡️ Hybrid Cloud & Local Fallback Architecture
@@ -88,7 +88,7 @@ Platform ini menggabungkan database cloud Supabase dengan sistem fail-safe lokal
 | **Icons & UI** | Lucide React, React Icons | Iconset minimalis dan modern |
 | **Styling** | Modular Vanilla CSS | Desain glassmorphism kustom tanpa overhead Tailwind bundle |
 | **Document Rendering** | PDF.js (`pdfjs-dist`) | High-performance HTML5 canvas rendering |
-| **AI Integration** | Groq API & OpenRouter API | Engine chatbot Agent-Z |
+| **AI Integration** | Groq API, Gemini API & OpenRouter | Engine chatbot Agent-Z |
 | **Deployment** | Vercel | Global Edge CDN hosting |
 
 ---
@@ -120,8 +120,10 @@ MyPortfolio/
 │   │       ├── ProfileInteractiveDeck.jsx # 3-tab specialization mini deck
 │   │       └── SpotlightCard.jsx    # Hardware-accelerated spotlight bento card
 │   ├── data/                        # Local fallback data & CV single-source-of-truth
-│   │   ├── latestCvData.js          # Terpusat: CV data, riset SISFOTEK, LestariRimba
+│   │   ├── latestCvData.js          # Terpusat: CV data, AutoOverlay AI, AMD Hackathon
 │   │   ├── projects.js
+│   │   ├── certificates.js
+│   │   ├── honors.js
 │   │   ├── skills.js
 │   │   └── translations.js          # Bilingual ID/EN dictionary
 │   ├── lib/
@@ -171,37 +173,13 @@ VITE_SUPABASE_ANON_KEY=your-supabase-anon-key
 1. Buka [Supabase Dashboard](https://supabase.com/dashboard) dan pilih proyek Anda.
 2. Masuk ke menu **SQL Editor**.
 3. Buka file [`supabase-sync-cv.sql`](./supabase-sync-cv.sql) pada repositori ini, salin seluruh kueri, lalu jalankan (**Run**).
-4. Skrip ini akan secara otomatis membuat tabel yang dibutuhkan, memperbarui constraint schema, dan melakukan seeding data profil, proyek unggulan (Agent-Z, LestariRimba, Prediksi Tiket Pesawat), dan keahlian terkini.
+4. Skrip ini akan secara otomatis membuat tabel yang dibutuhkan, memperbarui constraint schema, dan melakukan seeding data profil, proyek unggulan (AutoOverlay AI, Agent-Z, A2Z Agentz), dan keahlian terkini.
 
 ### 4. Jalankan Development Server
 ```bash
 npm run dev
 ```
 Buka browser pada `http://localhost:3000` (atau port yang ditunjuk oleh Vite).
-
-### 5. Build Produksi
-```bash
-npm run build
-```
-
----
-
-## 🗺️ Rute Aplikasi
-
-### 🌐 Halaman Publik
-- `#/` : Bento Grid Landing Page (Hero, Profil Deck, AI Terminal, Featured Projects, Experience, Skills, Contact).
-- `#/projects` : Galeri Proyek Lengkap dengan filter kategori dan modal pratinjau dokumen.
-- `#/certificates` : Arsip Sertifikasi Resmi dengan viewer PDF/gambar instan.
-- `#/honors` : Penghargaan Kompetisi dan Prestasi Akademik.
-
-### 🔒 Halaman Admin (Protected)
-- `#/admin/dashboard` : Unified Command Dashboard & Hub Migrasi Supabase.
-- `#/admin/quick-editor` : Split-Screen Editor dengan Live Preview interaktif.
-- `#/admin/profile` : Manajemen Profil dan Narasi Bio.
-- `#/admin/projects` : CRUD Proyek & Pengaturan Featured (Maksimal 3 item).
-- `#/admin/certificates` : CRUD Sertifikat & Pengelompokan Kategori.
-- `#/admin/honors` : CRUD Penghargaan & Kompetisi.
-- `#/admin/experience` & `#/admin/education` : CRUD Riwayat Karir & Studi.
 
 ---
 

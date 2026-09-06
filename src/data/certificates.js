@@ -1,4 +1,6 @@
 export const certificates = [
+  { id: 'cert-20', title: 'Pijak x IBM SkillsBuild AI Engineer Intensive (Full Graduate)', file: '/assets/certificates/sertif20.pdf', preview: '/assets/certificates/previews/sertif20.png', type: 'pdf' },
+  { id: 'cert-19', title: 'AMD Developer Hackathon ACT II Certificate', file: '/assets/certificates/sertif19.pdf', preview: '/assets/certificates/previews/sertif19.png', type: 'pdf' },
   { id: 'cert-18', title: 'IBM Introduction to Generative AI', file: '/assets/certificates/sertif18.pdf', preview: '/assets/certificates/previews/sertif18.png', type: 'pdf' },
   { id: 'cert-17', title: 'IBM AI Ethics', file: '/assets/certificates/sertif17.pdf', preview: '/assets/certificates/previews/sertif17.png', type: 'pdf' },
   { id: 'cert-16', title: 'IAII SISFOTEK 9', file: '/assets/certificates/sertif16.pdf', preview: '/assets/certificates/previews/sertif16.png', type: 'pdf' },

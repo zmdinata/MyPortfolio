@@ -1,0 +1,982 @@
+{
+  "/srv/ai-data/kuliah/MyWebPortfolio/api/chat.js": {
+    "mtime": 1788680539.5880847,
+    "ast_hash": "c1995028d1feadd2c159d5540af36c32",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/api/link-preview.js": {
+    "mtime": 1788680539.5892067,
+    "ast_hash": "56d23a0ffed198f7042423edc978ea54",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/package.json": {
+    "mtime": 1788680539.59951,
+    "ast_hash": "23d265d0d536aaea62aa30e8ee58dc7a",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/portfolio-video/capture/extracted/animations.json": {
+    "mtime": 1788680539.62816,
+    "ast_hash": "a6dc521bcdb28900affa7fd696702612",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/portfolio-video/capture/extracted/assets-catalog.json": {
+    "mtime": 1788680539.6285806,
+    "ast_hash": "f573c4921e1385fbbd5d0764f6c1c3d2",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/portfolio-video/capture/meta.json": {
+    "mtime": 1788680539.6285806,
+    "ast_hash": "fa675ba5dc69f736e1c51831fa9618fc",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/portfolio-video/renders/portfolio-video_2026-05-10_06-49-46.meta.json": {
+    "mtime": 1788680539.6385102,
+    "ast_hash": "97816351479ac35375c10e73546c9459",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/portfolio-video/renders/portfolio-video_2026-05-10_06-49-51.meta.json": {
+    "mtime": 1788680539.6396358,
+    "ast_hash": "97816351479ac35375c10e73546c9459",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/portfolio-video/renders/portfolio-video_2026-05-10_06-50-05.meta.json": {
+    "mtime": 1788680539.6396358,
+    "ast_hash": "97816351479ac35375c10e73546c9459",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/portfolio-video/renders/portfolio-video_2026-05-10_06-50-31.meta.json": {
+    "mtime": 1788680539.6396358,
+    "ast_hash": "97816351479ac35375c10e73546c9459",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/portfolio-video/renders/portfolio-video_2026-05-10_06-56-52.meta.json": {
+    "mtime": 1788680539.6396358,
+    "ast_hash": "97816351479ac35375c10e73546c9459",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/script.js": {
+    "mtime": 1788680540.2055154,
+    "ast_hash": "90e66695058ca129f2257f8daaf1b216",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/src/App.jsx": {
+    "mtime": 1788680540.2505157,
+    "ast_hash": "7b813fcbe6efb5d0d1d657a4277f1100",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/src/components/Chatbot/Chatbot.jsx": {
+    "mtime": 1788684546.129913,
+    "ast_hash": "7c2b08f4bdefd3d8f45eacca606bda42",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/src/components/admin/AdminLayout.jsx": {
+    "mtime": 1788680540.2519784,
+    "ast_hash": "e51b75d596e59870f369ee28c5213889",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/src/components/admin/CustomSelect.jsx": {
+    "mtime": 1788680540.2521996,
+    "ast_hash": "ad965744638a391d51bf4adececbe74c",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/src/components/admin/PortfolioCrudManager.jsx": {
+    "mtime": 1788680540.2521996,
+    "ast_hash": "0180762a28a683a253cde1c2423e62d2",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/src/components/admin/ProtectedRoute.jsx": {
+    "mtime": 1788680540.2521996,
+    "ast_hash": "88dbd7ff2e3f27055a2e0f2569de61af",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/src/components/layout/Footer.jsx": {
+    "mtime": 1788680540.2521996,
+    "ast_hash": "1babf9c0f2ebe63afbc3c79365367580",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/src/components/layout/Layout.jsx": {
+    "mtime": 1788680540.2525892,
+    "ast_hash": "a7376d341560d573ab392b3f8f4f8d32",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/src/components/layout/Navbar.jsx": {
+    "mtime": 1788680540.2525892,
+    "ast_hash": "d467f93cc5045fb01b684e38dd1cd8b5",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/src/components/ui/AiTelemetryCard.jsx": {
+    "mtime": 1788680540.2525892,
+    "ast_hash": "fda57abcbce5ccb2855493f7b3665a66",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/src/components/ui/AmbientGridMesh.jsx": {
+    "mtime": 1788680540.2527673,
+    "ast_hash": "ea2d941c329db2abe8bc4c3cb31dea5e",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/src/components/ui/CustomCursor.jsx": {
+    "mtime": 1788680540.2527673,
+    "ast_hash": "efe50bbee7a8bf2ee4dcce372bd26cdb",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/src/components/ui/HeroAnimation.jsx": {
+    "mtime": 1788680540.2527673,
+    "ast_hash": "6b73bc2ff60a3ba639763fb2dde9a930",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/src/components/ui/InteractiveTerminal.jsx": {
+    "mtime": 1788684493.012439,
+    "ast_hash": "355eec482c104d7402989bc7357543e3",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/src/components/ui/PdfPreview.jsx": {
+    "mtime": 1788680540.2527673,
+    "ast_hash": "a99328e3fefcfb63bca92b14ba1ffbd9",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/src/components/ui/PreviewModal.jsx": {
+    "mtime": 1788680540.2527673,
+    "ast_hash": "a101c5927d32c155984d9c8cd6a5efcb",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/src/components/ui/ProfileInteractiveDeck.jsx": {
+    "mtime": 1788684047.6898205,
+    "ast_hash": "6d7636fe9ad142646bc75916a51df46d",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/src/components/ui/SpotlightCard.jsx": {
+    "mtime": 1788680540.2527673,
+    "ast_hash": "b6feb35c81f123b3945c1966587da644",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/src/context/LangContext.jsx": {
+    "mtime": 1788684047.6898205,
+    "ast_hash": "1f2a45592f84f32a5f19cbad35f9e287",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/src/context/ThemeContext.jsx": {
+    "mtime": 1788680540.2533295,
+    "ast_hash": "c6fd3eea69c84294e7ac0c064a29817a",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/src/data/certificates.js": {
+    "mtime": 1788684448.091038,
+    "ast_hash": "2662591c75b036d3b0639e9dbec849e8",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/src/data/honors.js": {
+    "mtime": 1788684454.5380957,
+    "ast_hash": "a01f5584f6e78d671abc74a80bd497c9",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/src/data/latestCvData.js": {
+    "mtime": 1788684408.398673,
+    "ast_hash": "ae59fb5d9bea300adee47bff804cdfb1",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/src/data/projects.js": {
+    "mtime": 1788684438.6959543,
+    "ast_hash": "972c2510ded492dbd29887c05b465c3b",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/src/data/skills.js": {
+    "mtime": 1788684461.3411562,
+    "ast_hash": "c51dd0afdce2092f10671a85b62d307a",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/src/data/translations.js": {
+    "mtime": 1788684472.607257,
+    "ast_hash": "77f233040ce159f38c2710a5924a060e",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/src/hooks/usePortfolioContext.js": {
+    "mtime": 1788680540.2534385,
+    "ast_hash": "58ee885a2ddb726c0af98dfad4a839f5",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/src/lib/aiClient.js": {
+    "mtime": 1788680540.2534385,
+    "ast_hash": "3e5354c4b86f54b4877cf5c9aba27efd",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/src/lib/categoryIcons.jsx": {
+    "mtime": 1788680540.2539198,
+    "ast_hash": "5eecbc2dda0c71606a10f1c8f154db13",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/src/lib/chatMemory.js": {
+    "mtime": 1788680540.2539198,
+    "ast_hash": "84d7efbee362da67f7fb974e2daced0e",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/src/lib/motionConfig.js": {
+    "mtime": 1788680540.2539198,
+    "ast_hash": "3242ea83d5de4800c417933bfeb07054",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/src/lib/portfolioCache.js": {
+    "mtime": 1788680540.2539198,
+    "ast_hash": "cca50054ecc00effa09aa10317b3b3ba",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/src/lib/portfolioFallbacks.js": {
+    "mtime": 1788684479.544319,
+    "ast_hash": "3a795dd7bce6c7a1d4d87dc79e036d71",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/src/lib/portfolioMedia.js": {
+    "mtime": 1788680540.2539198,
+    "ast_hash": "e81e5723b57228876b00109f01586019",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/src/lib/supabase.js": {
+    "mtime": 1788680540.2539198,
+    "ast_hash": "e4ba688660f0cfcf82ade280755579e8",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/src/main.jsx": {
+    "mtime": 1788680540.2539198,
+    "ast_hash": "03fafe5b9272027a11951a665db530bf",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/src/pages/CertificatesPage.jsx": {
+    "mtime": 1788680540.2539198,
+    "ast_hash": "b14b7d7dce850dfe26d8c8cfcff81eea",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/src/pages/HomePage.jsx": {
+    "mtime": 1788684047.6898205,
+    "ast_hash": "631f6009ca618cf7eeb28ff05b9e1674",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/src/pages/HonorsPage.jsx": {
+    "mtime": 1788680540.2543895,
+    "ast_hash": "bf926419a71df1d148c26ffd76e20f66",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/src/pages/ProjectsPage.jsx": {
+    "mtime": 1788680540.2543895,
+    "ast_hash": "a6e688f46cce9a9826e7354bc2f973c8",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/src/pages/admin/DashboardPage.jsx": {
+    "mtime": 1788680540.2543895,
+    "ast_hash": "9902f01263d09336ad7ab7a2fc6ece41",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/src/pages/admin/LoginPage.jsx": {
+    "mtime": 1788680540.254804,
+    "ast_hash": "9b8c40d06248b7367488ec8a4daaee30",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/src/pages/admin/ManageCertificates.jsx": {
+    "mtime": 1788680540.254804,
+    "ast_hash": "d03950d59a9ae4af9284851c5bf79ac5",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/src/pages/admin/ManageEducation.jsx": {
+    "mtime": 1788680540.254804,
+    "ast_hash": "8ec586c5ff75fde541f7dabcd1ecfa1c",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/src/pages/admin/ManageExperience.jsx": {
+    "mtime": 1788680540.254804,
+    "ast_hash": "06b4e146492de7b00e8ba52ddf8135f8",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/src/pages/admin/ManageHonors.jsx": {
+    "mtime": 1788680540.254804,
+    "ast_hash": "d49eafacb08415ff16049a4455ce30d7",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/src/pages/admin/ManageProfile.jsx": {
+    "mtime": 1788680540.254804,
+    "ast_hash": "ea41fa1d52d4f4e5137f349bc3510a11",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/src/pages/admin/ManageProjects.jsx": {
+    "mtime": 1788680540.254804,
+    "ast_hash": "86a726f510f1998a02710b28f4952a8c",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/src/pages/admin/ManageSkills.jsx": {
+    "mtime": 1788680540.254804,
+    "ast_hash": "9ba6cf901253377d7509fcde37681238",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/src/pages/admin/QuickEditorPage.jsx": {
+    "mtime": 1788680540.254804,
+    "ast_hash": "5dc12477a1de54667f39b96e76bddba0",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/supabase-sync-cv.sql": {
+    "mtime": 1788684578.4492016,
+    "ast_hash": "ce129770a14d2bcf43d3db7d1ba14af5",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/vercel.json": {
+    "mtime": 1788680540.2563267,
+    "ast_hash": "64cc5a77fee9081db9a238a98a87de38",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/vite.config.js": {
+    "mtime": 1788680540.2563267,
+    "ast_hash": "9c57575ffedb0f10d4a0d8a468b29832",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/README.md": {
+    "mtime": 1788684047.6883104,
+    "ast_hash": "9a811944b69880ce5ad7e1dbde2cba89",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/honor_section.html": {
+    "mtime": 1788680539.59551,
+    "ast_hash": "70d5800d84033d32952b6c45f13c4819",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/index.html": {
+    "mtime": 1788680539.59951,
+    "ast_hash": "d45ee989a68a6566dab82a87549522d6",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/index.old.html": {
+    "mtime": 1788680539.59951,
+    "ast_hash": "7e86172ef44171c0640571f0d02592f2",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/portfolio-video/DESIGN.md": {
+    "mtime": 1788680539.60251,
+    "ast_hash": "d794de15462fe74e8096a7c2ba361274",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/portfolio-video/SCRIPT.md": {
+    "mtime": 1788680539.6044102,
+    "ast_hash": "f132f91168a4313703a889758cbcb984",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/portfolio-video/STORYBOARD.md": {
+    "mtime": 1788680539.6044102,
+    "ast_hash": "b34ec463f57e6b7dd015a4a951cfc5f7",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/portfolio-video/capture/AGENTS.md": {
+    "mtime": 1788680539.604617,
+    "ast_hash": "b99a14910b09be75263c88ba22f2b5ca",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/portfolio-video/capture/BLOCKED.md": {
+    "mtime": 1788680539.604617,
+    "ast_hash": "935d386ac7211387aeddd4cd3aeaa2ec",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/portfolio-video/capture/CLAUDE.md": {
+    "mtime": 1788680539.604617,
+    "ast_hash": "b99a14910b09be75263c88ba22f2b5ca",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/portfolio-video/capture/extracted/asset-descriptions.md": {
+    "mtime": 1788680539.6285806,
+    "ast_hash": "70872dab3f4f8518fd8a7f04be0d1780",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/portfolio-video/capture/extracted/visible-text.txt": {
+    "mtime": 1788680539.6285806,
+    "ast_hash": "10750a68412bab94309a92b86e5d0583",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/portfolio-video/index.html": {
+    "mtime": 1788680539.6385102,
+    "ast_hash": "458924614b4d60c0a618715deaf54c4b",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/progresswebsite.md": {
+    "mtime": 1788684047.6883104,
+    "ast_hash": "a5d5afeae2b143783c4608c588d2b6c6",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/prompt.md": {
+    "mtime": 1788680539.7455113,
+    "ast_hash": "ce2d27a4d37279dd305628ce743e6cad",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/proyek_section.html": {
+    "mtime": 1788680539.942513,
+    "ast_hash": "67e6912ed796d29289d159e898926c1e",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/sertif_section.html": {
+    "mtime": 1788680540.2505157,
+    "ast_hash": "02e225f461be3beee7d51cb53562cf35",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/proyek/Data/data1.pdf": {
+    "mtime": 1788680539.7470918,
+    "ast_hash": "f0c37d619cd31f05867c8ed19f1af1d4",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/proyek/Data/data2.pdf": {
+    "mtime": 1788680539.7555113,
+    "ast_hash": "cf1cc5452263b399bd3626c8a9291e4d",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/proyek/Lainnya/Lain1.pdf": {
+    "mtime": 1788680539.7665114,
+    "ast_hash": "295497c9227d2d694ff03f4dceff9ea0",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/proyek/Lainnya/Lain2.pdf": {
+    "mtime": 1788680539.7785115,
+    "ast_hash": "dd4060dd371ce4e417628795c8a01115",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/proyek/Lainnya/Lain3.pdf": {
+    "mtime": 1788680539.8075118,
+    "ast_hash": "82d3da27b5b0b3a6642b59b13ddd7540",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/proyek/Lomba/lomba1.pdf": {
+    "mtime": 1788680539.8115118,
+    "ast_hash": "c3f3cc144546919656d118f23c2db860",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/proyek/Lomba/lomba2.pdf": {
+    "mtime": 1788680539.9095128,
+    "ast_hash": "a637fd9096b86ce3351e0d9035b88496",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/proyek/Tugas/Tugas1.pdf": {
+    "mtime": 1788680539.9155128,
+    "ast_hash": "bd518481a4e52191389075222642d273",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/proyek/Tugas/Tugas2.pdf": {
+    "mtime": 1788680539.9195127,
+    "ast_hash": "c284befb37325646919382808d216860",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/proyek/Tugas/Tugas3.pdf": {
+    "mtime": 1788680539.933513,
+    "ast_hash": "79da3e53db51bbc0dcbecfba5292a6fe",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/proyek/Tugas/Tugas4.pdf": {
+    "mtime": 1788680539.940513,
+    "ast_hash": "93867d0137260a444ae15434977a9ac4",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/sertif/sertif10.pdf": {
+    "mtime": 1788680540.2305155,
+    "ast_hash": "cacc5291b6d17d84222c0a0b1f1ce95a",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/sertif/sertif11.pdf": {
+    "mtime": 1788680540.2305155,
+    "ast_hash": "4835fe02e127b6638a97c3c1ff347846",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/sertif/sertif12.pdf": {
+    "mtime": 1788680540.2305155,
+    "ast_hash": "c371da28a9e4d9bbf31e45c5c34806db",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/sertif/sertif13.pdf": {
+    "mtime": 1788680540.2305155,
+    "ast_hash": "734e9cd57e8b153ad2781864e7d297d2",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/sertif/sertif14.pdf": {
+    "mtime": 1788680540.2315156,
+    "ast_hash": "68e497fcb4fc51fb05851389cfef9a5d",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/sertif/sertif15.pdf": {
+    "mtime": 1788680540.2315156,
+    "ast_hash": "7f0ccb00f9e8d18a8768d0a6f20f8df9",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/sertif/sertif16.pdf": {
+    "mtime": 1788680540.2335155,
+    "ast_hash": "9730301abadaa917d036985df46d69c0",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/sertif/sertif17.pdf": {
+    "mtime": 1788680540.2335155,
+    "ast_hash": "c1c944eee4a040de075ee3f4d8146c6f",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/sertif/sertif18.pdf": {
+    "mtime": 1788680540.2335155,
+    "ast_hash": "2f1e557723542caaf1f20f5c2ac23cf4",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/sertif/sertif2.pdf": {
+    "mtime": 1788680540.2365155,
+    "ast_hash": "22bc06757f08ae0451abccc834272703",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/sertif/sertif3.pdf": {
+    "mtime": 1788680540.2365155,
+    "ast_hash": "a6dfa2b79c7dea5340bc1abeb966d046",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/sertif/sertif4.pdf": {
+    "mtime": 1788680540.2415156,
+    "ast_hash": "f15a813f9503f67e4fee07d1d0ee38b3",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/sertif/sertif5.pdf": {
+    "mtime": 1788680540.2425158,
+    "ast_hash": "4dece34e59e38c249a188ba744752ee6",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/sertif/sertif6.pdf": {
+    "mtime": 1788680540.2425158,
+    "ast_hash": "8ae02184ab96a44f115d804d4dd06788",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/sertif/sertif7.pdf": {
+    "mtime": 1788680540.2455158,
+    "ast_hash": "fc96ff373713f5bb276807136ac5951d",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/sertif/sertif8.pdf": {
+    "mtime": 1788680540.2505157,
+    "ast_hash": "26c899d5d1dcdfe4b3e7dded305012e7",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/sertif/sertif9.pdf": {
+    "mtime": 1788680540.2505157,
+    "ast_hash": "cd796e05416bc2e7c1ba703deb01907f",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/hero/photo.png": {
+    "mtime": 1788680539.5915098,
+    "ast_hash": "59dad9b6099d8749960db8e157193d96",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/honor/honor1.jpeg": {
+    "mtime": 1788680539.5915098,
+    "ast_hash": "8ae05e60b144cd5dcc483d692afd022a",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/honor/honor2.png": {
+    "mtime": 1788680539.59551,
+    "ast_hash": "86aaeaf1160f0938581d69e780916670",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/image.png": {
+    "mtime": 1788680539.59851,
+    "ast_hash": "86e4aafbe72296605f735ad3e68dd841",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/photo.png": {
+    "mtime": 1788680539.60251,
+    "ast_hash": "59dad9b6099d8749960db8e157193d96",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/portfolio-video/capture/assets/og-image.png": {
+    "mtime": 1788680539.6265101,
+    "ast_hash": "a782c1f372374d7b31815716b26841bb",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/portfolio-video/capture/assets/svgs/btn-outline.svg": {
+    "mtime": 1788680539.6265101,
+    "ast_hash": "83c45f0753bd5bc9e407e6648850cb6f",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/portfolio-video/capture/assets/svgs/btn-primary.svg": {
+    "mtime": 1788680539.62816,
+    "ast_hash": "83c45f0753bd5bc9e407e6648850cb6f",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/portfolio-video/capture/assets/svgs/chatbot-toggle-btn.svg": {
+    "mtime": 1788680539.62816,
+    "ast_hash": "805c440fdbb96d729c08b79f329e45e0",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/portfolio-video/capture/assets/svgs/contact-btn.svg": {
+    "mtime": 1788680539.62816,
+    "ast_hash": "481ec3ec1212e47dec5ae1da3b710788",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/portfolio-video/capture/assets/svgs/footer-social-link.svg": {
+    "mtime": 1788680539.62816,
+    "ast_hash": "481ec3ec1212e47dec5ae1da3b710788",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/portfolio-video/capture/assets/svgs/icon-1.svg": {
+    "mtime": 1788680539.62816,
+    "ast_hash": "2d9b6d138293346e8153c84e1c89bf4e",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/portfolio-video/capture/assets/svgs/skill-card-icon.svg": {
+    "mtime": 1788680539.62816,
+    "ast_hash": "a5d890cb9a4884b8dfd456b68b69dd37",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/portfolio-video/capture/assets/svgs/toggle-btn.svg": {
+    "mtime": 1788680539.62816,
+    "ast_hash": "d3fb3fdf9d6266abd0923cc059c50716",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/portfolio-video/capture/screenshots/scroll-000.png": {
+    "mtime": 1788680539.6295102,
+    "ast_hash": "c42723b99f2faf4588982b523b79cc4c",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/portfolio-video/capture/screenshots/scroll-019.png": {
+    "mtime": 1788680539.6305103,
+    "ast_hash": "02fce077128bf1fd0fd13b56b5fd88ac",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/portfolio-video/capture/screenshots/scroll-039.png": {
+    "mtime": 1788680539.6335104,
+    "ast_hash": "93a645796e4036b79e6af6bdc2b314ba",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/portfolio-video/capture/screenshots/scroll-058.png": {
+    "mtime": 1788680539.6345103,
+    "ast_hash": "af4166663d13a7e46887d258c33231d4",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/portfolio-video/capture/screenshots/scroll-077.png": {
+    "mtime": 1788680539.6355102,
+    "ast_hash": "297bac6c0fdae95316c92816c4f99349",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/portfolio-video/capture/screenshots/scroll-096.png": {
+    "mtime": 1788680539.6365104,
+    "ast_hash": "9c75a9b7c9a1762baeaf66bddeb2729f",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/portfolio-video/capture/screenshots/scroll-100.png": {
+    "mtime": 1788680539.6375103,
+    "ast_hash": "4edb07ecd4af4cff9130e0b353bbcbc0",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/proyek/Data/data1.png": {
+    "mtime": 1788680539.7481792,
+    "ast_hash": "2320073516fdf0b48c182d190a2f8f51",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/proyek/Data/data2.png": {
+    "mtime": 1788680539.7585113,
+    "ast_hash": "871f909bdfa9d82bf192f54a2786cddc",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/proyek/Desain/proyek1.jpeg": {
+    "mtime": 1788680539.7585113,
+    "ast_hash": "9d0a57b6d47f5207be5a579775d40400",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/proyek/Desain/proyek2.jpeg": {
+    "mtime": 1788680539.7600965,
+    "ast_hash": "2563e6761e34a85470cde1b568e0f391",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/proyek/Desain/proyek3.jpeg": {
+    "mtime": 1788680539.7600965,
+    "ast_hash": "829ee67897d65cd9addd05b50e82513f",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/proyek/Desain/zmdinata_insta.png": {
+    "mtime": 1788680539.7605114,
+    "ast_hash": "beaffe37474a00c6e0a3c9dd35ffb1c9",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/proyek/Lainnya/Lain1.png": {
+    "mtime": 1788680539.7675114,
+    "ast_hash": "287a020bdc68d7efc38ec11478d7510c",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/proyek/Lainnya/Lain2.png": {
+    "mtime": 1788680539.7815115,
+    "ast_hash": "9f22c08dbd77beda94215952fb5ecb8a",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/proyek/Lainnya/Lain3.png": {
+    "mtime": 1788680539.8085117,
+    "ast_hash": "929d4e30d40d21488fb6c39996d6dda1",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/proyek/Lomba/lomba1.png": {
+    "mtime": 1788680539.8115118,
+    "ast_hash": "98d7479916c13933cdbaa90d4afe954d",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/proyek/Lomba/lomba2.png": {
+    "mtime": 1788680539.9115126,
+    "ast_hash": "afacedca76dec7873885f9e87af51d57",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/proyek/Tugas/PWD.png": {
+    "mtime": 1788680539.9135127,
+    "ast_hash": "3bc034dab2ad62227b7ab1382e526270",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/proyek/Tugas/Tugas1.png": {
+    "mtime": 1788680539.9165127,
+    "ast_hash": "6970da4865b8e7e9689b5973a29fab1f",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/proyek/Tugas/Tugas2.png": {
+    "mtime": 1788680539.9195127,
+    "ast_hash": "011c21571d3825113168f6a677631f23",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/proyek/Tugas/Tugas3.png": {
+    "mtime": 1788680539.939513,
+    "ast_hash": "84e4cc7b74a43d91730439dd9140ec48",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/proyek/Tugas/Tugas4.png": {
+    "mtime": 1788680539.942513,
+    "ast_hash": "6b655b503638817c03e98e8504d2207d",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/public/assets/certificates/previews/sertif10.png": {
+    "mtime": 1788680539.944513,
+    "ast_hash": "5ec102800ce536842acfe580d4b69d27",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/public/assets/certificates/previews/sertif11.png": {
+    "mtime": 1788680539.944513,
+    "ast_hash": "c8ca1537cd5cf6a4f7170ad003219a71",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/public/assets/certificates/previews/sertif12.png": {
+    "mtime": 1788680539.946513,
+    "ast_hash": "fab235ace644e2e7b2c8e34f2bf4cd47",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/public/assets/certificates/previews/sertif13.png": {
+    "mtime": 1788680539.948513,
+    "ast_hash": "9550592938845af283aec722e737c6a7",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/public/assets/certificates/previews/sertif14.png": {
+    "mtime": 1788680539.948513,
+    "ast_hash": "9c41b5ac5d08335a6aa5025277b5ce26",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/public/assets/certificates/previews/sertif15.png": {
+    "mtime": 1788680539.9505131,
+    "ast_hash": "5f4217b59723d900fd6c5682fac8bfb2",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/public/assets/certificates/previews/sertif16.png": {
+    "mtime": 1788680539.954513,
+    "ast_hash": "4b37fa1bbf2864c4d20027b545c55ec5",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/public/assets/certificates/previews/sertif17.png": {
+    "mtime": 1788680539.9555132,
+    "ast_hash": "38cdb2f5aeef719dc1fb26009e4c90db",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/public/assets/certificates/previews/sertif18.png": {
+    "mtime": 1788680539.9565132,
+    "ast_hash": "cee11140e34a0f7b819c32a4d74a145a",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/public/assets/certificates/previews/sertif2.png": {
+    "mtime": 1788680539.9585133,
+    "ast_hash": "323b6144fe3168edc6d5644510724f60",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/public/assets/certificates/previews/sertif3.png": {
+    "mtime": 1788680539.9595132,
+    "ast_hash": "b8fa26bd0caa97dd60cfa4700ad45084",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/public/assets/certificates/previews/sertif4.png": {
+    "mtime": 1788680539.9615133,
+    "ast_hash": "f6499c582a0345c22d002e8b8e09aed7",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/public/assets/certificates/previews/sertif5.png": {
+    "mtime": 1788680539.9625132,
+    "ast_hash": "968f61022f8b1463e1a0bb2b1da58b6d",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/public/assets/certificates/previews/sertif6.png": {
+    "mtime": 1788680539.9625132,
+    "ast_hash": "4ff5825fbda57211d5554dbb10a4e924",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/public/assets/certificates/previews/sertif7.png": {
+    "mtime": 1788680539.9635131,
+    "ast_hash": "69046b76d8a1037c40eae6198f069f0b",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/public/assets/certificates/previews/sertif8.png": {
+    "mtime": 1788680539.9655132,
+    "ast_hash": "5cc3c752a712d2b51278b64d2ddb7656",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/public/assets/certificates/previews/sertif9.png": {
+    "mtime": 1788680539.9675133,
+    "ast_hash": "7ac6438112dd7503c6efc9eee25ea1b1",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/public/assets/certificates/sertif1.png": {
+    "mtime": 1788680539.9685133,
+    "ast_hash": "d8c5d70d4d0a36f91db2a5c6d0ffedc0",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/public/assets/honors/honor1.jpeg": {
+    "mtime": 1788680539.9905133,
+    "ast_hash": "8ae05e60b144cd5dcc483d692afd022a",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/public/assets/honors/honor2.png": {
+    "mtime": 1788680539.9935136,
+    "ast_hash": "86aaeaf1160f0938581d69e780916670",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/public/assets/images/agent-z-body.png": {
+    "mtime": 1788680539.9985135,
+    "ast_hash": "2c0654eb4593524f7f3b768f4d3b0bac",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/public/assets/images/agent-z-forearm.png": {
+    "mtime": 1788680539.9995136,
+    "ast_hash": "aec0bdcfd441c62748aa8e51504a5a47",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/public/assets/images/agent-z-hand.png": {
+    "mtime": 1788680540.0005136,
+    "ast_hash": "7ff1574ea558e812f4c5f83c9ec456fe",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/public/assets/images/agent-z-maskot.png": {
+    "mtime": 1788680540.0015135,
+    "ast_hash": "e35779275d7279bfd580bddaec555662",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/public/assets/images/agent-z-upperarm.png": {
+    "mtime": 1788680540.0025136,
+    "ast_hash": "9a68ef6904e75cd198de876479f6e05d",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/public/assets/images/hero/photo.png": {
+    "mtime": 1788680540.0065136,
+    "ast_hash": "59dad9b6099d8749960db8e157193d96",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/public/assets/images/photo.png": {
+    "mtime": 1788680540.0105135,
+    "ast_hash": "59dad9b6099d8749960db8e157193d96",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/public/assets/images/preview.png": {
+    "mtime": 1788680540.0115137,
+    "ast_hash": "a782c1f372374d7b31815716b26841bb",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/public/favicon.png": {
+    "mtime": 1788680540.2055154,
+    "ast_hash": "040020b81e83223270dab7e777d4a9a4",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/sertif/previews/sertif10.png": {
+    "mtime": 1788680540.2075155,
+    "ast_hash": "5ec102800ce536842acfe580d4b69d27",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/sertif/previews/sertif11.png": {
+    "mtime": 1788680540.2085154,
+    "ast_hash": "c8ca1537cd5cf6a4f7170ad003219a71",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/sertif/previews/sertif12.png": {
+    "mtime": 1788680540.2095153,
+    "ast_hash": "fab235ace644e2e7b2c8e34f2bf4cd47",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/sertif/previews/sertif13.png": {
+    "mtime": 1788680540.2115154,
+    "ast_hash": "9550592938845af283aec722e737c6a7",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/sertif/previews/sertif14.png": {
+    "mtime": 1788680540.2125154,
+    "ast_hash": "9c41b5ac5d08335a6aa5025277b5ce26",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/sertif/previews/sertif15.png": {
+    "mtime": 1788680540.2135155,
+    "ast_hash": "5f4217b59723d900fd6c5682fac8bfb2",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/sertif/previews/sertif16.png": {
+    "mtime": 1788680540.2175155,
+    "ast_hash": "4b37fa1bbf2864c4d20027b545c55ec5",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/sertif/previews/sertif17.png": {
+    "mtime": 1788680540.2175155,
+    "ast_hash": "38cdb2f5aeef719dc1fb26009e4c90db",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/sertif/previews/sertif18.png": {
+    "mtime": 1788680540.2185154,
+    "ast_hash": "cee11140e34a0f7b819c32a4d74a145a",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/sertif/previews/sertif2.png": {
+    "mtime": 1788680540.2205155,
+    "ast_hash": "323b6144fe3168edc6d5644510724f60",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/sertif/previews/sertif3.png": {
+    "mtime": 1788680540.2215154,
+    "ast_hash": "b8fa26bd0caa97dd60cfa4700ad45084",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/sertif/previews/sertif4.png": {
+    "mtime": 1788680540.2235155,
+    "ast_hash": "f6499c582a0345c22d002e8b8e09aed7",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/sertif/previews/sertif5.png": {
+    "mtime": 1788680540.2245154,
+    "ast_hash": "968f61022f8b1463e1a0bb2b1da58b6d",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/sertif/previews/sertif6.png": {
+    "mtime": 1788680540.2245154,
+    "ast_hash": "4ff5825fbda57211d5554dbb10a4e924",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/sertif/previews/sertif7.png": {
+    "mtime": 1788680540.2255156,
+    "ast_hash": "69046b76d8a1037c40eae6198f069f0b",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/sertif/previews/sertif8.png": {
+    "mtime": 1788680540.2285156,
+    "ast_hash": "5cc3c752a712d2b51278b64d2ddb7656",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/sertif/previews/sertif9.png": {
+    "mtime": 1788680540.2295156,
+    "ast_hash": "7ac6438112dd7503c6efc9eee25ea1b1",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/sertif/sertif1.png": {
+    "mtime": 1788680540.2305155,
+    "ast_hash": "d8c5d70d4d0a36f91db2a5c6d0ffedc0",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/portfolio-video/renders/zmdinata-portfolio-draft.mp4": {
+    "mtime": 1788680539.6925108,
+    "ast_hash": "621f37be35db791d8640485cdae47673",
+    "semantic_hash": ""
+  },
+  "/srv/ai-data/kuliah/MyWebPortfolio/portfolio-video/renders/zmdinata-portfolio-portrait-draft.mp4": {
+    "mtime": 1788680539.7455113,
+    "ast_hash": "7e2c76e74e0484988fdf75254ad36a6b",
+    "semantic_hash": ""
+  }
+}

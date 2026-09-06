@@ -92,13 +92,6 @@ export default function Chatbot() {
 
     let aiResponseText = await generateChatResponse(contextMessages, {
       profile: contextString,
-      contact: contextString,
-      education: contextString,
-      skills: contextString,
-      experience: contextString,
-      projects: contextString,
-      certifications: contextString,
-      awards: contextString,
     }, lang);
 
     if (aiResponseText.startsWith('TOKEN_LIMIT_REACHED|')) {
@@ -120,150 +113,151 @@ export default function Chatbot() {
   const handleClearMemory = () => {
     clearMemory();
     const greeting = lang === 'en'
-      ? "Hello! I am Agent-Z, the AI assistant for Z. M. Dinata's portfolio. Is there anything you'd like to know about his experience, projects, or skills?"
-      : "Halo! Saya adalah Agent-Z, AI asisten untuk portfolio Z. M. Dinata. Ada yang ingin Anda ketahui tentang pengalaman, proyek, atau keahlian beliau?";
+      ? "Chat history cleared. How can I help you next?"
+      : "Riwayat percakapan telah dibersihkan. Ada yang bisa saya bantu selanjutnya?";
     setMessages([{ id: 'greeting', text: greeting, sender: 'ai' }]);
-    setIsOffline(false);
   };
 
   return (
     <div className="chatbot-wrapper">
-      {/* ========== CHAT WINDOW ========== */}
+      {/* Tombol Floating / Trigger */}
+      {!isOpen && (
+        <div 
+          className="chatbot-trigger-container"
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+        >
+          <AnimatePresence>
+            {isHovered && (
+              <motion.div
+                className="chatbot-speech-bubble"
+                initial={{ opacity: 0, y: 10, scale: 0.9 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: 10, scale: 0.9 }}
+                transition={{ duration: 0.2 }}
+              >
+                {speechText[lang] || speechText.en}
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          <button
+            className="chatbot-toggle-button"
+            onClick={() => setIsOpen(true)}
+            aria-label="Open Agent-Z AI Chat"
+          >
+            <span className="chatbot-pulse-ring" />
+            <img 
+              src="/assets/images/preview.png" 
+              alt="Agent-Z Mascot" 
+              className="chatbot-mascot-img"
+              onError={(e) => {
+                e.target.style.display = 'none';
+              }} 
+            />
+            <FiMessageSquare className="chatbot-icon-fallback" />
+          </button>
+        </div>
+      )}
+
+      {/* Jendela Chat */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
             className="chatbot-window"
-            initial={{ opacity: 0, y: 50, scale: 0.9 }}
+            initial={{ opacity: 0, y: 30, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 50, scale: 0.9 }}
-            transition={{ duration: 0.3 }}
+            exit={{ opacity: 0, y: 30, scale: 0.95 }}
+            transition={{ duration: 0.25, ease: 'easeOut' }}
           >
-            <button className="chatbot-close-btn" onClick={() => setIsOpen(false)}>
-              <FiX size={24} />
-            </button>
+            {/* Header */}
             <div className="chatbot-header">
-              <div className="chatbot-header-title">
-                <div className="chatbot-avatar">
-                  <img src="/assets/images/agent-z-maskot.png" alt="Agent-Z" />
-                </div>
-                <div className="chatbot-header-text">
-                  <h3>Agent-Z</h3>
-                  <span className={`chatbot-status ${isOffline ? 'offline' : 'online'}`}>
-                    {isOffline ? 'Offline' : 'Online'}
-                  </span>
+              <div className="chatbot-header-left">
+                <div className="chatbot-status-dot" />
+                <div>
+                  <h3 className="chatbot-title">Agent-Z</h3>
+                  <p className="chatbot-subtitle">
+                    {lang === 'en' ? 'AI Portfolio Assistant' : 'Asisten AI Portofolio'}
+                  </p>
                 </div>
               </div>
-              {/* Tombol hapus memory */}
-              <button
-                className="chatbot-clear-btn"
-                onClick={handleClearMemory}
-                title={lang === 'en' ? 'Clear conversation' : 'Hapus percakapan'}
-              >
-                <FiTrash2 size={16} />
-              </button>
+              <div className="chatbot-header-actions">
+                <button
+                  className="chatbot-action-btn"
+                  onClick={handleClearMemory}
+                  title={lang === 'en' ? 'Clear history' : 'Bersihkan riwayat'}
+                >
+                  <FiTrash2 />
+                </button>
+                <button
+                  className="chatbot-action-btn"
+                  onClick={() => setIsOpen(false)}
+                  title={lang === 'en' ? 'Close chat' : 'Tutup chat'}
+                >
+                  <FiX />
+                </button>
+              </div>
             </div>
+
+            {/* Area Pesan */}
             <div className="chatbot-messages">
               {messages.map((msg) => (
-                <div key={msg.id} className={`chatbot-message ${msg.sender}`}>
-                  <div className="chatbot-message-content">{msg.text}</div>
+                <div
+                  key={msg.id}
+                  className={`chat-bubble-row ${msg.sender === 'user' ? 'user-row' : 'ai-row'}`}
+                >
+                  {msg.sender === 'ai' && (
+                    <div className="chat-avatar">
+                      <span>Z</span>
+                    </div>
+                  )}
+                  <div className={`chat-bubble ${msg.sender === 'user' ? 'user-bubble' : 'ai-bubble'}`}>
+                    {msg.text}
+                  </div>
                 </div>
               ))}
+
               {isTyping && (
-                <div className="chatbot-message ai">
-                  <div className="chatbot-message-content typing-indicator">
-                    <span /><span /><span />
+                <div className="chat-bubble-row ai-row">
+                  <div className="chat-avatar">
+                    <span>Z</span>
+                  </div>
+                  <div className="chat-bubble ai-bubble typing-bubble">
+                    <span className="dot" />
+                    <span className="dot" />
+                    <span className="dot" />
                   </div>
                 </div>
               )}
               <div ref={messagesEndRef} />
             </div>
-            <form className="chatbot-input-area" onSubmit={handleSend}>
+
+            {/* Input Form */}
+            <form className="chatbot-input-form" onSubmit={handleSend}>
               <input
                 type="text"
+                className="chatbot-input"
                 placeholder={
                   isOffline
-                    ? (lang === 'en' ? 'Agent-Z is offline.' : 'Agent-Z sedang offline.')
-                    : isLoading
-                    ? (lang === 'en' ? 'Loading data...' : 'Sedang memuat data...')
-                    : (lang === 'en' ? 'Type your message...' : 'Ketik pesan Anda...')
+                    ? (lang === 'en' ? 'AI is offline (token limit reached)...' : 'AI sedang offline (limit token)...')
+                    : (lang === 'en' ? 'Ask Agent-Z anything...' : 'Tanyakan apa saja pada Agent-Z...')
                 }
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                disabled={isLoading || isOffline}
+                disabled={isOffline || isLoading}
               />
-              <button type="submit" disabled={isLoading || isOffline || !input.trim()}>
-                <FiSend size={18} />
+              <button
+                type="submit"
+                className="chatbot-send-btn"
+                disabled={!input.trim() || isOffline || isLoading}
+                aria-label="Send message"
+              >
+                <FiSend />
               </button>
             </form>
           </motion.div>
         )}
       </AnimatePresence>
-
-      {/* ========== MASKOT + TOMBOL AREA ========== */}
-      <div
-        className="agentz-container"
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-      >
-        {/* Balon Teks (Kiri Atas Maskot) */}
-        <AnimatePresence>
-          {isHovered && !isOpen && (
-            <motion.div
-              className="speech-bubble"
-              initial={{ opacity: 0, y: 20, scale: 0.9 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: 20, scale: 0.9 }}
-              transition={{ duration: 0.4, ease: [0.68, -0.55, 0.265, 1.55] }}
-            >
-              <p>{speechText[lang]}</p>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        {/* Wrapper Maskot & Tombol */}
-        <div className="mascot-wrapper">
-
-          {/* ===== KONTAINER MELAYANG (body + lengan SAJA, tombol TIDAK) ===== */}
-          {!isOpen && (
-            <div className="mascot-float-container">
-              {/* Layer 1: Tubuh Utama */}
-              <img
-                src="/assets/images/agent-z-body.png"
-                alt="Agent-Z Body"
-                className="mascot-body"
-              />
-
-              {/* Layer 2: Sistem Kerangka Lengan (Skeletal) */}
-              <div className="arm-system">
-                {/* Engsel 1: Bahu → Lengan Atas */}
-                <div className="upper-arm-joint">
-                  <img src="/assets/images/agent-z-upperarm.png" alt="Upper Arm" className="arm-part upper-arm-img" />
-
-                  {/* Engsel 2: Siku → Lengan Bawah */}
-                  <div className="forearm-joint">
-                    <img src="/assets/images/agent-z-forearm.png" alt="Forearm" className="arm-part forearm-img" />
-
-                    {/* Engsel 3: Pergelangan → Telapak Tangan */}
-                    <div className="hand-joint">
-                      <img src="/assets/images/agent-z-hand.png" alt="Hand" className="arm-part hand-img" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* ===== TOMBOL CHAT (STATIS, tidak ikut melayang) ===== */}
-          <motion.button
-            className={`chatbot-toggle-btn ${isOpen ? 'open' : ''}`}
-            onClick={() => setIsOpen(!isOpen)}
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-          >
-            {isOpen ? <FiX size={28} /> : <FiMessageSquare size={24} />}
-          </motion.button>
-        </div>
-      </div>
     </div>
   );
 }

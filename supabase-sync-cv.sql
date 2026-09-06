@@ -1,122 +1,128 @@
 -- =========================================================
--- SQL Migration Script: Sinkronisasi CV Terbaru Zacky Muhammad Dinata
+-- SQL Migration Script: Sinkronisasi CV & Portofolio Zacky Muhammad Dinata (2026)
 -- Jalankan skrip ini langsung di Supabase SQL Editor (Dashboard > SQL Editor)
 -- =========================================================
 
 -- 1. UPDATE PROFILE
 UPDATE public.profile
 SET 
-  hero_description_en = 'Results-driven AI Engineer | LLM Automation (OpenClaw, Hermes Agent, n8n) | Scholar at Pijak x IBM SkillsBuild',
-  hero_description_id = 'Results-driven AI Engineer | Otomasi LLM (OpenClaw, Hermes Agent, n8n) | Scholar Pijak x IBM SkillsBuild',
-  about_description_en = 'Results-driven AI Engineer focused on building automated systems powered by Large Language Models. Backed by a strong technical foundation from PIJAK in Collaboration with the IBM SkillsBuild AI Intensive Program, I specialize in streamlining complex, repetitive operations. I am actively using OpenClaw, Hermes Agent, and n8n to integrate state-of-the-art LLMs (such as Gemini) into seamless, automated workflows. Passionate about leveraging intelligent tools to eliminate manual effort and drive impactful business efficiency.',
-  about_description_id = 'Results-driven AI Engineer yang berfokus pada pembangunan sistem otomasi bertenaga Large Language Models (LLM). Didukung fondasi teknis kuat dari program intensif PIJAK x IBM SkillsBuild, saya berspesialisasi dalam menyederhanakan operasi repetitif yang kompleks. Saya aktif menggunakan OpenClaw, Hermes Agent, dan n8n untuk mengintegrasikan LLM canggih (seperti Gemini) ke dalam alur kerja otomatis yang efisien untuk mendorong produktivitas dan dampak bisnis nyata.',
+  hero_description_en = 'AI Engineer & Autonomous Agent Architect | Research & Quantitative Risk Systems | Scholar at Pijak x IBM SkillsBuild',
+  hero_description_id = 'AI Engineer & Arsitek Agen Mandiri | Riset & Sistem Risiko Kuantitatif | Scholar Pijak x IBM SkillsBuild',
+  about_description_en = 'Results-driven AI Engineer & ML Researcher specializing in Autonomous Multi-Agent Orchestration (Hermes Agent, OpenClaw, n8n) and Quantitative Risk Management. Full Scholarship Graduate of the PIJAK in Collaboration with IBM SkillsBuild AI Intensive Program. I specialize in architecting explainable agentic workflows, deterministic options trading risk layers (Monte Carlo Merton Jump Diffusion VaR), and autonomous homelab infrastructure.',
+  about_description_id = 'AI Engineer & Peneliti ML yang berfokus pada Orkestrasi Multi-Agent Mandiri (Hermes Agent, OpenClaw, n8n) dan Manajemen Risiko Kuantitatif. Lulusan Beasiswa Penuh Program Beasiswa AI Engineer PIJAK x IBM SkillsBuild. Saya berdedikasi membangun alur kerja agen cerdas yang dapat diaudit, lapisan manajemen risiko opsi trading deterministik (Monte Carlo Merton Jump Diffusion VaR), serta infrastruktur server homelab mandiri.',
   available_for_hire = true,
   updated_at = NOW()
 WHERE id = 1;
 
--- 2. UPDATE EDUCATION (GPA 3.55 & Prestasi Medali Perunggu UNY)
+-- 2. UPDATE EDUCATION (STMIK IKMI Cirebon)
 UPDATE public.education
 SET 
-  grade_type = 'IPK',
-  grade_value = '3.55',
-  date_start = '2024-10-01',
-  date_end = '2028-10-01',
-  description_en = 'Bronze Medal, National Business Plan Competition "Cipta Nusantara Fest Vol. 2" (2025), Universitas Negeri Yogyakarta (business idea: "Es Krim Jamu"). Coursework: Data Science, Statistics, Machine Learning, AI Engineer.',
-  description_id = 'Medali Perunggu, National Business Plan Competition "Cipta Nusantara Fest Vol. 2" (2025) di Universitas Negeri Yogyakarta (ide bisnis: "Es Krim Jamu"). Mata kuliah: Data Science, Statistika, Machine Learning, AI Engineer.'
-WHERE school = 'STMIK IKMI Cirebon' OR id = '7e473f25-743e-4e67-ae75-52013d9226e1';
+  degree = 'Bachelor of Information Systems',
+  major = 'Information Systems',
+  gpa = '3.55 / 4.00',
+  description_en = 'Bronze Medal, National Business Plan Competition "Cipta Nusantara Fest Vol. 2" (2025), Universitas Negeri Yogyakarta. Finalist/Participant in AMD Hackathon ACT II, Alpaca AI Trading, and AI HACKFEST 2026.',
+  description_id = 'Medali Perunggu, National Business Plan Competition "Cipta Nusantara Fest Vol. 2" (2025) di Universitas Negeri Yogyakarta. Partisipan di AMD Hackathon ACT II, Alpaca AI Trading, dan AI HACKFEST 2026.',
+  updated_at = NOW()
+WHERE school ILIKE '%IKMI%' OR id = 1;
 
--- 3. UPDATE EXPERIENCE (Pijak x IBM SkillsBuild & Freelance)
-UPDATE public.experience
-SET 
-  date_start = '2026-02-01',
-  date_end = '2026-07-31',
-  role_en = 'AI Engineer Intensive Program Scholar',
-  role_id = 'AI Engineer Intensive Program Scholar',
-  company_en = 'Pijak x IBM SkillsBuild',
-  company_id = 'Pijak x IBM SkillsBuild',
-  description_en = 'Selected through a competitive process to receive a full scholarship for the Pijak x IBM SkillsBuild AI Engineer Cohort, a program built to produce job-ready AI Engineers backed by IBM.',
-  description_id = 'Terpilih melalui proses kompetitif untuk menerima beasiswa penuh pada program Pijak x IBM SkillsBuild AI Engineer Cohort, sebuah program pencetak AI Engineer siap kerja didukung oleh IBM.'
-WHERE role_en ILIKE '%AI Engineer Intensive%';
+-- 3. UPSERT EXPERIENCE (Alpaca Hackathon, AI HACKFEST, Pijak x IBM & Freelance)
+INSERT INTO public.experience (
+  company_en, company_id, role_en, role_id, date_start, date_end, description_en, description_id, sort_order
+) VALUES 
+  (
+    'AutoOverlay AI (Alpaca AI Hackathon)',
+    'AutoOverlay AI (Alpaca AI Hackathon)',
+    'AI Engineer & Quant Lead (Hackathon Contributor)',
+    'AI Engineer & Quant Lead (Kontributor Hackathon)',
+    '2026-08-01',
+    '2026-09-04',
+    'Architected an autonomous 4-layer options trading engine with Monte Carlo Merton Jump Diffusion VaR and 6-persona investor council.',
+    'Merancang arsitektur 4-layer mesin trading opsi mandiri dengan simulasi Monte Carlo Merton Jump Diffusion VaR dan konsensus 6 persona investor.',
+    1
+  ),
+  (
+    'LifeOS Agent (AI HACKFEST 2026)',
+    'LifeOS Agent (AI HACKFEST 2026)',
+    'Project Manager & AI Agent Architect',
+    'Project Manager & Arsitek Agen AI',
+    '2026-08-15',
+    '2026-10-01',
+    'Leading a 3-person squad in developing an autonomous personal productivity and life management agent leveraging Hermes Agent and OpenClaw on CloudBaik VPS.',
+    'Memimpin tim 3 orang membangun agen produktivitas dan manajemen hidup otonom menggunakan Hermes Agent dan OpenClaw di VPS CloudBaik.',
+    2
+  ),
+  (
+    'Pijak x IBM SkillsBuild',
+    'Pijak x IBM SkillsBuild',
+    'AI Engineer Intensive Program Scholar (Full Graduate)',
+    'Scholar Program Intensif AI Engineer (Lulus Penuh)',
+    '2026-02-01',
+    '2026-07-31',
+    'Full scholarship graduate across end-to-end Machine Learning, Deep Learning, and Soft Skills curriculum with official Full Graduation credentials.',
+    'Lulusan beasiswa penuh kurikulum Machine Learning, Deep Learning, dan Soft Skills end-to-end dengan sertifikasi Kelulusan Penuh resmi.',
+    3
+  ),
+  (
+    'Self-Employed (Global Clients)',
+    'Mandiri (Klien Global)',
+    'Freelance NFT & Digital Illustration Artist',
+    'Artis NFT & Ilustrasi Digital Lepas',
+    '2020-12-01',
+    '2024-10-31',
+    'Delivered 60+ commercial NFT artworks for FlokyApe and 30+ layered anime traits before career pivoting full-time to AI/ML engineering.',
+    'Menyelesaikan 60+ karya seni NFT komersial FlokyApe dan 30+ trait modular anime sebelum beralih karier penuh ke AI/ML.',
+    4
+  )
+ON CONFLICT DO NOTHING;
 
-UPDATE public.experience
-SET 
-  date_start = '2020-12-01',
-  date_end = '2024-10-31',
-  role_en = 'Freelance NFT & Digital Illustration Artist',
-  role_id = 'Seniman Ilustrasi Digital & NFT Lepas',
-  description_en = 'Completed 60+ custom NFT illustrations for FlokyApe collection, 30+ layered traits inspired by Azuki style, and 20+ digital portraits.',
-  description_id = 'Menyelesaikan 60+ karya NFT kustom untuk koleksi FlokyApe, 30+ trait berlayer terinspirasi gaya Azuki, dan 20+ potret digital pesanan.'
-WHERE role_en ILIKE '%NFT%';
-
--- 4. INSERT OR UPDATE PROYEK BARU UNGGULAN (Agent-Z Homelab, LestariRimba, & SISFOTEK MLR)
--- Pastikan project lama tidak lagi featured
+-- 4. INSERT OR UPDATE FEATURED PROJECTS
 UPDATE public.projects SET is_featured = false, featured_order = null;
 
--- Masukkan/Update Proyek 1: Agent-Z Homelab
 INSERT INTO public.projects (
   id_string, source_key, category, title_en, title_id, file, preview, type, is_featured, featured_order, sort_order
-) VALUES (
-  'ai-1',
-  'static:ai-1',
-  'data',
-  'Agent-Z Homelab: AI Agent Orchestrator',
-  'Agent-Z Homelab: AI Agent Orchestrator',
-  'https://github.com/zmdinata',
-  '/assets/images/preview.png',
-  'link',
-  true,
-  1,
-  1
-)
+) VALUES 
+  (
+    'ai-0',
+    'static:ai-0',
+    'data',
+    'AutoOverlay AI: Autonomous Options Alpha & Risk Engine',
+    'AutoOverlay AI: Mesin Alpha & Manajemen Risiko Opsi Mandiri',
+    'https://github.com/zmdinata/autooverlay-ai',
+    '/assets/images/preview.png',
+    'link',
+    true,
+    1,
+    1
+  ),
+  (
+    'ai-1',
+    'static:ai-1',
+    'data',
+    'Agent-Z Homelab: AI Agent Orchestrator',
+    'Agent-Z Homelab: Orkestrasi Agen AI Mandiri',
+    'https://github.com/zmdinata',
+    '/assets/images/preview.png',
+    'link',
+    true,
+    2,
+    2
+  ),
+  (
+    'ai-amd',
+    'static:ai-amd',
+    'web3',
+    'A2Z Agentz: Autonomous Web3 Airdrop Intelligence (AMD Hackathon)',
+    'A2Z Agentz: Agen Intelijen Airdrop Web3 Mandiri (AMD Hackathon)',
+    'https://lablab.ai/event/amd-developer-hackathon-act-ii',
+    '/assets/images/preview.png',
+    'link',
+    true,
+    3,
+    3
+  )
 ON CONFLICT (id_string) DO UPDATE SET
   title_en = EXCLUDED.title_en,
   title_id = EXCLUDED.title_id,
   file = EXCLUDED.file,
-  is_featured = true,
-  featured_order = 1;
-
--- Masukkan/Update Proyek 2: LestariRimba
-INSERT INTO public.projects (
-  id_string, source_key, category, title_en, title_id, file, preview, type, is_featured, featured_order, sort_order
-) VALUES (
-  'ai-2',
-  'static:ai-2',
-  'web',
-  'LestariRimba: AI Sustainability Prototype',
-  'LestariRimba: Prototype Web AI Berkelanjutan',
-  'https://lestari-rimba-661373468998.asia-southeast2.run.app/',
-  '/assets/images/preview.png',
-  'link',
-  true,
-  2,
-  2
-)
-ON CONFLICT (id_string) DO UPDATE SET
-  title_en = EXCLUDED.title_en,
-  title_id = EXCLUDED.title_id,
-  file = EXCLUDED.file,
-  is_featured = true,
-  featured_order = 2;
-
--- Masukkan/Update Proyek 3: SISFOTEK Flight Price Prediction
-INSERT INTO public.projects (
-  id_string, source_key, category, title_en, title_id, file, preview, type, is_featured, featured_order, sort_order
-) VALUES (
-  'ai-3',
-  'static:ai-3',
-  'data',
-  'Flight Ticket Price Prediction with Multiple Linear Regression',
-  'Prediksi Harga Tiket Penerbangan (Multiple Linear Regression)',
-  'https://seminar.iaii.or.id/index.php/SISFOTEK/article/view/692',
-  '/assets/projects/Data/data1.png',
-  'link',
-  true,
-  3,
-  3
-)
-ON CONFLICT (id_string) DO UPDATE SET
-  title_en = EXCLUDED.title_en,
-  title_id = EXCLUDED.title_id,
-  file = EXCLUDED.file,
-  is_featured = true,
-  featured_order = 3;
+  is_featured = EXCLUDED.is_featured,
+  featured_order = EXCLUDED.featured_order;

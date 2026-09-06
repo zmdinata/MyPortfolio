@@ -1,0 +1,8 @@
+.git/
+.venv*/
+node_modules/
+dist/
+**/assets/certificates/*.pdf
+**/assets/projects/**/*.pdf
+**/assets/projects/**/*.png
+**/assets/projects/**/*.jpeg
