@@ -364,7 +364,7 @@ export default function HomePage() {
                           {isLinkType(type) && <span className="external-badge">Link</span>}
                           <img
                             src={getPreviewForItem(project, getFileForItem(project) || '/assets/images/preview.png')}
-                            alt={lang === 'en' ? project.title_en : project.title_id}
+                            alt={lang === 'en' ? (project.title_en || project.title?.en) : (project.title_id || project.title?.id)}
                             className="project-image-preview"
                             loading="lazy"
                             onError={(event) => {
@@ -375,7 +375,7 @@ export default function HomePage() {
                             }}
                           />
                           <div className="project-card-title">
-                            {lang === 'en' ? project.title_en : project.title_id}
+                            {lang === 'en' ? (project.title_en || project.title?.en) : (project.title_id || project.title?.id)}
                           </div>
                         </div>
                       </SpotlightCard>

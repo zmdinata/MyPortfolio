@@ -122,12 +122,12 @@ export default function ProjectsPage() {
                     )}
                     <img
                       src={getPreviewForItem(project, '/assets/images/preview.png')}
-                      alt={lang === 'en' ? project.title_en : project.title_id}
+                      alt={lang === 'en' ? (project.title_en || project.title?.en) : (project.title_id || project.title?.id)}
                       className="project-image-preview"
                       loading="lazy"
                     />
                     <div className="project-card-title">
-                      {lang === 'en' ? project.title_en : project.title_id}
+                      {lang === 'en' ? (project.title_en || project.title?.en) : (project.title_id || project.title?.id)}
                     </div>
                   </div>
                 </motion.div>

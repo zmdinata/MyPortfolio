@@ -1,43 +1,121 @@
 export const projects = [
-  // === AI Engineering & Homelab (Real Projects) ===
+  // ── AI Engineering, Multi-Agent & Machine Learning Systems ──────────────
+  {
+    id: 'ai-0',
+    category: 'data',
+    title: {
+      en: 'AutoOverlay AI: Autonomous Options Alpha & Risk Engine',
+      id: 'AutoOverlay AI: Mesin Alpha & Manajemen Risiko Opsi Mandiri',
+    },
+    title_en: 'AutoOverlay AI: Autonomous Options Alpha & Risk Engine',
+    title_id: 'AutoOverlay AI: Mesin Alpha & Manajemen Risiko Opsi Mandiri',
+    description_en: 'Institutional-grade options trading engine with Monte Carlo Merton Jump Diffusion VaR, 6-persona council, pre-trade kill-switches, and deterministic limit order execution built for Alpaca AI Trading Hackathon.',
+    description_id: 'Mesin trading opsi mandiri tingkat institusional dengan simulasi Monte Carlo Merton Jump Diffusion VaR, konsensus 6 persona investor, pre-trade kill-switch, dan eksekusi limit order deterministik untuk Alpaca AI Hackathon.',
+    file: 'https://github.com/zmdinata/autooverlay-ai',
+    preview: '/assets/images/preview.png',
+    type: 'link',
+    is_featured: true,
+    featured_order: 1,
+    tags: ['Python', 'FastAPI', 'Monte Carlo VaR', 'Alpaca API', 'SQLite WAL', 'Pytest'],
+  },
   {
     id: 'ai-1',
     category: 'data',
-    title: { 
-      en: 'Agent-Z Homelab: AI Agent Orchestrator', 
-      id: 'Agent-Z Homelab: AI Agent Orchestrator' 
+    title: {
+      en: 'Agent-Z Homelab: AI Agent Orchestrator',
+      id: 'Agent-Z Homelab: Orkestrator Agen AI Mandiri',
     },
+    title_en: 'Agent-Z Homelab: AI Agent Orchestrator',
+    title_id: 'Agent-Z Homelab: Orkestrator Agen AI Mandiri',
+    description_en: 'Self-hosted AI agent orchestrator on ThinkPad T440 running Hermes Agent, OpenClaw, and n8n with live telemetry, sub-agent delegation, and 9Router failover.',
+    description_id: 'Sistem orkestrasi agen AI mandiri di ThinkPad T440 menggunakan Hermes Agent, OpenClaw, dan n8n dengan telemetri live, delegasi sub-agent, dan fallback 9Router.',
     file: 'https://github.com/zmdinata',
     preview: '/assets/images/preview.png',
     type: 'link',
+    is_featured: true,
+    featured_order: 2,
+    tags: ['Hermes Agent', 'OpenClaw', 'n8n', 'Linux Homelab', 'PM2', 'Docker'],
   },
   {
     id: 'ai-2',
     category: 'web',
-    title: { 
-      en: 'LestariRimba: AI Sustainability Prototype', 
-      id: 'LestariRimba: Prototype Web AI Berkelanjutan' 
+    title: {
+      en: 'LestariRimba: AI-Powered Sustainability Platform',
+      id: 'LestariRimba: Platform AI Keberlanjutan Lingkungan',
     },
+    title_en: 'LestariRimba: AI-Powered Sustainability Platform',
+    title_id: 'LestariRimba: Platform AI Keberlanjutan Lingkungan',
+    description_en: 'Environmental sustainability prototype on Google Cloud Run featuring AI vision for deforestation analysis (#JuaraVibeCoding).',
+    description_id: 'Prototipe platform keberlanjutan lingkungan di Google Cloud Run dengan analisis AI vision konservasi hutan (#JuaraVibeCoding).',
     file: 'https://lestari-rimba-661373468998.asia-southeast2.run.app/',
     preview: '/assets/images/preview.png',
     type: 'link',
+    is_featured: true,
+    featured_order: 3,
+    tags: ['Google Cloud Run', 'FastAPI', 'Gemini API', 'Python', 'AI Vision'],
   },
   {
     id: 'ai-3',
     category: 'data',
-    title: { 
-      en: 'Flight Ticket Price Prediction (MLR - SISFOTEK)', 
-      id: 'Prediksi Harga Tiket Penerbangan (MLR - SISFOTEK)' 
+    title: {
+      en: 'Flight Ticket Price Prediction (MLR - SISFOTEK)',
+      id: 'Prediksi Harga Tiket Penerbangan (MLR - SISFOTEK)',
     },
+    title_en: 'Flight Ticket Price Prediction with Multiple Linear Regression',
+    title_id: 'Prediksi Harga Tiket Penerbangan (Multiple Linear Regression)',
+    description_en: 'Published peer-reviewed research paper on flight ticket price forecasting using Multiple Linear Regression in SISFOTEK Journal (116K+ records).',
+    description_id: 'Publikasi penelitian prediksi harga tiket pesawat menggunakan regresi linier berganda pada Jurnal SISFOTEK (116K+ data).',
     file: 'https://seminar.iaii.or.id/index.php/SISFOTEK/article/view/692',
     preview: '/assets/projects/Data/data1.png',
     type: 'link',
+    is_featured: false,
+    featured_order: null,
+    tags: ['Python', 'Multiple Linear Regression', 'Scikit-learn', 'Pandas', 'SISFOTEK'],
   },
-  // === Data Analysis ===
+  {
+    id: 'ai-amd',
+    category: 'web3',
+    title: {
+      en: 'A2Z Agentz: Autonomous Web3 Airdrop Intelligence (AMD Hackathon)',
+      id: 'A2Z Agentz: Agen Intelijen Airdrop Web3 Mandiri (AMD Hackathon)',
+    },
+    title_en: 'A2Z Agentz: Autonomous Web3 Airdrop Intelligence (AMD Hackathon)',
+    title_id: 'A2Z Agentz: Agen Intelijen Airdrop Web3 Mandiri (AMD Hackathon)',
+    description_en: 'Autonomous multi-agent platform for discovering and automating Web3 airdrops on Base Network with Agent-to-Agent (A2A) microtransactions, powered by AMD ROCm and Llama 3.1.',
+    description_id: 'Platform multi-agen mandiri untuk riset dan otomatisasi airdrop Web3 di Base Network dengan transaksi Agent-to-Agent (A2A), ditenagai AMD ROCm dan Llama 3.1.',
+    file: 'https://lablab.ai/event/amd-developer-hackathon-act-ii',
+    preview: '/assets/images/preview.png',
+    type: 'link',
+    is_featured: false,
+    featured_order: null,
+    tags: ['AMD ROCm', 'Llama 3.1', 'DeepSeek V3', 'Base Network', 'Web3 Agents'],
+  },
+  {
+    id: 'ai-lifeos',
+    category: 'data',
+    title: {
+      en: 'LifeOS Agent: Autonomous Life Management (AI HACKFEST 2026)',
+      id: 'LifeOS Agent: Manajemen Hidup Mandiri (AI HACKFEST 2026)',
+    },
+    title_en: 'LifeOS Agent: Autonomous Life Management (AI HACKFEST 2026)',
+    title_id: 'LifeOS Agent: Manajemen Hidup Mandiri (AI HACKFEST 2026)',
+    description_en: 'Autonomous personal productivity and life management agent leveraging Hermes Agent and OpenClaw on CloudBaik VPS (Squad 3 - AI HACKFEST 2026).',
+    description_id: 'Agen produktivitas dan manajemen hidup mandiri menggunakan Hermes Agent dan OpenClaw di VPS CloudBaik (Squad 3 - AI HACKFEST 2026).',
+    file: 'https://github.com/zmdinata',
+    preview: '/assets/images/preview.png',
+    type: 'link',
+    is_featured: false,
+    featured_order: null,
+    tags: ['Hermes Agent', 'OpenClaw', 'CloudBaik VPS', 'FastAPI', 'Automation'],
+  },
+
+  // ── Existing Catalog, Data Analysis & Competitions ────────────────────────
   {
     id: 'data-1',
     category: 'data',
     title: { en: 'Sales Analysis Case Study', id: 'Studi Kasus Analisis Penjualan' },
+    title_en: 'Sales Analysis Case Study',
+    title_id: 'Studi Kasus Analisis Penjualan',
     file: '/assets/projects/Data/data1.pdf',
     preview: '/assets/projects/Data/data1.png',
     type: 'pdf',
@@ -46,15 +124,18 @@ export const projects = [
     id: 'data-2',
     category: 'data',
     title: { en: 'Optimized Superstore Strategy', id: 'Strategi Superstore yang Dioptimalkan' },
+    title_en: 'Optimized Superstore Strategy: A Data-Driven Roadmap to Profitability',
+    title_id: 'Strategi Superstore yang Dioptimalkan: Roadmap Profitabilitas Berbasis Data',
     file: '/assets/projects/Data/data2.pdf',
     preview: '/assets/projects/Data/data2.png',
     type: 'pdf',
   },
-  // === Competitions ===
   {
     id: 'lomba-1',
     category: 'lomba',
     title: { en: 'Dompi: Digital Financial Innovations', id: 'Dompi: Inovasi Keuangan Digital' },
+    title_en: 'Dompi: Digital Financial Innovations',
+    title_id: 'Dompi: Inovasi Keuangan Digital',
     file: '/assets/projects/Lomba/lomba1.pdf',
     preview: '/assets/projects/Lomba/lomba1.png',
     type: 'pdf',
@@ -62,16 +143,21 @@ export const projects = [
   {
     id: 'lomba-2',
     category: 'lomba',
-    title: { en: 'Herbelice: Ice Cream Herbal (Business Plan)', id: 'Herbelice: Es Krim Jamu (Rencana Bisnis)' },
+    title: { en: 'Herbelice: Traditional Herbal Ice Cream (Bronze Medal UNY 2025)', id: 'Herbelice: Es Krim Jamu Tradisional (Medali Perunggu UNY 2025)' },
+    title_en: 'Herbelice: Traditional Herbal Ice Cream (Bronze Medal UNY 2025)',
+    title_id: 'Herbelice: Es Krim Jamu Tradisional (Medali Perunggu UNY 2025)',
     file: '/assets/projects/Lomba/lomba2.pdf',
     preview: '/assets/projects/Lomba/lomba2.png',
     type: 'pdf',
   },
-  // === Coursework ===
+
+  // ── Coursework & Academic Research ────────────────────────────────────────
   {
     id: 'tugas-1',
     category: 'tugas',
     title: { en: 'ML Algorithm Report (Manual Calc)', id: 'Laporan Algoritma ML (Hitungan Manual)' },
+    title_en: 'ML Algorithm Report (Manual Calculation)',
+    title_id: 'Laporan Algoritma ML (Hitungan Manual)',
     file: '/assets/projects/Tugas/Tugas1.pdf',
     preview: '/assets/projects/Tugas/Tugas1.png',
     type: 'pdf',
@@ -80,6 +166,8 @@ export const projects = [
     id: 'tugas-2',
     category: 'tugas',
     title: { en: 'Fuel Efficiency Analysis (MPG)', id: 'Analisis Efisiensi BBM (Dataset MPG)' },
+    title_en: 'Fuel Efficiency Analysis (MPG Dataset)',
+    title_id: 'Analisis Efisiensi BBM (Dataset MPG)',
     file: '/assets/projects/Tugas/Tugas2.pdf',
     preview: '/assets/projects/Tugas/Tugas2.png',
     type: 'pdf',
@@ -88,6 +176,8 @@ export const projects = [
     id: 'tugas-3',
     category: 'tugas',
     title: { en: 'NusantaraFood MIS Analysis', id: 'Analisis SIM NusantaraFood' },
+    title_en: 'NusantaraFood MIS Analysis & Design',
+    title_id: 'Analisis dan Perancangan SIM NusantaraFood',
     file: '/assets/projects/Tugas/Tugas3.pdf',
     preview: '/assets/projects/Tugas/Tugas3.png',
     type: 'pdf',
@@ -96,32 +186,42 @@ export const projects = [
     id: 'tugas-4',
     category: 'tugas',
     title: { en: 'Cluster Analysis Report (gapminder)', id: 'Laporan Analisis Cluster (gapminder)' },
+    title_en: 'Cluster Analysis Report (gapminder.csv)',
+    title_id: 'Laporan Analisis Cluster (gapminder.csv)',
     file: '/assets/projects/Tugas/Tugas4.pdf',
     preview: '/assets/projects/Tugas/Tugas4.png',
     type: 'pdf',
   },
-  // === Web Development ===
+
+  // ── Web Development ───────────────────────────────────────────────────────
   {
     id: 'web-1',
     category: 'web',
     title: { en: 'Web Programming Group Assignments', id: 'Kumpulan Tugas Kelompok Pemrograman Web' },
+    title_en: 'Web Programming Group Assignments',
+    title_id: 'Kumpulan Tugas Kelompok Pemrograman Web Dasar',
     file: 'https://zmdinata.github.io/Kumpulan_Tugas_Kelompok_PWD/',
     preview: '/assets/projects/Tugas/PWD.png',
-    type: 'iframe',
+    type: 'link',
   },
-  // === Design ===
+
+  // ── Design & Digital Art ──────────────────────────────────────────────────
   {
     id: 'desain-1',
     category: 'desain',
     title: { en: 'FlockyApe NFT Art', id: 'Seni NFT FlockyApe' },
+    title_en: 'FlockyApe NFT Art Collection',
+    title_id: 'Koleksi Seni NFT FlockyApe',
     file: 'https://www.instagram.com/flokyape/',
     preview: '/assets/projects/Desain/proyek1.jpeg',
-    type: 'external',
+    type: 'link',
   },
   {
     id: 'desain-2',
     category: 'desain',
     title: { en: 'Class Structure Design', id: 'Desain Struktur Kelas' },
+    title_en: 'Class Structure Organization Design',
+    title_id: 'Desain Struktur Organisasi Kelas',
     file: '/assets/projects/Desain/proyek2.jpeg',
     preview: '/assets/projects/Desain/proyek2.jpeg',
     type: 'image',
@@ -130,6 +230,8 @@ export const projects = [
     id: 'desain-3',
     category: 'desain',
     title: { en: 'IS Program Parade Illustration', id: 'Ilustrasi Parade Prodi SI' },
+    title_en: 'Information Systems Parade Illustration',
+    title_id: 'Ilustrasi Parade Program Studi Sistem Informasi',
     file: '/assets/projects/Desain/proyek3.jpeg',
     preview: '/assets/projects/Desain/proyek3.jpeg',
     type: 'image',
@@ -138,15 +240,20 @@ export const projects = [
     id: 'desain-4',
     category: 'desain',
     title: { en: 'Other Design Portfolio', id: 'Portofolio Desain Lainnya' },
+    title_en: 'Other Design Portfolio (Instagram)',
+    title_id: 'Portofolio Desain Grafis Lainnya (Instagram)',
     file: 'https://www.instagram.com/zmdinata',
     preview: '/assets/projects/Desain/zmdinata_insta.png',
-    type: 'external',
+    type: 'link',
   },
-  // === Web3 & Crypto ===
+
+  // ── Web3 & Crypto Research ────────────────────────────────────────────────
   {
     id: 'web3-1',
     category: 'web3',
     title: { en: 'Blockchain & Web3 (Presentation)', id: 'Blockchain & Web3 (Presentasi)' },
+    title_en: 'Unlocking the Future: Blockchain & Web3',
+    title_id: 'Membuka Masa Depan: Blockchain & Web3 untuk Generasi Digital',
     file: '/assets/projects/Lainnya/Lain1.pdf',
     preview: '/assets/projects/Lainnya/Lain1.png',
     type: 'pdf',
@@ -155,6 +262,8 @@ export const projects = [
     id: 'web3-2',
     category: 'web3',
     title: { en: 'Grass Token Research', id: 'Riset Token Grass' },
+    title_en: 'Grass Token Research Report',
+    title_id: 'Laporan Riset Ekosistem Token Grass',
     file: '/assets/projects/Lainnya/Lain2.pdf',
     preview: '/assets/projects/Lainnya/Lain2.png',
     type: 'pdf',
@@ -163,10 +272,12 @@ export const projects = [
     id: 'web3-3',
     category: 'web3',
     title: { en: 'MBOX Token Research', id: 'Riset Token MBOX' },
+    title_en: 'MBOX Token Research Report',
+    title_id: 'Laporan Riset Tokenomics MBOX',
     file: '/assets/projects/Lainnya/Lain3.pdf',
     preview: '/assets/projects/Lainnya/Lain3.png',
     type: 'pdf',
   },
 ];
 
-export const projectCategories = ['data', 'lomba', 'tugas', 'web', 'desain', 'web3'];
+export const projectCategories = ['data', 'web3', 'lomba', 'tugas', 'web', 'desain'];

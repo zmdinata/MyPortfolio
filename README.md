@@ -31,9 +31,9 @@ Platform ini menggabungkan database cloud Supabase dengan sistem fail-safe lokal
 - **Spotlight Cards (`SpotlightCard.jsx`)**: Efek kursor interaktif dengan radial glow dinamis dan aksen border laser shimmer yang diproses melalui akselerasi GPU.
 - **Ambient Grid Mesh (`AmbientGridMesh.jsx`)**: Latar belakang grid sirkuit modern dengan native CSS gradient murni tanpa beban blur berat.
 - **Profile Interactive Deck (`ProfileInteractiveDeck.jsx`)**: Kartu profil interaktif dengan 3 tab spesialisasi:
-  - 🤖 **LLM & Agents**: Homelab ThinkPad T440 daur ulang, OpenClaw, Hermes Agent, Gemini API, Docker.
-  - ⚡ **Workflow & Cloud**: LestariRimba #JuaraVibeCoding di Google Cloud Run, FastAPI, n8n Automation.
-  - 📊 **ML & Research**: Makalah riset SISFOTEK 9 (Multiple Linear Regression 116K+ records).
+  - 🤖 **LLM & Agents**: AutoOverlay AI (Alpaca Hackathon), Homelab ThinkPad T440 daur ulang, OpenClaw, Hermes Agent, Gemini API, Docker.
+  - ⚡ **Workflow & Cloud**: LestariRimba #JuaraVibeCoding di Google Cloud Run, LifeOS Agent (AI HACKFEST), FastAPI, n8n Automation.
+  - 📊 **ML & Research**: Makalah riset SISFOTEK 9 (Multiple Linear Regression 116K+ records) & Monte Carlo Merton Jump Diffusion.
   - Dilengkapi *live pulse status* homelab dan tombol aksi cepat (*Hubungi*, *Salin Email* dengan feedback badge, dan *Trigger Agent-Z*).
 - **Mobile Touch Ergonomics & Smart Justify**:
   - **Tiered Button Hierarchy**: Tombol utama 100% full-width di baris atas, tombol aksi pendukung 50:50 di baris bawah dengan touch target ergonomis (min 48px) dan tactile feedback.

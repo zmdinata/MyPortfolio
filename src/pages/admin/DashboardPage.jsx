@@ -243,7 +243,7 @@ export default function DashboardPage() {
           </div>
           <div className="meta-item">
             <span className="meta-label">Supabase URL</span>
-            <span className="meta-value code-truncate">vafesoxvobxnvuhpffeb.supabase.co</span>
+            <span className="meta-value code-truncate">{import.meta.env.VITE_SUPABASE_URL ? import.meta.env.VITE_SUPABASE_URL.replace('https://', '') : 'Connected'}</span>
           </div>
         </div>
       </div>
@@ -381,7 +381,7 @@ export default function DashboardPage() {
                 <strong>
                   Buka Supabase SQL Editor:{' '}
                   <a
-                    href="https://supabase.com/dashboard/project/vafesoxvobxnvuhpffeb/sql/new"
+                    href="https://supabase.com/dashboard"
                     target="_blank"
                     rel="noreferrer"
                     className="step-link"

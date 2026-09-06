@@ -34,3 +34,5 @@ dist-ssr
 .agents/
 ORIGINAL_REQUEST.md
 PROJECT.md
+graphify-out/
+.graphifyignore
