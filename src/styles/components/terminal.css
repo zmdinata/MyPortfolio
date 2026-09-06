@@ -245,78 +245,144 @@
   color: #ffffff;
 }
 
-/* Quick Chips - Horizontal Swipeable Container */
-.terminal-quick-chips {
+/* ===== Modern Cyberpunk / Terminal Glass Quick Runs Bar ===== */
+.terminal-quick-container {
   display: flex;
   align-items: center;
-  flex-wrap: nowrap;
+  gap: 8px;
+  padding: 0.5rem 0.85rem;
+  background: rgba(8, 8, 16, 0.75);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  position: relative;
+  overflow: hidden;
+}
+
+[data-theme="light"] .terminal-quick-container {
+  background: rgba(240, 242, 250, 0.85);
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.terminal-quick-sticky-label {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  z-index: 2;
+}
+
+.terminal-quick-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 8px;
+  background: rgba(0, 221, 179, 0.08);
+  border: 1px solid rgba(0, 221, 179, 0.3);
+  border-radius: 6px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  color: #00ddb3;
+  text-transform: uppercase;
+  user-select: none;
+  box-shadow: 0 0 10px rgba(0, 221, 179, 0.12);
+}
+
+[data-theme="light"] .terminal-quick-badge {
+  background: rgba(0, 168, 136, 0.1);
+  border-color: rgba(0, 168, 136, 0.35);
+  color: #00886e;
+}
+
+.terminal-quick-pulse {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #00ddb3;
+  box-shadow: 0 0 8px #00ddb3;
+  animation: pulseQuick 2s infinite ease-in-out;
+}
+
+@keyframes pulseQuick {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.8); }
+}
+
+.terminal-quick-chips-scroll {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 6px;
   overflow-x: auto;
   overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
   -ms-overflow-style: none;
-  gap: 6px;
-  padding: 0.55rem 0.85rem;
-  background: rgba(0, 0, 0, 0.3);
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
   touch-action: pan-x;
   overscroll-behavior-x: contain;
-  scroll-padding: 0 0.85rem;
+  padding: 2px 2px;
 }
 
-.terminal-quick-chips::-webkit-scrollbar {
+.terminal-quick-chips-scroll::-webkit-scrollbar {
   display: none;
 }
 
-[data-theme="light"] .terminal-quick-chips {
-  background: rgba(0, 0, 0, 0.03);
-  border-top: 1px solid rgba(0, 0, 0, 0.08);
-}
-
-.quick-label {
+.terminal-chip.cyberpunk-chip {
   flex-shrink: 0;
-  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #cfd0e6;
+  border-radius: 6px;
+  padding: 3px 9px;
   font-size: 0.72rem;
-  color: #8888a6;
-  margin-right: 2px;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  font-weight: 700;
-}
-
-[data-theme="light"] .quick-label {
-  color: #666682;
-}
-
-.terminal-chip {
-  flex-shrink: 0;
-  white-space: nowrap;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  color: #d0d0e6;
-  border-radius: var(--radius-pill);
-  padding: 3px 10px;
-  font-size: 0.74rem;
-  font-weight: 500;
   font-family: inherit;
+  font-weight: 500;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  user-select: none;
 }
 
-[data-theme="light"] .terminal-chip {
+[data-theme="light"] .terminal-chip.cyberpunk-chip {
   background: #ffffff;
   border: 1px solid rgba(0, 0, 0, 0.12);
-  color: #333348;
+  color: #2e3048;
 }
 
-.terminal-chip:hover {
-  background: rgba(0, 221, 179, 0.15);
-  border-color: #00ddb3;
+.chip-prompt {
   color: #00ddb3;
-  transform: translateY(-1px);
+  font-weight: 800;
+  font-size: 0.75rem;
+  opacity: 0.85;
 }
 
-.terminal-chip:active {
+[data-theme="light"] .chip-prompt {
+  color: #00886e;
+}
+
+.chip-cmd {
+  font-weight: 600;
+}
+
+.terminal-chip.cyberpunk-chip:hover {
+  background: rgba(0, 221, 179, 0.14);
+  border-color: #00ddb3;
+  color: #ffffff;
+  transform: translateY(-1.5px);
+  box-shadow: 0 0 12px rgba(0, 221, 179, 0.35);
+}
+
+[data-theme="light"] .terminal-chip.cyberpunk-chip:hover {
+  background: rgba(0, 168, 136, 0.12);
+  border-color: #00886e;
+  color: #00886e;
+  box-shadow: 0 2px 8px rgba(0, 168, 136, 0.2);
+}
+
+.terminal-chip.cyberpunk-chip:active {
   transform: scale(0.95);
 }
+
 

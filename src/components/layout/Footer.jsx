@@ -4,6 +4,9 @@ import { HiOutlineMail } from 'react-icons/hi';
 
 export default function Footer() {
   const { t } = useLang();
+  const currentYear = new Date().getFullYear();
+  const rawCopyright = t('footer.copyright') || `© ${currentYear} Zacky Muhammad Dinata. All rights reserved.`;
+  const copyrightText = rawCopyright.replace(/\b20\d\d\b/, currentYear);
 
   return (
     <footer className="footer">
@@ -21,7 +24,7 @@ export default function Footer() {
           <HiOutlineMail />
         </a>
       </div>
-      <p>{t('footer.copyright')}</p>
+      <p>{copyrightText}</p>
     </footer>
   );
 }

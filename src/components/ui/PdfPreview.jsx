@@ -1,7 +1,9 @@
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { useEffect, useRef, useState, useCallback, useMemo } from 'react';
 import {
   FiChevronLeft,
   FiChevronRight,
+  FiChevronsLeft,
+  FiChevronsRight,
   FiExternalLink,
   FiZoomIn,
   FiZoomOut,
@@ -10,6 +12,52 @@ import {
   FiDownload,
 } from 'react-icons/fi';
 import pdfWorkerUrl from 'pdfjs-dist/build/pdf.worker.min.mjs?url';
+
+/**
+ * Smart Windowing Pagination Generator
+ * - Always shows page 1 and total
+ * - Window of 3-5 pages around current page
+ * - Clickable jump ellipses (+/- 5 pages)
+ * - Returns exactly 7 items max when total > 7
+ */
+function getSmartPaginationItems(current, total) {
+  if (total <= 1) return [];
+  if (total <= 7) {
+    return Array.from({ length: total }, (_, i) => ({ type: 'page', page: i + 1 }));
+  }
+
+  const items = [];
+
+  // Case 1: Near beginning (current <= 4) -> [1, 2, 3, 4, 5, '...', total]
+  if (current <= 4) {
+    for (let p = 1; p <= 5; p++) {
+      items.push({ type: 'page', page: p });
+    }
+    items.push({ type: 'ellipsis-next', jumpTo: Math.min(total, current + 5) });
+    items.push({ type: 'page', page: total });
+    return items;
+  }
+
+  // Case 2: Near end (current >= total - 3) -> [1, '...', total-4, total-3, total-2, total-1, total]
+  if (current >= total - 3) {
+    items.push({ type: 'page', page: 1 });
+    items.push({ type: 'ellipsis-prev', jumpTo: Math.max(1, current - 5) });
+    for (let p = total - 4; p <= total; p++) {
+      items.push({ type: 'page', page: p });
+    }
+    return items;
+  }
+
+  // Case 3: In the middle -> [1, '...', current-1, current, current+1, '...', total]
+  items.push({ type: 'page', page: 1 });
+  items.push({ type: 'ellipsis-prev', jumpTo: Math.max(1, current - 5) });
+  items.push({ type: 'page', page: current - 1 });
+  items.push({ type: 'page', page: current });
+  items.push({ type: 'page', page: current + 1 });
+  items.push({ type: 'ellipsis-next', jumpTo: Math.min(total, current + 5) });
+  items.push({ type: 'page', page: total });
+  return items;
+}
 
 export default function PdfPreview({ src }) {
   const containerRef = useRef(null);
@@ -153,6 +201,11 @@ export default function PdfPreview({ src }) {
   const handleZoomOut = () => setZoomScale((z) => Math.max(0.6, +(z - 0.15).toFixed(2)));
   const handleResetZoom = () => setZoomScale(1);
 
+  const paginationItems = useMemo(
+    () => getSmartPaginationItems(currentPage, numPages),
+    [currentPage, numPages]
+  );
+
   return (
     <div className="pdf-viewer-wrapper" ref={containerRef}>
       {/* Top Controls Toolbar */}
@@ -244,8 +297,10 @@ export default function PdfPreview({ src }) {
       <div className="pdf-viewport">
         {status === 'loading' && (
           <div className="pdf-state-loading">
-            <FiRefreshCw className="spin" />
-            <p>Membuka dokumen...</p>
+            <div className="pdf-loading-spinner-ring">
+              <FiRefreshCw className="spin" />
+            </div>
+            <p className="pdf-loading-text">Membuka dokumen...</p>
           </div>
         )}
 
@@ -261,32 +316,90 @@ export default function PdfPreview({ src }) {
         <canvas
           ref={canvasRef}
           className={`pdf-canvas ${status === 'loading' ? 'hidden' : ''}`}
+          style={status === 'loading' ? { display: 'none' } : undefined}
           aria-label={`PDF page ${currentPage}`}
         />
       </div>
 
-      {/* Multi-Page Quick Slide Navigator */}
+      {/* Smart Windowing Slide Navigator */}
       {numPages > 1 && (
-        <div className="pdf-slide-dots">
-          {Array.from({ length: Math.min(numPages, 16) }, (_, idx) => {
-            const pageNum = idx + 1;
-            const isActive = pageNum === currentPage;
-            return (
-              <button
-                key={pageNum}
-                type="button"
-                onClick={() => setCurrentPage(pageNum)}
-                className={`pdf-slide-dot ${isActive ? 'active' : ''}`}
-                title={`Lompat ke Slide ${pageNum}`}
-              >
-                {pageNum}
-              </button>
-            );
-          })}
-          {numPages > 16 && (
-            <span className="pdf-dots-more">+{numPages - 16} halaman lagi</span>
-          )}
-        </div>
+        <nav className="pdf-pagination-nav" aria-label="Navigasi Halaman Dokumen">
+          <div className="pdf-smart-pagination">
+            <button
+              type="button"
+              className="pdf-page-pill nav-step"
+              onClick={handlePrevPage}
+              disabled={currentPage <= 1}
+              title="Halaman Sebelumnya (Panah Kiri)"
+              aria-label="Halaman Sebelumnya"
+            >
+              <FiChevronLeft />
+            </button>
+
+            {paginationItems.map((item, idx) => {
+              if (item.type === 'page') {
+                const isActive = item.page === currentPage;
+                return (
+                  <button
+                    key={`page-${item.page}`}
+                    type="button"
+                    onClick={() => setCurrentPage(item.page)}
+                    className={`pdf-page-pill ${isActive ? 'active' : ''}`}
+                    aria-current={isActive ? 'page' : undefined}
+                    title={`Lompat ke Halaman ${item.page}`}
+                  >
+                    {item.page}
+                  </button>
+                );
+              }
+
+              if (item.type === 'ellipsis-prev') {
+                return (
+                  <button
+                    key={`ellipsis-prev-${idx}`}
+                    type="button"
+                    onClick={() => setCurrentPage(item.jumpTo)}
+                    className="pdf-page-ellipsis"
+                    title={`Lompat ke halaman ${item.jumpTo} (-5 halaman)`}
+                    aria-label={`Lompat mundur ke halaman ${item.jumpTo}`}
+                  >
+                    <span className="ellipsis-dots">···</span>
+                    <span className="ellipsis-jump-hint"><FiChevronsLeft />5</span>
+                  </button>
+                );
+              }
+
+              if (item.type === 'ellipsis-next') {
+                return (
+                  <button
+                    key={`ellipsis-next-${idx}`}
+                    type="button"
+                    onClick={() => setCurrentPage(item.jumpTo)}
+                    className="pdf-page-ellipsis"
+                    title={`Lompat ke halaman ${item.jumpTo} (+5 halaman)`}
+                    aria-label={`Lompat maju ke halaman ${item.jumpTo}`}
+                  >
+                    <span className="ellipsis-dots">···</span>
+                    <span className="ellipsis-jump-hint">5<FiChevronsRight /></span>
+                  </button>
+                );
+              }
+
+              return null;
+            })}
+
+            <button
+              type="button"
+              className="pdf-page-pill nav-step"
+              onClick={handleNextPage}
+              disabled={currentPage >= numPages}
+              title="Halaman Berikutnya (Panah Kanan)"
+              aria-label="Halaman Berikutnya"
+            >
+              <FiChevronRight />
+            </button>
+          </div>
+        </nav>
       )}
     </div>
   );

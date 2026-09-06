@@ -2,12 +2,16 @@ export const translations = {
   en: {
     nav: {
       about: 'About',
+      aboutMe: 'About',
       skills: 'Skills',
       experience: 'Experience',
       education: 'Education',
       projects: 'Projects',
+      project: 'Projects',
       certificates: 'Certificates',
+      certification: 'Certificates',
       honors: 'Honors',
+      honor: 'Honors',
       contact: 'Contact',
     },
     sections: {
@@ -171,12 +175,16 @@ export const translations = {
   id: {
     nav: {
       about: 'Tentang',
+      aboutMe: 'Tentang Saya',
       skills: 'Keahlian',
       experience: 'Pengalaman',
       education: 'Pendidikan',
       projects: 'Proyek',
+      project: 'Proyek',
       certificates: 'Sertifikasi',
+      certification: 'Sertifikasi',
       honors: 'Penghargaan',
+      honor: 'Penghargaan',
       contact: 'Kontak',
     },
     sections: {

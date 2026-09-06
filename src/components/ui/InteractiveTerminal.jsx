@@ -388,21 +388,28 @@ export default function InteractiveTerminal() {
         </div>
       </div>
 
-      {/* Quick Action Chips */}
-      <div className="terminal-quick-chips">
-        <span className="quick-label">
-          {lang === 'en' ? 'Quick runs:' : 'Aksi cepat:'}
-        </span>
-        {quickCommands.map((cmd) => (
-          <button
-            key={cmd}
-            type="button"
-            className="terminal-chip"
-            onClick={() => executeCommand(cmd)}
-          >
-            {cmd}
-          </button>
-        ))}
+      {/* Quick Action Chips - Modern Cyberpunk Glass */}
+      <div className="terminal-quick-container">
+        <div className="terminal-quick-sticky-label">
+          <span className="terminal-quick-badge">
+            <span className="terminal-quick-pulse"></span>
+            ⚡ {lang === 'en' ? 'QUICK RUNS' : 'AKSI CEPAT'}
+          </span>
+        </div>
+        <div className="terminal-quick-chips-scroll">
+          {quickCommands.map((cmd) => (
+            <button
+              key={cmd}
+              type="button"
+              className="terminal-chip cyberpunk-chip"
+              onClick={() => executeCommand(cmd)}
+              title={lang === 'en' ? `Run command: ${cmd}` : `Jalankan perintah: ${cmd}`}
+            >
+              <span className="chip-prompt">$</span>
+              <span className="chip-cmd">{cmd}</span>
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   );
