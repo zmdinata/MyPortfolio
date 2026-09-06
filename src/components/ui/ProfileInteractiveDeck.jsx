@@ -110,7 +110,7 @@ export default function ProfileInteractiveDeck({ name, role }) {
       {/* 2. Interactive Specialization Mini-Deck */}
       <div className="deck-showcase-box">
         {/* Tab Navigation */}
-        <div className="deck-tabs-row" role="tablist">
+        <div className="deck-tabs-row" role="tablist" aria-label="Bidang Spesialisasi">
           {specializationDecks.map((deck) => {
             const Icon = deck.icon;
             const isActive = activeTab === deck.id;
@@ -118,7 +118,10 @@ export default function ProfileInteractiveDeck({ name, role }) {
               <button
                 key={deck.id}
                 role="tab"
+                id={`deck-tab-${deck.id}`}
+                aria-controls={`deck-tabpanel-${deck.id}`}
                 aria-selected={isActive}
+                tabIndex={isActive ? 0 : -1}
                 onClick={() => setActiveTab(deck.id)}
                 className={`deck-tab-btn ${isActive ? 'active' : ''}`}
                 style={{ '--deck-accent': deck.color }}
@@ -131,7 +134,14 @@ export default function ProfileInteractiveDeck({ name, role }) {
         </div>
 
         {/* Tab Content Card */}
-        <div className="deck-content-card" style={{ '--deck-accent': currentDeck.color }}>
+        <div
+          className="deck-content-card"
+          style={{ '--deck-accent': currentDeck.color }}
+          role="tabpanel"
+          id={`deck-tabpanel-${currentDeck.id}`}
+          aria-labelledby={`deck-tab-${currentDeck.id}`}
+          tabIndex={0}
+        >
           <AnimatePresence mode="wait">
             <motion.div
               key={currentDeck.id}

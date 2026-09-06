@@ -31,6 +31,20 @@ Sumber memory historis: `git log --date=short --pretty=format:"%h %ad %s"`.
 
 ### 6 September 2026
 
+- **Penyempurnaan Menyeluruh Mobile UI/UX (Clean, Neat & Touch Ergonomics)**:
+  - **Tiered Button Hierarchy (Sistem Tombol Bertingkat)**:
+    - Menghilangkan tombol flat/tidak proporsional pada mobile.
+    - Pada Hero Bento: Tombol utama "Lihat Proyek" 100% full-width di baris atas dengan aksen gradient-accent & subtle glow; tombol pendukung "Hubungi Saya" / "Chat Agent-Z" tersusun simetris 2 kolom (50:50) di baris bawah.
+    - Pada Profile Deck: Tombol "Hubungi Zacky" 100% full-width di baris atas; tombol "Salin Email" dan "Agent-Z" berbagi ruang seimbang 50:50 di baris bawah dengan touch target ergonomis (tinggi minimal 48px) dan efek tactile depression (`transform: scale(0.98)`).
+  - **Swipeable Pill Bar Profile Deck**:
+    - Mengubah tab spesialisasi (`.deck-tabs-row`) menjadi Swipeable Pill Bar dengan horizontal touch-snap halus dan scrollbar tersembunyi, sehingga judul tab tetap utuh satu baris tanpa terpotong di layar ponsel sempit (<380px).
+  - **Smart Justify Typography Engine**:
+    - Menerapkan justifikasi cerdas (`text-align: justify; text-justify: inter-word; hyphens: auto; -webkit-hyphens: auto;`) khusus pada teks narasi panjang (Bio/About Me) dengan sinkronisasi otomatis atribut bahasa dokumen (`document.documentElement.lang = lang`), mencegah "rivers of white" (spasi bolong-bolong antar-kata).
+    - Menjaga teks pendek, heading, tombol, dan tags tetap `text-align: left` atau centered untuk kerapian visual.
+  - **Fluid Terminal Typography & Swipeable Commands**:
+    - Menambahkan ukuran font fluid dengan CSS `clamp()`, serta bar perintah cepat terminal (`neofetch`, `skills`, `projects`, `telemetry`) yang dapat digeser secara horizontal tanpa merusak tata letak kartu.
+  - **Restrukturisasi Padding Kartu Bento Mobile**:
+    - Mengurangi padding kartu dari 20px menjadi 16px (<=768px) dan 14px (<=480px/380px) untuk memperluas ruang baca efektif ponsel tanpa horizontal overflow.
 - **Optimasi Performa Ekstrem (Zero-Lag, Ringan & Profesional)**:
   - Memperbaiki bug kritis `scrollIntoView({ behavior: 'smooth' })` pada `InteractiveTerminal.jsx` yang sebelumnya memaksa window melakukan auto-scroll saat halaman pertama kali dimuat sehingga melewatkan kartu Hero dan profil utama. Kini terminal hanya melakukan scroll internal pada kontainer log miliknya sendiri.
   - Menghilangkan `-webkit-mask-composite: xor` dan animasi spinning conic-gradient 200% pada `spotlight.css` yang sebelumnya membebani GPU dan menyebabkan frame drops hingga white-screen blank tab. Digantikan dengan efek hardware-accelerated laser shimmer dan hover border yang sangat ringan dan mulus 60+ FPS.

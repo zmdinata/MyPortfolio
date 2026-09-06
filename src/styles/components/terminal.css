@@ -69,7 +69,7 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 0.8rem;
+  font-size: clamp(0.72rem, 2vw, 0.82rem);
   color: #a8a8c4;
   font-weight: 600;
   letter-spacing: 0.02em;
@@ -134,8 +134,8 @@
 }
 
 .terminal-line {
-  font-size: 0.82rem;
-  line-height: 1.55;
+  font-size: clamp(0.72rem, 2vw, 0.82rem);
+  line-height: 1.5;
   word-break: break-word;
 }
 
@@ -166,7 +166,9 @@
   font-size: inherit;
   margin: 0;
   white-space: pre-wrap;
-  line-height: 1.55;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 [data-theme="light"] .output-text {
@@ -206,7 +208,7 @@
   border: none;
   outline: none;
   font-family: inherit;
-  font-size: 0.84rem;
+  font-size: clamp(0.78rem, 2.2vw, 0.84rem);
   color: #ffffff;
   caret-color: #00ddb3;
   font-weight: 500;
@@ -243,15 +245,27 @@
   color: #ffffff;
 }
 
-/* Quick Chips */
+/* Quick Chips - Horizontal Swipeable Container */
 .terminal-quick-chips {
   display: flex;
   align-items: center;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
   gap: 6px;
-  padding: 0.6rem 1rem;
+  padding: 0.55rem 0.85rem;
   background: rgba(0, 0, 0, 0.3);
   border-top: 1px solid rgba(255, 255, 255, 0.08);
+  touch-action: pan-x;
+  overscroll-behavior-x: contain;
+  scroll-padding: 0 0.85rem;
+}
+
+.terminal-quick-chips::-webkit-scrollbar {
+  display: none;
 }
 
 [data-theme="light"] .terminal-quick-chips {
@@ -260,6 +274,8 @@
 }
 
 .quick-label {
+  flex-shrink: 0;
+  white-space: nowrap;
   font-size: 0.72rem;
   color: #8888a6;
   margin-right: 2px;
@@ -273,6 +289,8 @@
 }
 
 .terminal-chip {
+  flex-shrink: 0;
+  white-space: nowrap;
   background: rgba(255, 255, 255, 0.06);
   border: 1px solid rgba(255, 255, 255, 0.14);
   color: #d0d0e6;
@@ -297,3 +315,8 @@
   color: #00ddb3;
   transform: translateY(-1px);
 }
+
+.terminal-chip:active {
+  transform: scale(0.95);
+}
+

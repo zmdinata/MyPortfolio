@@ -35,6 +35,10 @@ Platform ini menggabungkan database cloud Supabase dengan sistem fail-safe lokal
   - ⚡ **Workflow & Cloud**: LestariRimba #JuaraVibeCoding di Google Cloud Run, FastAPI, n8n Automation.
   - 📊 **ML & Research**: Makalah riset SISFOTEK 9 (Multiple Linear Regression 116K+ records).
   - Dilengkapi *live pulse status* homelab dan tombol aksi cepat (*Hubungi*, *Salin Email* dengan feedback badge, dan *Trigger Agent-Z*).
+- **Mobile Touch Ergonomics & Smart Justify**:
+  - **Tiered Button Hierarchy**: Tombol utama 100% full-width di baris atas, tombol aksi pendukung 50:50 di baris bawah dengan touch target ergonomis (min 48px) dan tactile feedback.
+  - **Swipeable Pill Bar**: Tab Profile Deck dapat digeser horizontal dengan touch-snap halus tanpa terpotong di layar ponsel sempit (<380px).
+  - **Smart Justify Typography Engine**: Justifikasi cerdas dengan hyphenation otomatis (`hyphens: auto; text-justify: inter-word;`) pada narasi panjang untuk mencegah *rivers of white*, sambil menjaga teks pendek tetap rata kiri yang rapi.
 
 ### 2. 💻 Interactive AI Terminal (`InteractiveTerminal.jsx`)
 - Terminal UNIX emulator interaktif yang merefleksikan data telemetri nyata dari server homelab lokal Zacky.

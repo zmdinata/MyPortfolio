@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useCallback } from 'react';
+import { createContext, useContext, useState, useCallback, useEffect } from 'react';
 import { translations } from '../data/translations';
 
 const LangContext = createContext();
@@ -8,6 +8,10 @@ export function LangProvider({ children }) {
     const saved = localStorage.getItem('lang');
     return saved || 'en';
   });
+
+  useEffect(() => {
+    document.documentElement.lang = lang;
+  }, [lang]);
 
   const toggleLang = useCallback(() => {
     setLang(prev => {

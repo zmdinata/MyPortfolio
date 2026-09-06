@@ -29,3 +29,8 @@ dist-ssr
 .env.development.local
 .env.test.local
 .env.production.local
+
+# Agent workspaces & Task specs
+.agents/
+ORIGINAL_REQUEST.md
+PROJECT.md

@@ -52,6 +52,18 @@ export default function Chatbot() {
     if (isOpen) refreshMemoryTTL();
   }, [isOpen]);
 
+  // ── Listener Event Kustom 'open-chatbot' (dari Profile Deck / Hero Actions) ──
+  useEffect(() => {
+    const handleOpenChatbot = (event) => {
+      setIsOpen(true);
+      if (event?.detail?.message) {
+        setInput(event.detail.message);
+      }
+    };
+    window.addEventListener('open-chatbot', handleOpenChatbot);
+    return () => window.removeEventListener('open-chatbot', handleOpenChatbot);
+  }, []);
+
   // ── Auto-scroll ke pesan terbaru ────────────────────────────────────────
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });

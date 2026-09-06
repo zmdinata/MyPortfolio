@@ -207,6 +207,7 @@
   opacity: 0.5;
 }
 
+.horizontal-scroll > .project-card,
 .horizontal-scroll .tilt-wrapper {
   flex: 0 0 280px;
   scroll-snap-align: start;
@@ -453,6 +454,7 @@
     grid-template-columns: 1fr;
   }
 
+  .horizontal-scroll > .project-card,
   .horizontal-scroll .tilt-wrapper {
     flex: 0 0 85%;
   }

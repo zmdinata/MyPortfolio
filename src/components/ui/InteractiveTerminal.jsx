@@ -27,7 +27,7 @@ export default function InteractiveTerminal() {
     }
   }, [terminalLog]);
 
-  const quickCommands = ['help', 'whoami', 'skills', 'projects', 'education', 'contact', 'clear'];
+  const quickCommands = ['neofetch', 'skills', 'projects', 'telemetry', 'whoami', 'contact', 'clear'];
 
   const executeCommand = (cmdStr) => {
     const trimmed = cmdStr.trim().toLowerCase();
@@ -45,6 +45,8 @@ export default function InteractiveTerminal() {
           text: lang === 'en'
             ? [
                 'Available commands:',
+                '  neofetch     - Display ThinkPad T440 Linux Homelab system info',
+                '  telemetry    - Live health & agent status for Agent-Z stack',
                 '  whoami       - About Zacky Muhammad Dinata & AI focus',
                 '  skills       - LLM automation, data science & tooling stack',
                 '  projects     - Homelab agent orchestrator, LestariRimba & ML research',
@@ -57,6 +59,8 @@ export default function InteractiveTerminal() {
               ].join('\n')
             : [
                 'Perintah yang tersedia:',
+                '  neofetch     - Tampilkan info sistem Linux Homelab ThinkPad T440',
+                '  telemetry    - Status kesehatan & agen aktif stack Agent-Z',
                 '  whoami       - Profil Zacky Muhammad Dinata & fokus AI',
                 '  skills       - Otomasi LLM, data science & stack teknologi',
                 '  projects     - Homelab agent orchestrator, LestariRimba & riset ML',
@@ -66,6 +70,52 @@ export default function InteractiveTerminal() {
                 '  contact      - Email, website, GitHub, LinkedIn & Dicoding',
                 '  agent-z      - Buka asisten AI Agent-Z',
                 '  clear        - Bersihkan layar terminal',
+              ].join('\n'),
+        });
+        break;
+
+      case 'neofetch':
+      case 'sysinfo':
+      case 'system':
+        newLog.push({
+          type: 'output',
+          text: [
+            '    ███████╗███╗   ███╗██████╗  zmdinata@homelab-t440',
+            '    ╚══███╔╝████╗ ████║██╔══██╗ ---------------------',
+            '      ███╔╝ ██╔████╔██║██║  ██║ OS: Linux Homelab (ThinkPad T440)',
+            '     ███╔╝  ██║╚██╔╝██║██║  ██║ Host: Lenovo ThinkPad T440 Core i5',
+            '    ███████╗██║ ╚═╝ ██║██████╔╝ Kernel: Linux 6.1.0-agentz-ai',
+            '    ╚══════╝╚═╝     ╚═╝╚═════╝  Uptime: 42 days, 13 hours',
+            '                                Shell: zsh 5.9 / agent-z runtime',
+            '                                Stack: Nous Hermes • OpenClaw • n8n',
+            '                                LLM Engine: Gemini API + 9Router',
+            '                                Status: Online & Telemetry Active',
+          ].join('\n'),
+        });
+        break;
+
+      case 'telemetry':
+      case 'status':
+        newLog.push({
+          type: 'output',
+          text: lang === 'en'
+            ? [
+                '⚡ AGENT-Z AI HOMELAB TELEMETRY:',
+                '• Orchestrator Node: ThinkPad T440 (Linux Always-On Server)',
+                '• Active Agents    : 3 Sub-Agents (Hermes, OpenClaw, RimbaPulse)',
+                '• Gateway Router   : 9Router Multi-Agent Gateway (Latency: ~240ms)',
+                '• Workflow Engine  : n8n Automated Webhook Pipelines (Active)',
+                '• Cloud Sync       : Google Cloud Run (LestariRimba API)',
+                '• Telemetry Status : HEALTHY / OPERATIONAL (100% Uptime)',
+              ].join('\n')
+            : [
+                '⚡ TELEMETRI AI HOMELAB AGENT-Z:',
+                '• Server Mandiri   : ThinkPad T440 (Linux Server Always-On)',
+                '• Agen Aktif       : 3 Sub-Agen (Hermes, OpenClaw, RimbaPulse)',
+                '• Router Fallback  : 9Router Multi-Agent Gateway (Latensi: ~240ms)',
+                '• Mesin Otomasi    : Pipeline Webhook n8n (Aktif)',
+                '• Sinkronisasi     : Google Cloud Run (LestariRimba API)',
+                '• Status Telemetri : SEHAT / BERJALAN NORMAL (Uptime 100%)',
               ].join('\n'),
         });
         break;

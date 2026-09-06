@@ -9,7 +9,7 @@ import * as FaIcons from 'react-icons/fa';
 import * as SiIcons from 'react-icons/si';
 import * as FiIcons from 'react-icons/fi';
 import { HiOutlineMail } from 'react-icons/hi';
-import { FiArrowRight } from 'react-icons/fi';
+import { FiArrowRight, FiMessageSquare } from 'react-icons/fi';
 import PreviewModal from '../components/ui/PreviewModal';
 import SpotlightCard from '../components/ui/SpotlightCard';
 import InteractiveTerminal from '../components/ui/InteractiveTerminal';
@@ -161,6 +161,18 @@ export default function HomePage() {
     setProjectModal({ open: true, src: file, type });
   };
 
+  const handleChatAgentZ = () => {
+    window.dispatchEvent(
+      new CustomEvent('open-chatbot', {
+        detail: {
+          message: lang === 'en'
+            ? "Can you tell me more about Zacky's projects and skills?"
+            : "Bisa ceritakan lebih banyak tentang proyek dan keahlian Zacky?",
+        },
+      })
+    );
+  };
+
   return (
     <>
       {/* ===== Bento Hero Section ===== */}
@@ -200,15 +212,29 @@ export default function HomePage() {
               </div>
 
               <div className="bento-hero-actions">
+                {/* Row 1: 100% Full-Width Primary CTA */}
                 <Link to="/projects" className="btn-primary">
                   {t('hero.viewProjects')} <FiArrowRight />
                 </Link>
+
+                {/* Row 2: 50:50 Dynamic Action Pair */}
                 <button 
+                  type="button"
                   onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })} 
                   className="btn-secondary"
                 >
                   {t('hero.contactMe')}
                 </button>
+                <button
+                  type="button"
+                  onClick={handleChatAgentZ}
+                  className="btn-secondary btn-hero-agentz"
+                  title="Chat dengan AI Assistant Agent-Z"
+                >
+                  <FiMessageSquare /> <span>Chat Agent-Z</span>
+                </button>
+
+                {/* Row 3: 50:50 Credential Pair */}
                 <Link to="/certificates" className="btn-outline">
                   {t('hero.viewCertificates')}
                 </Link>
