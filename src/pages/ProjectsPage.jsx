@@ -1,14 +1,13 @@
 import { useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
-import Tilt from 'react-parallax-tilt';
-import { supabase } from '../lib/supabase';
 import { useLang } from '../context/LangContext';
-import { projectCategoryFallbacks, projectItemFallbacks, mergePortfolioCategories, mergePortfolioItems } from '../lib/portfolioFallbacks';
+import { projectCategoryFallbacks, projectItemFallbacks } from '../lib/portfolioFallbacks';
 import { CategoryIcon } from '../lib/categoryIcons';
 import { getDisplayType, getFileForItem, getPreviewForItem, isLinkType } from '../lib/portfolioMedia';
 import PreviewModal from '../components/ui/PreviewModal';
 import { HiOutlineExternalLink } from 'react-icons/hi';
 import { fadeLeft, fadeUp, scaleUp } from '../lib/motionConfig';
+import { getCachedProjects } from '../lib/portfolioCache';
 
 function getCategoryName(category, lang) {
   return lang === 'en'
@@ -23,32 +22,16 @@ export default function ProjectsPage() {
   const [categories, setCategories] = useState(projectCategoryFallbacks);
 
   useEffect(() => {
-    const fetchProjects = async () => {
-      try {
-        const [{ data: categoryData, error: categoryError }, { data: projectData, error: projectError }] =
-          await Promise.all([
-            supabase.from('project_categories').select('*').order('sort_order', { ascending: true }),
-            supabase.from('projects').select('*').order('sort_order', { ascending: true }),
-          ]);
-
-        const nextCategories = mergePortfolioCategories(
-          !categoryError ? categoryData || [] : [],
-          projectCategoryFallbacks
-        );
+    let isMounted = true;
+    getCachedProjects().then(({ projects: nextProjects, categories: nextCategories }) => {
+      if (isMounted) {
         setCategories(nextCategories);
-        setProjects(mergePortfolioItems(
-          !projectError ? projectData || [] : [],
-          projectItemFallbacks,
-          nextCategories,
-          'projects'
-        ));
-      } catch (err) {
-        setCategories(projectCategoryFallbacks);
-        setProjects(projectItemFallbacks);
+        setProjects(nextProjects);
       }
+    });
+    return () => {
+      isMounted = false;
     };
-
-    fetchProjects();
   }, []);
 
   const categoryGroups = useMemo(() => {
@@ -106,9 +89,9 @@ export default function ProjectsPage() {
           className="project-category"
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: '-60px' }}
+          viewport={{ once: true, margin: '-20px' }}
           variants={fadeUp}
-          custom={catIdx * 0.3}
+          custom={catIdx * 0.15}
         >
           <h3>
             <span className="category-icon"><CategoryIcon name={category.icon_name} /></span>
@@ -118,41 +101,36 @@ export default function ProjectsPage() {
             {items.map((project, idx) => {
               const type = getDisplayType(project.type);
               return (
-                <Tilt
+                <motion.div
                   key={project.id}
-                  tiltMaxAngleX={8}
-                  tiltMaxAngleY={8}
-                  scale={1.03}
-                  transitionSpeed={2500}
-                  className="tilt-wrapper"
+                  className="project-card"
+                  onClick={() => handleClick(project)}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true, margin: '-20px' }}
+                  variants={scaleUp}
+                  custom={idx}
+                  whileHover={{ y: -6, scale: 1.02 }}
+                  transition={{ duration: 0.2 }}
+                  style={{ willChange: 'transform, opacity' }}
                 >
-                  <motion.div
-                    className="project-card"
-                    onClick={() => handleClick(project)}
-                    initial="hidden"
-                    whileInView="visible"
-                    viewport={{ once: true, margin: '-40px' }}
-                    variants={scaleUp}
-                    custom={idx}
-                  >
-                    <div className="project-card-link">
-                      {isLinkType(type) && (
-                        <span className="external-badge">
-                          <HiOutlineExternalLink /> Link
-                        </span>
-                      )}
-                      <img
-                        src={getPreviewForItem(project, '/assets/images/preview.png')}
-                        alt={lang === 'en' ? project.title_en : project.title_id}
-                        className="project-image-preview"
-                        loading="lazy"
-                      />
-                      <div className="project-card-title">
-                        {lang === 'en' ? project.title_en : project.title_id}
-                      </div>
+                  <div className="project-card-link">
+                    {isLinkType(type) && (
+                      <span className="external-badge">
+                        <HiOutlineExternalLink /> Link
+                      </span>
+                    )}
+                    <img
+                      src={getPreviewForItem(project, '/assets/images/preview.png')}
+                      alt={lang === 'en' ? project.title_en : project.title_id}
+                      className="project-image-preview"
+                      loading="lazy"
+                    />
+                    <div className="project-card-title">
+                      {lang === 'en' ? project.title_en : project.title_id}
                     </div>
-                  </motion.div>
-                </Tilt>
+                  </div>
+                </motion.div>
               );
             })}
           </div>

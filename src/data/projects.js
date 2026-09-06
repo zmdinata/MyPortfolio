@@ -1,4 +1,38 @@
 export const projects = [
+  // === AI Engineering & Homelab (Real Projects) ===
+  {
+    id: 'ai-1',
+    category: 'data',
+    title: { 
+      en: 'Agent-Z Homelab: AI Agent Orchestrator', 
+      id: 'Agent-Z Homelab: AI Agent Orchestrator' 
+    },
+    file: 'https://github.com/zmdinata',
+    preview: '/assets/images/preview.png',
+    type: 'link',
+  },
+  {
+    id: 'ai-2',
+    category: 'web',
+    title: { 
+      en: 'LestariRimba: AI Sustainability Prototype', 
+      id: 'LestariRimba: Prototype Web AI Berkelanjutan' 
+    },
+    file: 'https://lestari-rimba-661373468998.asia-southeast2.run.app/',
+    preview: '/assets/images/preview.png',
+    type: 'link',
+  },
+  {
+    id: 'ai-3',
+    category: 'data',
+    title: { 
+      en: 'Flight Ticket Price Prediction (MLR - SISFOTEK)', 
+      id: 'Prediksi Harga Tiket Penerbangan (MLR - SISFOTEK)' 
+    },
+    file: 'https://seminar.iaii.or.id/index.php/SISFOTEK/article/view/692',
+    preview: '/assets/projects/Data/data1.png',
+    type: 'link',
+  },
   // === Data Analysis ===
   {
     id: 'data-1',

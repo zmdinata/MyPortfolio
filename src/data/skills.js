@@ -5,26 +5,26 @@ import { HiOutlineChartBar } from 'react-icons/hi';
 export const skills = [
   {
     id: 'skill-1',
-    icon: 'data',
-    title: { en: 'Data Analysis & Programming', id: 'Analisis Data & Pemrograman' },
-    description: 'Python (Beginner), SQL, MySQL, Excel, Data Science Principles',
+    icon: 'ml',
+    title: { en: 'LLM & Autonomous AI Agents', id: 'LLM & Agen AI Mandiri' },
+    description: 'OpenClaw, Hermes Agent, Gemini API, Prompt Engineering, Agentic Workflows',
   },
   {
     id: 'skill-2',
-    icon: 'design',
-    title: { en: 'Design & Illustration', id: 'Desain & Ilustrasi' },
-    description: 'Adobe Photoshop, Vector/Vexel Art, NFT Art, UI/UX (Basic Figma)',
+    icon: 'data',
+    title: { en: 'Workflow Automation & Cloud', id: 'Otomasi Alur Kerja & Cloud' },
+    description: 'n8n Pipelines, Python Scripts, Google Cloud Run, Supabase, Docker Homelab',
   },
   {
     id: 'skill-3',
-    icon: 'web3',
-    title: { en: 'Web3 & Blockchain', id: 'Web3 & Blockchain' },
-    description: 'Tokenomics, NFT Deep Dive, Testnet Participation, Cryptocurrency Trading',
+    icon: 'data',
+    title: { en: 'Machine Learning & Data Science', id: 'Machine Learning & Sains Data' },
+    description: 'Multiple Linear Regression, Scikit-learn, Pandas, SQL / MySQL, Statistical Modeling',
   },
   {
     id: 'skill-4',
-    icon: 'ml',
-    title: { en: 'Machine Learning (Basic)', id: 'Machine Learning (Dasar)' },
-    description: 'Artificial Intelligence Fundamentals, Scikit-Learn, Deep Learning Basics',
+    icon: 'design',
+    title: { en: 'Digital Art & Prototyping', id: 'Seni Digital & Prototipe' },
+    description: 'Adobe Photoshop, Vector/Vexel Art, NFT Collections, Rapid UI/UX Prototyping',
   },
 ];

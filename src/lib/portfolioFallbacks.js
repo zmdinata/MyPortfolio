@@ -64,8 +64,8 @@ export const projectItemFallbacks = localProjects.map((project, index) => ({
   file: project.file,
   preview: project.preview,
   type: project.type === 'external' || project.type === 'iframe' ? 'link' : project.type,
-  is_featured: ['data-1', 'data-2', 'web-1'].includes(project.id),
-  featured_order: project.id === 'data-1' ? 1 : project.id === 'data-2' ? 2 : project.id === 'web-1' ? 3 : null,
+  is_featured: ['ai-1', 'ai-2', 'ai-3'].includes(project.id),
+  featured_order: project.id === 'ai-1' ? 1 : project.id === 'ai-2' ? 2 : project.id === 'ai-3' ? 3 : null,
   sort_order: index + 1,
 }));
 

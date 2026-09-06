@@ -15,8 +15,13 @@ export default function CustomCursor() {
     checkDevice();
     window.addEventListener('resize', checkDevice);
 
+    let animationFrameId = null;
     const mouseMove = (e) => {
-      setMousePosition({ x: e.clientX, y: e.clientY });
+      if (animationFrameId) return;
+      animationFrameId = requestAnimationFrame(() => {
+        setMousePosition({ x: e.clientX, y: e.clientY });
+        animationFrameId = null;
+      });
     };
 
     const handleMouseOver = (e) => {
@@ -43,6 +48,7 @@ export default function CustomCursor() {
     }
 
     return () => {
+      if (animationFrameId) cancelAnimationFrame(animationFrameId);
       window.removeEventListener('resize', checkDevice);
       window.removeEventListener('mousemove', mouseMove);
       window.removeEventListener('mouseover', handleMouseOver);

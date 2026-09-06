@@ -6,9 +6,9 @@ import CustomCursor from '../ui/CustomCursor';
 import { exitTransition, pageTransition } from '../../lib/motionConfig';
 
 const pageVariants = {
-  initial: { opacity: 0, y: 18, filter: 'blur(6px)' },
-  animate: { opacity: 1, y: 0, filter: 'blur(0px)', transition: pageTransition },
-  exit: { opacity: 0, y: -8, filter: 'blur(4px)', transition: exitTransition },
+  initial: { opacity: 0, y: 10 },
+  animate: { opacity: 1, y: 0, transition: pageTransition },
+  exit: { opacity: 0, y: -6, transition: exitTransition },
 };
 
 export default function Layout() {
@@ -35,7 +35,7 @@ export default function Layout() {
       <Navbar />
 
       <main className="page-wrapper">
-        <AnimatePresence mode="wait">
+        <AnimatePresence mode="wait" initial={false}>
           <motion.div
             key={location.pathname}
             variants={pageVariants}

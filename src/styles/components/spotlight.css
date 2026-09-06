@@ -1,0 +1,101 @@
+/* ===== High-Performance Linear-Grade Spotlight & Border Styling ===== */
+
+.spotlight-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  isolation: isolate;
+  will-change: transform, border-color, box-shadow;
+}
+
+.spotlight-card:hover {
+  border-color: var(--border-hover);
+  box-shadow: 0 12px 32px -8px rgba(0, 0, 0, 0.4), 0 0 20px -4px var(--glow-color);
+  transform: translateY(-2px);
+}
+
+[data-theme="light"] .spotlight-card {
+  background: #ffffff;
+  border-color: rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+}
+
+[data-theme="light"] .spotlight-card:hover {
+  border-color: rgba(124, 111, 255, 0.3);
+  box-shadow: 0 12px 32px rgba(124, 111, 255, 0.1);
+}
+
+/* Cursor-following radial spotlight layer - GPU friendly */
+.spotlight-layer {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  will-change: opacity;
+  background: radial-gradient(
+    380px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    var(--spotlight-color, rgba(124, 111, 255, 0.14)),
+    transparent 70%
+  );
+}
+
+.spotlight-card.is-hovered .spotlight-layer {
+  opacity: 1;
+}
+
+/* Lightweight, hardware-accelerated top laser shimmer */
+.border-beam-tracer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  pointer-events: none;
+  z-index: 2;
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.border-beam-tracer::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -50%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--beam-color, var(--accent-primary)),
+    transparent
+  );
+  animation: borderShimmer 3s ease-in-out infinite;
+}
+
+.spotlight-card:hover .border-beam-tracer,
+.spotlight-card.is-hovered .border-beam-tracer {
+  opacity: 1;
+}
+
+@keyframes borderShimmer {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(350%);
+  }
+}
+
+.spotlight-content {
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  height: 100%;
+}

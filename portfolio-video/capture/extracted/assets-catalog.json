@@ -1,0 +1,103 @@
+[
+  {
+    "url": "http://127.0.0.1:5173/assets/images/photo.png",
+    "type": "Image",
+    "contexts": [
+      "img[src]"
+    ],
+    "notes": "Zacky Muhammad Dinata",
+    "description": "Zacky Muhammad Dinata",
+    "sectionClasses": "hero-image",
+    "aboveFold": true
+  },
+  {
+    "url": "http://127.0.0.1:5173/assets/projects/Data/data2.png",
+    "type": "Image",
+    "contexts": [
+      "img[src]"
+    ],
+    "notes": "Optimized Superstore Strategy",
+    "description": "Optimized Superstore Strategy",
+    "sectionClasses": "project-card featured-project-card",
+    "aboveFold": true
+  },
+  {
+    "url": "http://127.0.0.1:5173/assets/projects/Desain/proyek1.jpeg",
+    "type": "Image",
+    "contexts": [
+      "img[src]"
+    ],
+    "notes": "FlockyApe NFT Art",
+    "description": "FlockyApe NFT Art",
+    "sectionClasses": "project-card featured-project-card",
+    "aboveFold": true
+  },
+  {
+    "url": "http://127.0.0.1:5173/assets/projects/Tugas/PWD.png",
+    "type": "Image",
+    "contexts": [
+      "img[src]"
+    ],
+    "notes": "Web Programming Group Assignments",
+    "description": "Web Programming Group Assignments",
+    "sectionClasses": "project-card featured-project-card",
+    "aboveFold": true
+  },
+  {
+    "url": "http://127.0.0.1:5173/assets/images/agent-z-body.png",
+    "type": "Image",
+    "contexts": [
+      "img[src]"
+    ],
+    "notes": "Agent-Z Body",
+    "description": "Agent-Z Body",
+    "aboveFold": true
+  },
+  {
+    "url": "http://127.0.0.1:5173/assets/images/agent-z-upperarm.png",
+    "type": "Image",
+    "contexts": [
+      "img[src]"
+    ],
+    "notes": "Upper Arm",
+    "description": "Upper Arm",
+    "aboveFold": true
+  },
+  {
+    "url": "http://127.0.0.1:5173/assets/images/agent-z-forearm.png",
+    "type": "Image",
+    "contexts": [
+      "img[src]"
+    ],
+    "notes": "Forearm",
+    "description": "Forearm",
+    "aboveFold": true
+  },
+  {
+    "url": "http://127.0.0.1:5173/assets/images/agent-z-hand.png",
+    "type": "Image",
+    "contexts": [
+      "img[src]"
+    ],
+    "notes": "Hand",
+    "description": "Hand",
+    "aboveFold": true
+  },
+  {
+    "url": "http://127.0.0.1:5173/favicon.png",
+    "type": "Icon",
+    "contexts": [
+      "link[rel=\"icon\"]"
+    ],
+    "notes": null
+  },
+  {
+    "url": "https://zmdinata-portfolio.vercel.app/assets/images/preview.png",
+    "type": "Image",
+    "contexts": [
+      "meta[og:image]",
+      "meta[twitter:image]"
+    ],
+    "notes": null
+  }
+]

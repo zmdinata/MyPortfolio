@@ -2,6 +2,9 @@
 @import './animations.css';
 @import './components/navbar.css';
 @import './components/hero.css';
+@import './components/spotlight.css';
+@import './components/terminal.css';
+@import './components/bento.css';
 @import './components/cards.css';
 @import './components/modal.css';
 @import './components/footer.css';

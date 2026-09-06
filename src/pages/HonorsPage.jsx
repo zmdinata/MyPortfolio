@@ -1,14 +1,13 @@
 import { useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
-import Tilt from 'react-parallax-tilt';
 import { useLang } from '../context/LangContext';
-import { supabase } from '../lib/supabase';
-import { honorCategoryFallbacks, honorItemFallbacks, mergePortfolioCategories, mergePortfolioItems } from '../lib/portfolioFallbacks';
+import { honorCategoryFallbacks, honorItemFallbacks } from '../lib/portfolioFallbacks';
 import { CategoryIcon } from '../lib/categoryIcons';
 import { getDisplayType, getFileForItem, getPreviewForItem, isLinkType } from '../lib/portfolioMedia';
 import PreviewModal from '../components/ui/PreviewModal';
 import { HiOutlineExternalLink } from 'react-icons/hi';
-import { fadeLeft, fadeUp, scaleUp, stagger } from '../lib/motionConfig';
+import { fadeLeft, fadeUp, scaleUp } from '../lib/motionConfig';
+import { getCachedHonors } from '../lib/portfolioCache';
 
 function getCategoryName(category, lang) {
   return lang === 'en'
@@ -23,32 +22,16 @@ export default function HonorsPage() {
   const [categories, setCategories] = useState(honorCategoryFallbacks);
 
   useEffect(() => {
-    const fetchHonors = async () => {
-      try {
-        const [{ data: categoryData, error: categoryError }, { data: honorData, error: honorError }] =
-          await Promise.all([
-            supabase.from('honor_categories').select('*').order('sort_order', { ascending: true }),
-            supabase.from('honors').select('*').order('sort_order', { ascending: true }),
-          ]);
-
-        const nextCategories = mergePortfolioCategories(
-          !categoryError ? categoryData || [] : [],
-          honorCategoryFallbacks
-        );
-        setCategories(nextCategories);
-        setHonors(mergePortfolioItems(
-          !honorError ? honorData || [] : [],
-          honorItemFallbacks,
-          nextCategories,
-          'honors'
-        ));
-      } catch (err) {
-        setCategories(honorCategoryFallbacks);
-        setHonors(honorItemFallbacks);
+    let isMounted = true;
+    getCachedHonors().then(({ honors: nextHonors, categories: nextCats }) => {
+      if (isMounted) {
+        setCategories(nextCats);
+        setHonors(nextHonors);
       }
+    });
+    return () => {
+      isMounted = false;
     };
-
-    fetchHonors();
   }, []);
 
   const categoryGroups = useMemo(() => {
@@ -102,41 +85,32 @@ export default function HonorsPage() {
           className="project-category honor-category-section"
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: '-60px' }}
+          viewport={{ once: true, margin: '-20px' }}
           variants={fadeUp}
-          custom={catIdx * 0.3}
+          custom={catIdx * 0.15}
         >
           <h3>
             <span className="category-icon"><CategoryIcon name={category.icon_name} /></span>
             {getCategoryName(category, lang)}
           </h3>
-          <motion.div
-            className="honor-grid"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: '-40px' }}
-            variants={stagger}
-          >
+          <div className="horizontal-scroll">
             {items.map((honor, idx) => {
               const type = getDisplayType(honor.type);
               return (
-                <Tilt
+                <motion.div
                   key={honor.id}
-                  tiltMaxAngleX={12}
-                  tiltMaxAngleY={12}
-                  scale={1.03}
-                  transitionSpeed={2500}
-                  className="tilt-wrapper"
+                  className="project-card honor-card"
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true, margin: '-20px' }}
+                  variants={scaleUp}
+                  custom={idx}
+                  onClick={() => handleClick(honor)}
+                  whileHover={{ y: -6, scale: 1.02 }}
+                  transition={{ duration: 0.2 }}
+                  style={{ willChange: 'transform, opacity' }}
                 >
-                  <motion.div
-                    className="honor-card"
-                    initial="hidden"
-                    whileInView="visible"
-                    viewport={{ once: true, margin: '-20px' }}
-                    variants={scaleUp}
-                    custom={idx}
-                    onClick={() => handleClick(honor)}
-                  >
+                  <div className="project-card-link">
                     {isLinkType(type) && (
                       <span className="external-badge">
                         <HiOutlineExternalLink /> Link
@@ -145,17 +119,17 @@ export default function HonorsPage() {
                     <img
                       src={getPreviewForItem(honor, '/assets/images/preview.png')}
                       alt={lang === 'en' ? honor.title_en : honor.title_id}
-                      className="honor-card-image"
+                      className="project-image-preview"
                       loading="lazy"
                     />
-                    <div className="honor-card-body">
-                      <h4>{lang === 'en' ? honor.title_en : honor.title_id}</h4>
+                    <div className="project-card-title">
+                      {lang === 'en' ? honor.title_en : honor.title_id}
                     </div>
-                  </motion.div>
-                </Tilt>
+                  </div>
+                </motion.div>
               );
             })}
-          </motion.div>
+          </div>
         </motion.div>
       ))}
 

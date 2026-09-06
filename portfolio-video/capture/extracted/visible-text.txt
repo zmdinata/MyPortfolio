@@ -1,0 +1,70 @@
+[a] ZMDINATA
+[div] Available for Hire
+[a] About Me
+[a] Projects
+[a] Certifications
+[div] Available for Hire
+[p] Portfolio & Journey
+[h1] Zacky Muhammad Dinata
+[p] AI Engineer in Progress | Machine Learning | Deep Learning | IBM SkillsBuild Scholar | Information Systems Student
+[span] Indonesian (Native)
+[span] English (Pre-intermediate)
+[a] View Projects
+[button] Contact Me
+[a] Certifications
+[a] Honors
+[h2] About Me
+[p] Information Systems student at STMIK IKMI Cirebon and aspiring AI Engineer. My background spans digital illustration, Web3, and data analytics. I now work with Python, Scikit-learn, and Pandas, and am developing ML research for a SINTA 2+ publication. As a Pijak x IBM AI Engineer Scholar, I combine technical logic with design sensibility to build impactful systems.
+[h2] Featured Projects
+[p] Three highlighted works selected from the portfolio.
+[div] Optimized Superstore Strategy
+[span] Link
+[div] FlockyApe NFT Art
+[span] Link
+[div] Web Programming Group Assignments
+[a] View All Projects
+[h2] Experience
+[h3] AI Engineer Intensive Program Scholar
+[div] Pijak x IBM SkillsBuild
+[p] Feb 2026 — Present · 3 mos · Indonesia · Remote
+[p] Selected through a competitive process to receive a full scholarship for the Pijak x IBM SkillsBuild AI Engineer Cohort, a program built to produce job-ready AI Engineers with both technical depth and professional readiness, backed by IBM as a global technology leader committed to advancing digital literacy in Indonesia.
+[p] Key Responsibilities:
+[li] Technical curriculum completed: Programming Logic, Python Programming, Git and GitHub, Artificial Intelligence Fundamentals, Machine Learning for Beginners, Deep Learning Fundamentals, and Building End-to-End Machine Learning Systems.
+[li] Professional development completed through 7 structured ILT Soft Skill sessions covering Personal Productivity, Growth Mindset and Personal Development, Critical Thinking and Problem Solving, Stress Management and Adaptability, Communication and Networking, Business Presentation, and Personal Branding and Interview Preparation.
+[h3] Junior Data Scientist (Career Transition)
+[div] Self-Employed
+[p] Jul 2025 — Present · 10 mos · Indonesia · Remote
+[p] Currently undergoing a planned career transition to deepen my knowledge in Data Science and Blockchain technology. Actively building skills in Python, SQL, Excel, and MySQL through structured academic studies and self-learning.
+[h3] NFT & Design Artist
+[div] Freelance
+[p] Dec 2021 — Present · 4 yrs 5 mos · Global · Remote
+[p] Working as a freelance NFT and Design artist serving global clients.
+[p] Key Responsibilities:
+[li] Designed original NFT characters and layered traits aligned with client concepts.
+[li] Created diverse styles including vector, vexel, cartoon, and semi-realistic illustrations.
+[li] Delivered generative-ready assets with optimized layering for NFT minting.
+[p] Key Achievements:
+[li] Completed 60+ one-of-one NFT artworks for the FlokyApe collection.
+[li] Designed 30+ layered trait items inspired by Azuki style.
+[li] Delivered 20+ vector/vexel portraits for personal commissions.
+[h2] Education
+[h3] STMIK IKMI Cirebon
+[span] Bachelor's degree, Information Systems · Oct 2024 — Oct 2028
+[p] Grade: 3.33 (Current GPA)
+[p] Active in academic learning, focusing on business innovation, data trends, and digital technology.
+[h2] Skills
+[h3] Analisis Data & Pemrograman
+[p] Python (Beginner), SQL, MySQL, Excel, Data Science Principles
+[h3] Desain & Ilustrasi
+[p] Adobe Photoshop, Vector/Vexel Art, NFT Art, UI/UX (Basic Figma)
+[h3] Machine Learning (Dasar)
+[p] Artificial Intelligence Fundamentals, Scikit-Learn, Deep Learning Basics
+[h3] Web3 & Blockchain
+[p] Tokenomics, NFT Deep Dive, Testnet Participation, Cryptocurrency Trading
+[h2] Contact Me
+[p] Feel free to reach out for collaborations, projects, or professional opportunities.
+[a] Instagram
+[a] LinkedIn
+[a] GitHub
+[a] Email
+[p] © 2025 Zacky Muhammad Dinata. All rights reserved.

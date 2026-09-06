@@ -1,14 +1,13 @@
 import { useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
-import Tilt from 'react-parallax-tilt';
 import { useLang } from '../context/LangContext';
-import { supabase } from '../lib/supabase';
-import { certificateCategoryFallbacks, certificateItemFallbacks, mergePortfolioCategories, mergePortfolioItems } from '../lib/portfolioFallbacks';
+import { certificateCategoryFallbacks, certificateItemFallbacks } from '../lib/portfolioFallbacks';
 import { CategoryIcon } from '../lib/categoryIcons';
 import { getDisplayType, getFileForItem, getPreviewForItem, isLinkType } from '../lib/portfolioMedia';
 import PreviewModal from '../components/ui/PreviewModal';
 import { HiOutlineExternalLink } from 'react-icons/hi';
 import { fadeLeft, fadeUp, scaleUp, staggerFast } from '../lib/motionConfig';
+import { getCachedCertificates } from '../lib/portfolioCache';
 
 function getCategoryName(category, lang) {
   return lang === 'en'
@@ -23,32 +22,16 @@ export default function CertificatesPage() {
   const [categories, setCategories] = useState(certificateCategoryFallbacks);
 
   useEffect(() => {
-    const fetchCerts = async () => {
-      try {
-        const [{ data: categoryData, error: categoryError }, { data: certificateData, error: certificateError }] =
-          await Promise.all([
-            supabase.from('certificate_categories').select('*').order('sort_order', { ascending: true }),
-            supabase.from('certificates').select('*').order('sort_order', { ascending: true }),
-          ]);
-
-        const nextCategories = mergePortfolioCategories(
-          !categoryError ? categoryData || [] : [],
-          certificateCategoryFallbacks
-        );
-        setCategories(nextCategories);
-        setCertificates(mergePortfolioItems(
-          !certificateError ? certificateData || [] : [],
-          certificateItemFallbacks,
-          nextCategories,
-          'certificates'
-        ));
-      } catch (err) {
-        setCategories(certificateCategoryFallbacks);
-        setCertificates(certificateItemFallbacks);
+    let isMounted = true;
+    getCachedCertificates().then(({ certificates: nextCerts, categories: nextCats }) => {
+      if (isMounted) {
+        setCategories(nextCats);
+        setCertificates(nextCerts);
       }
+    });
+    return () => {
+      isMounted = false;
     };
-
-    fetchCerts();
   }, []);
 
   const categoryGroups = useMemo(() => {
@@ -102,9 +85,9 @@ export default function CertificatesPage() {
           className="project-category certificate-category-section"
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: '-60px' }}
+          viewport={{ once: true, margin: '-20px' }}
           variants={fadeUp}
-          custom={catIdx * 0.3}
+          custom={catIdx * 0.15}
         >
           <h3>
             <span className="category-icon"><CategoryIcon name={category.icon_name} /></span>
@@ -114,41 +97,36 @@ export default function CertificatesPage() {
             className="certificate-grid"
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, margin: '-40px' }}
+            viewport={{ once: true, margin: '-20px' }}
             variants={staggerFast}
           >
             {items.map((cert, idx) => {
               const type = getDisplayType(cert.type);
               return (
-                <Tilt
+                <motion.div
                   key={cert.id}
-                  tiltMaxAngleX={15}
-                  tiltMaxAngleY={15}
-                  scale={1.05}
-                  transitionSpeed={2500}
-                  className="tilt-wrapper"
+                  className="certificate-card"
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true, margin: '-20px' }}
+                  variants={scaleUp}
+                  custom={idx}
+                  onClick={() => handleClick(cert)}
+                  whileHover={{ y: -6, scale: 1.02 }}
+                  transition={{ duration: 0.2 }}
+                  style={{ willChange: 'transform, opacity' }}
                 >
-                  <motion.div
-                    className="certificate-card"
-                    initial="hidden"
-                    whileInView="visible"
-                    viewport={{ once: true, margin: '-20px' }}
-                    variants={scaleUp}
-                    custom={idx}
-                    onClick={() => handleClick(cert)}
-                  >
-                    {isLinkType(type) && (
-                      <span className="external-badge">
-                        <HiOutlineExternalLink /> Link
-                      </span>
-                    )}
-                    <img
-                      src={getPreviewForItem(cert, '/assets/images/preview.png')}
-                      alt={cert.title}
-                      loading="lazy"
-                    />
-                  </motion.div>
-                </Tilt>
+                  {isLinkType(type) && (
+                    <span className="external-badge">
+                      <HiOutlineExternalLink /> Link
+                    </span>
+                  )}
+                  <img
+                    src={getPreviewForItem(cert, '/assets/images/preview.png')}
+                    alt={cert.title}
+                    loading="lazy"
+                  />
+                </motion.div>
               );
             })}
           </motion.div>

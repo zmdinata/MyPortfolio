@@ -1,4 +1,4 @@
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import Tilt from 'react-parallax-tilt';
 import { useEffect, useState } from 'react';
@@ -10,8 +10,12 @@ import * as SiIcons from 'react-icons/si';
 import * as FiIcons from 'react-icons/fi';
 import { HiOutlineMail } from 'react-icons/hi';
 import { FiArrowRight } from 'react-icons/fi';
-import HeroAnimation from '../components/ui/HeroAnimation';
 import PreviewModal from '../components/ui/PreviewModal';
+import SpotlightCard from '../components/ui/SpotlightCard';
+import InteractiveTerminal from '../components/ui/InteractiveTerminal';
+import AiTelemetryCard from '../components/ui/AiTelemetryCard';
+import ProfileInteractiveDeck from '../components/ui/ProfileInteractiveDeck';
+import AmbientGridMesh from '../components/ui/AmbientGridMesh';
 import { fadeLeft, fadeRight, fadeUp, scaleUp, smoothEase, stagger, staggerFast } from '../lib/motionConfig';
 import { projectCategoryFallbacks, projectItemFallbacks, mergePortfolioItems } from '../lib/portfolioFallbacks';
 import { getDisplayType, getFileForItem, getPreviewForItem, isLinkType } from '../lib/portfolioMedia';
@@ -145,12 +149,6 @@ export default function HomePage() {
   const aboutContent = profile ? (lang === 'en' ? profile.about_description_en : profile.about_description_id) : t('about.content');
   const isAvailable = profile ? profile.available_for_hire : true;
   
-  // Parallax effects
-  const { scrollY } = useScroll();
-  const heroTextY = useTransform(scrollY, [0, 800], [0, 100]);
-  const heroImageY = useTransform(scrollY, [0, 800], [0, -40]);
-  const heroOpacity = useTransform(scrollY, [0, 800], [1, 0.1]);
-
   const handleFeaturedProjectClick = (project) => {
     const type = getDisplayType(project.type);
     const file = getFileForItem(project);
@@ -165,49 +163,43 @@ export default function HomePage() {
 
   return (
     <>
-      {/* ===== Hero Section ===== */}
-      <section className="hero-section" id="home">
-        <HeroAnimation />
-        {/* Particle dots */}
-        <div className="hero-particles" aria-hidden="true">
-          <div className="hero-particle"></div>
-          <div className="hero-particle"></div>
-          <div className="hero-particle"></div>
-          <div className="hero-particle"></div>
-          <div className="hero-particle"></div>
-        </div>
+      {/* ===== Bento Hero Section ===== */}
+      <section className="bento-hero-section" id="home">
+        <AmbientGridMesh />
 
-        <div className="hero-content">
-          <motion.div
-            className="hero-text"
-            initial="hidden"
-            animate="visible"
-            variants={stagger}
-            style={{ y: heroTextY, opacity: heroOpacity }}
-          >
-            {isAvailable && (
-              <motion.div className="hero-status" variants={fadeLeft}>
-                <div className="hire-status-badge">
-                  <span className="pulse-dot"></span>
-                  {t('hero.available')}
-                </div>
-              </motion.div>
-            )}
-            <motion.p className="hero-kicker" variants={fadeLeft}>
-              {t('hero.kicker')}
-            </motion.p>
-            <motion.h1 className="hero-name gradient-text" variants={fadeUp} custom={1}>
-              {t('hero.name')}
-            </motion.h1>
-            <motion.p className="hero-job" variants={fadeUp} custom={2}>
-              {heroJob}
-            </motion.p>
-            <motion.div className="hero-meta" variants={staggerFast} initial="hidden" animate="visible">
-              <motion.span className="hero-pill" variants={scaleUp}>{t('hero.langId')}</motion.span>
-              <motion.span className="hero-pill" variants={scaleUp}>{t('hero.langEn')}</motion.span>
-            </motion.div>
-            <motion.div className="hero-cta" variants={fadeUp} custom={4}>
-              <div className="hero-cta-main">
+        <motion.div
+          className="bento-grid"
+          initial="hidden"
+          animate="visible"
+          variants={stagger}
+        >
+          {/* Card 1: Main Hero Identity Card */}
+          <SpotlightCard className="bento-card-main" spotlightColor="rgba(124, 111, 255, 0.18)">
+            <div>
+              <div className="bento-hero-badge-row">
+                {isAvailable && (
+                  <div className="bento-avail-badge">
+                    <span className="bento-avail-beacon"></span>
+                    {t('hero.available')}
+                  </div>
+                )}
+                <span className="bento-kicker">{t('bento.kicker')}</span>
+              </div>
+              <motion.h1 className="bento-hero-title gradient-text" variants={fadeUp}>
+                {t('hero.name')}
+              </motion.h1>
+              <p className="bento-hero-bio">
+                {heroJob}
+              </p>
+            </div>
+
+            <div>
+              <div className="hero-meta" style={{ marginBottom: '1.5rem' }}>
+                <span className="hero-pill">{t('hero.langId')}</span>
+                <span className="hero-pill">{t('hero.langEn')}</span>
+              </div>
+
+              <div className="bento-hero-actions">
                 <Link to="/projects" className="btn-primary">
                   {t('hero.viewProjects')} <FiArrowRight />
                 </Link>
@@ -217,8 +209,6 @@ export default function HomePage() {
                 >
                   {t('hero.contactMe')}
                 </button>
-              </div>
-              <div className="hero-cta-sub">
                 <Link to="/certificates" className="btn-outline">
                   {t('hero.viewCertificates')}
                 </Link>
@@ -226,27 +216,46 @@ export default function HomePage() {
                   {t('hero.viewHonors')}
                 </Link>
               </div>
-            </motion.div>
-          </motion.div>
-
-          <motion.div
-            className="hero-image-wrapper"
-            initial={{ opacity: 0, scale: 0.7, rotate: -5 }}
-            animate={{ opacity: 1, scale: 1, rotate: 0 }}
-            transition={{ duration: 1, delay: 0.12, ease: smoothEase }}
-            style={{ y: heroImageY, opacity: heroOpacity }}
-          >
-            <div className="hero-image-ring" aria-hidden="true"></div>
-            <div className="hero-image-glow" aria-hidden="true"></div>
-            <div className="hero-image-container">
-              <img
-                src="/assets/images/photo.png"
-                alt="Zacky Muhammad Dinata"
-                className="hero-image"
-              />
             </div>
-          </motion.div>
-        </div>
+          </SpotlightCard>
+
+          {/* Card 2: Interactive Profile Showcase Deck */}
+          <SpotlightCard className="bento-card-profile" borderBeam={true} spotlightColor="rgba(0, 221, 179, 0.18)">
+            <ProfileInteractiveDeck name={t('hero.name')} role={t('bento.role')} />
+          </SpotlightCard>
+
+          {/* Card 3: Interactive Terminal Card */}
+          <div className="bento-card-terminal">
+            <InteractiveTerminal />
+          </div>
+
+          {/* Card 4: AI Telemetry & Stack Card */}
+          <SpotlightCard className="bento-card-telemetry" spotlightColor="rgba(0, 221, 179, 0.16)">
+            <AiTelemetryCard />
+          </SpotlightCard>
+
+          {/* Card 5: Metrics & Impact Overview */}
+          <SpotlightCard className="bento-card-metrics" borderBeam={false} spotlightColor="rgba(124, 111, 255, 0.14)">
+            <div className="bento-metrics-grid">
+              <div className="bento-metric-col">
+                <span className="bento-metric-num gradient-text">24+</span>
+                <span className="bento-metric-label">{t('bento.metrics.projects')}</span>
+              </div>
+              <div className="bento-metric-col">
+                <span className="bento-metric-num gradient-text">14+</span>
+                <span className="bento-metric-label">{t('bento.metrics.models')}</span>
+              </div>
+              <div className="bento-metric-col">
+                <span className="bento-metric-num gradient-text">18+</span>
+                <span className="bento-metric-label">{t('bento.metrics.certifications')}</span>
+              </div>
+              <div className="bento-metric-col">
+                <span className="bento-metric-num gradient-text">5+</span>
+                <span className="bento-metric-label">{t('bento.metrics.honors')}</span>
+              </div>
+            </div>
+          </SpotlightCard>
+        </motion.div>
 
         {/* Scroll indicator */}
         <motion.div
@@ -318,30 +327,32 @@ export default function HomePage() {
                     transitionSpeed={2500}
                     className="tilt-wrapper"
                   >
-                    <motion.div
-                      className="project-card featured-project-card"
-                      variants={scaleUp}
-                      custom={idx}
-                      onClick={() => handleFeaturedProjectClick(project)}
-                    >
-                      <div className="project-card-link">
-                        {isLinkType(type) && <span className="external-badge">Link</span>}
-                        <img
-                          src={getPreviewForItem(project, getFileForItem(project) || '/assets/images/preview.png')}
-                          alt={lang === 'en' ? project.title_en : project.title_id}
-                          className="project-image-preview"
-                          loading="lazy"
-                          onError={(event) => {
-                            const fallbackSrc = getFileForItem(project) || '/assets/images/preview.png';
-                            if (event.currentTarget.src !== new URL(fallbackSrc, window.location.origin).href) {
-                              event.currentTarget.src = fallbackSrc;
-                            }
-                          }}
-                        />
-                        <div className="project-card-title">
-                          {lang === 'en' ? project.title_en : project.title_id}
+                    <motion.div variants={scaleUp} custom={idx} style={{ height: '100%' }}>
+                      <SpotlightCard
+                        className="project-card featured-project-card"
+                        borderBeam={true}
+                        spotlightColor="rgba(0, 221, 179, 0.18)"
+                        onClick={() => handleFeaturedProjectClick(project)}
+                      >
+                        <div className="project-card-link">
+                          {isLinkType(type) && <span className="external-badge">Link</span>}
+                          <img
+                            src={getPreviewForItem(project, getFileForItem(project) || '/assets/images/preview.png')}
+                            alt={lang === 'en' ? project.title_en : project.title_id}
+                            className="project-image-preview"
+                            loading="lazy"
+                            onError={(event) => {
+                              const fallbackSrc = getFileForItem(project) || '/assets/images/preview.png';
+                              if (event.currentTarget.src !== new URL(fallbackSrc, window.location.origin).href) {
+                                event.currentTarget.src = fallbackSrc;
+                              }
+                            }}
+                          />
+                          <div className="project-card-title">
+                            {lang === 'en' ? project.title_en : project.title_id}
+                          </div>
                         </div>
-                      </div>
+                      </SpotlightCard>
                     </motion.div>
                   </Tilt>
                 );
