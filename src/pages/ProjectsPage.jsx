@@ -33,15 +33,27 @@ export default function ProjectsPage() {
 
   useEffect(() => {
     let isMounted = true;
-    getCachedProjects().then(({ projects: nextProjects, categories: nextCategories }) => {
-      if (isMounted) {
-        setCategories(nextCategories);
-        setProjects(nextProjects);
-        setIsLoading(false);
-      }
-    });
+    const loadProjects = () => {
+      getCachedProjects().then(({ projects: nextProjects, categories: nextCategories }) => {
+        if (isMounted) {
+          setCategories(nextCategories);
+          setProjects(nextProjects);
+          setIsLoading(false);
+        }
+      });
+    };
+
+    loadProjects();
+
+    const handleCacheInvalidated = () => {
+      loadProjects();
+    };
+
+    window.addEventListener('portfolio-cache-invalidated', handleCacheInvalidated);
+
     return () => {
       isMounted = false;
+      window.removeEventListener('portfolio-cache-invalidated', handleCacheInvalidated);
     };
   }, []);
 

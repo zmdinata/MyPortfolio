@@ -32,7 +32,8 @@ import {
   portfolioItemTypes,
   uploadPortfolioFile,
 } from '../../lib/portfolioMedia';
-import { mergePortfolioCategories, mergePortfolioItems } from '../../lib/portfolioFallbacks';
+import { markStaticIdDeleted, mergePortfolioCategories, mergePortfolioItems } from '../../lib/portfolioFallbacks';
+import { invalidatePortfolioCache } from '../../lib/portfolioCache';
 import '../../styles/pages/admin-manage.css';
 
 const blankCategory = {
@@ -338,7 +339,10 @@ export default function PortfolioCrudManager({
     if (!window.confirm(`Delete this ${label.singular.toLowerCase()}?`)) return;
 
     if (!isUuid(item.id)) {
+      markStaticIdDeleted(item.id);
+      if (item.source_key) markStaticIdDeleted(item.source_key);
       setItems((current) => current.filter((candidate) => candidate.id !== item.id));
+      invalidatePortfolioCache();
       return;
     }
 
@@ -348,6 +352,7 @@ export default function PortfolioCrudManager({
       return;
     }
 
+    invalidatePortfolioCache();
     fetchData();
   };
 
@@ -355,7 +360,10 @@ export default function PortfolioCrudManager({
     if (!window.confirm(`Delete category "${categoryLabel(category)}"? Existing items will become uncategorized.`)) return;
 
     if (!isUuid(category.id)) {
+      markStaticIdDeleted(category.id);
+      if (category.slug) markStaticIdDeleted(category.slug);
       setCategories((current) => current.filter((candidate) => candidate.id !== category.id));
+      invalidatePortfolioCache();
       return;
     }
 
@@ -365,6 +373,7 @@ export default function PortfolioCrudManager({
       return;
     }
 
+    invalidatePortfolioCache();
     fetchData();
   };
 
@@ -393,6 +402,7 @@ export default function PortfolioCrudManager({
     }
 
     setCategoryModalOpen(false);
+    invalidatePortfolioCache();
     fetchData();
   };
 
@@ -419,6 +429,7 @@ export default function PortfolioCrudManager({
     }
 
     setItemModalOpen(false);
+    invalidatePortfolioCache();
     fetchData();
   };
 
@@ -507,6 +518,7 @@ export default function PortfolioCrudManager({
       return;
     }
 
+    invalidatePortfolioCache();
     fetchData();
   };
 

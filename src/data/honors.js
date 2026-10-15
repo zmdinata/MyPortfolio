@@ -11,16 +11,4 @@ export const honors = [
     image: '/assets/honors/honor2.png',
     type: 'image',
   },
-  {
-    id: 'honor-3',
-    title: { en: 'Finalist / Participant: AMD Developer Hackathon ACT II', id: 'Partisipan / Finalis: AMD Developer Hackathon ACT II' },
-    image: '/assets/honors/honor2.png',
-    type: 'image',
-  },
-  {
-    id: 'honor-4',
-    title: { en: 'Full Scholarship Awardee: Pijak x IBM SkillsBuild AI Cohort', id: 'Penerima Beasiswa Penuh: Pijak x IBM SkillsBuild AI Cohort' },
-    image: '/assets/honors/honor2.png',
-    type: 'image',
-  },
 ];

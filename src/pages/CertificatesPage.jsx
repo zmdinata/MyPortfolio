@@ -33,26 +33,45 @@ export default function CertificatesPage() {
 
   useEffect(() => {
     let isMounted = true;
-    getCachedCertificates().then(({ certificates: nextCerts, categories: nextCats }) => {
-      if (isMounted) {
-        setCategories(nextCats);
-        setCertificates(nextCerts);
-        setIsLoading(false);
-      }
-    });
+    const loadCertificates = () => {
+      getCachedCertificates().then(({ certificates: nextCerts, categories: nextCats }) => {
+        if (isMounted) {
+          setCategories(nextCats);
+          setCertificates(nextCerts);
+          setIsLoading(false);
+        }
+      });
+    };
+
+    loadCertificates();
+
+    const handleCacheInvalidated = () => {
+      loadCertificates();
+    };
+
+    window.addEventListener('portfolio-cache-invalidated', handleCacheInvalidated);
+
     return () => {
       isMounted = false;
+      window.removeEventListener('portfolio-cache-invalidated', handleCacheInvalidated);
     };
   }, []);
 
   const categoryGroups = useMemo(() => {
-    const categoryMap = new Map(categories.map((category) => [category.id, category]));
-    const uncategorized = certificates.filter((cert) => !categoryMap.has(cert.category_id));
+    const isInCategory = (cert, cat) =>
+      cert.category_id === cat.id ||
+      cert.category_id === cat.slug ||
+      cert.category === cat.slug ||
+      cert.category === cat.id;
+
+    const uncategorized = certificates.filter(
+      (cert) => !categories.some((cat) => isInCategory(cert, cat))
+    );
 
     return categories
       .map((category) => ({
         category,
-        items: certificates.filter((cert) => cert.category_id === category.id),
+        items: certificates.filter((cert) => isInCategory(cert, category)),
       }))
       .filter((group) => group.items.length > 0)
       .concat(

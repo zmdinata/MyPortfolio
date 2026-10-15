@@ -185,3 +185,48 @@ ON CONFLICT (id_string) DO UPDATE SET
   title_en = EXCLUDED.title_en,
   title_id = EXCLUDED.title_id,
   file = EXCLUDED.file;
+
+-- 5. SINKRONISASI HONORS & PENGHARGAAN (2 Item Aktif)
+-- Pastikan kategori speaking dan competition tersedia
+INSERT INTO public.honor_categories (slug, name_en, name_id, icon_name, sort_order)
+VALUES 
+  ('speaking', 'Speaking & Teaching', 'Pemateri & Edukasi', 'mic', 1),
+  ('competition', 'Competition Awards', 'Penghargaan Lomba', 'medal', 2)
+ON CONFLICT (slug) DO NOTHING;
+
+-- Hapus item honors yang sudah dihapus oleh user
+DELETE FROM public.honors WHERE source_key IN ('static:honor-3', 'static:honor-4');
+
+-- Masukkan 2 item honors resmi
+INSERT INTO public.honors (
+  source_key, category_id, title_en, title_id, file_path, preview_path, image_path, type, sort_order
+)
+SELECT 
+  'static:honor-1',
+  id,
+  'Speaker: Business & Blockchain',
+  'Pemateri: Bisnis & Blockchain',
+  '/assets/honors/honor1.jpeg',
+  '/assets/honors/honor1.jpeg',
+  '/assets/honors/honor1.jpeg',
+  'image',
+  1
+FROM public.honor_categories WHERE slug = 'speaking'
+ON CONFLICT DO NOTHING;
+
+INSERT INTO public.honors (
+  source_key, category_id, title_en, title_id, file_path, preview_path, image_path, type, sort_order
+)
+SELECT 
+  'static:honor-2',
+  id,
+  'Bronze Medal: Business Plan Competition (UNY 2025)',
+  'Medali Perunggu: Lomba Business Plan (UNY 2025)',
+  '/assets/honors/honor2.png',
+  '/assets/honors/honor2.png',
+  '/assets/honors/honor2.png',
+  'image',
+  2
+FROM public.honor_categories WHERE slug = 'competition'
+ON CONFLICT DO NOTHING;
+

@@ -33,26 +33,45 @@ export default function HonorsPage() {
 
   useEffect(() => {
     let isMounted = true;
-    getCachedHonors().then(({ honors: nextHonors, categories: nextCats }) => {
-      if (isMounted) {
-        setCategories(nextCats);
-        setHonors(nextHonors);
-        setIsLoading(false);
-      }
-    });
+    const loadHonors = () => {
+      getCachedHonors().then(({ honors: nextHonors, categories: nextCats }) => {
+        if (isMounted) {
+          setCategories(nextCats);
+          setHonors(nextHonors);
+          setIsLoading(false);
+        }
+      });
+    };
+
+    loadHonors();
+
+    const handleCacheInvalidated = () => {
+      loadHonors();
+    };
+
+    window.addEventListener('portfolio-cache-invalidated', handleCacheInvalidated);
+
     return () => {
       isMounted = false;
+      window.removeEventListener('portfolio-cache-invalidated', handleCacheInvalidated);
     };
   }, []);
 
   const categoryGroups = useMemo(() => {
-    const categoryMap = new Map(categories.map((category) => [category.id, category]));
-    const uncategorized = honors.filter((honor) => !categoryMap.has(honor.category_id));
+    const isInCategory = (honor, cat) =>
+      honor.category_id === cat.id ||
+      honor.category_id === cat.slug ||
+      honor.category === cat.slug ||
+      honor.category === cat.id;
+
+    const uncategorized = honors.filter(
+      (honor) => !categories.some((cat) => isInCategory(honor, cat))
+    );
 
     return categories
       .map((category) => ({
         category,
-        items: honors.filter((honor) => honor.category_id === category.id),
+        items: honors.filter((honor) => isInCategory(honor, category)),
       }))
       .filter((group) => group.items.length > 0)
       .concat(

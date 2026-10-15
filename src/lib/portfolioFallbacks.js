@@ -1,6 +1,6 @@
-import { projects as localProjects } from '../data/projects';
-import { certificates as localCertificates } from '../data/certificates';
-import { honors as localHonors } from '../data/honors';
+import { projects as localProjects } from '../data/projects.js';
+import { certificates as localCertificates } from '../data/certificates.js';
+import { honors as localHonors } from '../data/honors.js';
 
 export const projectCategoryFallbacks = [
   { id: 'data', slug: 'data', name_en: 'AI & Data Systems', name_id: 'Sistem AI & Data', icon_name: 'brain', sort_order: 1 },
@@ -107,13 +107,39 @@ export function mergePortfolioCategories(dbCategories = [], fallbackCategories =
   return merged.sort((a, b) => (a.sort_order ?? 999) - (b.sort_order ?? 999));
 }
 
+export function getDeletedStaticIds() {
+  try {
+    const raw = typeof window !== 'undefined' ? localStorage.getItem('portfolio_deleted_static_ids') : null;
+    return raw ? JSON.parse(raw) : [];
+  } catch {
+    return [];
+  }
+}
+
+export function markStaticIdDeleted(id) {
+  try {
+    if (typeof window === 'undefined') return;
+    const current = getDeletedStaticIds();
+    if (!current.includes(id)) {
+      current.push(id);
+      localStorage.setItem('portfolio_deleted_static_ids', JSON.stringify(current));
+    }
+  } catch (err) {
+    console.warn('Failed to save deleted static ID:', err);
+  }
+}
+
 function matchesFallback(item, fallbackItem, contentType) {
   if (!item || !fallbackItem) return false;
   if (item.source_key && fallbackItem.source_key && item.source_key === fallbackItem.source_key) return true;
   if (item.id === fallbackItem.id) return true;
   if (item.id_string && fallbackItem.id_string && item.id_string === fallbackItem.id_string) return true;
 
-  if (contentType === 'project') {
+  const isProject = contentType === 'project' || contentType === 'projects';
+  const isCertificate = contentType === 'certificate' || contentType === 'certificates';
+  const isHonor = contentType === 'honor' || contentType === 'honors';
+
+  if (isProject) {
     return Boolean(
       (item.title_en && item.title_en === fallbackItem.title_en) ||
       (item.title_id && item.title_id === fallbackItem.title_id) ||
@@ -121,14 +147,14 @@ function matchesFallback(item, fallbackItem, contentType) {
     );
   }
 
-  if (contentType === 'certificate') {
+  if (isCertificate) {
     return Boolean(
       (item.title && item.title === fallbackItem.title) ||
       (item.file_path && fallbackItem.file_path && item.file_path === fallbackItem.file_path)
     );
   }
 
-  if (contentType === 'honor') {
+  if (isHonor) {
     return Boolean(
       (item.title_en && item.title_en === fallbackItem.title_en) ||
       (item.title_id && item.title_id === fallbackItem.title_id) ||
@@ -141,8 +167,12 @@ function matchesFallback(item, fallbackItem, contentType) {
 
 export function mergePortfolioItems(dbItems = [], fallbackItems = [], categories = [], contentType) {
   const merged = [...(dbItems || [])];
+  const deletedStaticIds = getDeletedStaticIds();
 
   (fallbackItems || []).forEach((fallbackItem) => {
+    if (deletedStaticIds.includes(fallbackItem.id) || (fallbackItem.source_key && deletedStaticIds.includes(fallbackItem.source_key))) {
+      return;
+    }
     const exists = merged.some((item) => matchesFallback(item, fallbackItem, contentType));
     if (!exists) merged.push(fallbackItem);
   });

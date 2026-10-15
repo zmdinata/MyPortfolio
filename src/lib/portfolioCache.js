@@ -157,7 +157,14 @@ export async function getCachedHonors() {
 
 export function invalidatePortfolioCache() {
   memoryCache.projects = null;
+  memoryCache.projectCategories = null;
   memoryCache.certificates = null;
+  memoryCache.certificateCategories = null;
   memoryCache.honors = null;
+  memoryCache.honorCategories = null;
   memoryCache.lastFetched = { projects: 0, certificates: 0, honors: 0 };
+
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(new CustomEvent('portfolio-cache-invalidated'));
+  }
 }
