@@ -156,6 +156,10 @@ export default function HonorsPage() {
                       alt={lang === 'en' ? honor.title_en : honor.title_id}
                       className="project-image-preview"
                       loading="lazy"
+                      onError={(e) => {
+                        e.currentTarget.onerror = null;
+                        e.currentTarget.src = '/assets/images/preview.png';
+                      }}
                     />
                     <div className="project-card-title">
                       {lang === 'en' ? honor.title_en : honor.title_id}

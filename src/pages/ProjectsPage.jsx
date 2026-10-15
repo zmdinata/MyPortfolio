@@ -153,6 +153,10 @@ export default function ProjectsPage() {
                       alt={lang === 'en' ? (project.title_en || project.title?.en) : (project.title_id || project.title?.id)}
                       className="project-image-preview"
                       loading="lazy"
+                      onError={(e) => {
+                        e.currentTarget.onerror = null;
+                        e.currentTarget.src = '/assets/images/preview.png';
+                      }}
                     />
                     <div className="project-card-title">
                       {lang === 'en' ? (project.title_en || project.title?.en) : (project.title_id || project.title?.id)}

@@ -160,6 +160,10 @@ export default function CertificatesPage() {
                     src={getPreviewForItem(cert, '/assets/images/preview.png')}
                     alt={cert.title}
                     loading="lazy"
+                    onError={(e) => {
+                      e.currentTarget.onerror = null;
+                      e.currentTarget.src = '/assets/images/preview.png';
+                    }}
                   />
                 </motion.div>
               );

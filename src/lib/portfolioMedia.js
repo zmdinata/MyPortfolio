@@ -111,3 +111,44 @@ export async function fetchLinkPreview(url) {
 
   return payload;
 }
+
+export async function generatePdfThumbnailBlob(fileOrUrl, targetWidth = 600) {
+  if (!fileOrUrl) throw new Error('No PDF file or URL provided');
+
+  const pdfjsLib = await import('pdfjs-dist');
+  const pdfWorkerUrl = (await import('pdfjs-dist/build/pdf.worker.min.mjs?url')).default;
+  pdfjsLib.GlobalWorkerOptions.workerSrc = pdfWorkerUrl;
+
+  let loadingTask;
+  if (fileOrUrl instanceof File || fileOrUrl instanceof Blob) {
+    const arrayBuffer = await fileOrUrl.arrayBuffer();
+    loadingTask = pdfjsLib.getDocument({ data: arrayBuffer });
+  } else {
+    loadingTask = pdfjsLib.getDocument(fileOrUrl);
+  }
+
+  const pdf = await loadingTask.promise;
+  const page = await pdf.getPage(1);
+  const unscaledViewport = page.getViewport({ scale: 1 });
+  const scale = targetWidth / unscaledViewport.width;
+  const viewport = page.getViewport({ scale });
+
+  const canvas = document.createElement('canvas');
+  canvas.width = Math.floor(viewport.width);
+  canvas.height = Math.floor(viewport.height);
+  const ctx = canvas.getContext('2d', { alpha: false });
+
+  await page.render({ canvasContext: ctx, viewport }).promise;
+
+  return new Promise((resolve, reject) => {
+    canvas.toBlob(
+      (blob) => {
+        if (blob) resolve(blob);
+        else reject(new Error('Failed to create thumbnail image blob from PDF canvas'));
+      },
+      'image/png',
+      0.92
+    );
+  });
+}
+

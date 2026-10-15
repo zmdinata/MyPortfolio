@@ -24,6 +24,7 @@ import {
   buildStorageFolder,
   deletePortfolioFileByUrl,
   fetchLinkPreview,
+  generatePdfThumbnailBlob,
   getDisplayType,
   getFileForItem,
   getPreviewForItem,
@@ -530,15 +531,68 @@ export default function PortfolioCrudManager({
       const previousUrl = itemForm[field];
       const url = await uploadPortfolioFile(file, buildStorageFolder(contentType, role));
       await deletePortfolioFileByUrl(previousUrl);
+
+      let autoPreviewUrl = null;
+      const fileField = getItemFileField(contentType);
+      const previewField = getItemPreviewField(contentType);
+      const isFileField = field === fileField;
+      const isPdf = file.type === 'application/pdf' || file.name?.toLowerCase().endsWith('.pdf');
+
+      // 1. If uploading an image as the main file, auto-set preview to the same image
+      if (isFileField && (itemForm.type === 'image' || file.type?.startsWith('image/'))) {
+        autoPreviewUrl = url;
+      }
+
+      // 2. If uploading a PDF as the main file, auto-extract page 1 to PNG and upload as preview!
+      if (isFileField && (itemForm.type === 'pdf' || isPdf)) {
+        try {
+          const thumbnailBlob = await generatePdfThumbnailBlob(file);
+          const safeName = file.name.replace(/\.[^/.]+$/, '').replace(/[^\w.\-]+/g, '-').toLowerCase();
+          const previewFile = new File([thumbnailBlob], `${safeName}-preview-${Date.now()}.png`, { type: 'image/png' });
+          autoPreviewUrl = await uploadPortfolioFile(previewFile, buildStorageFolder(contentType, 'previews'));
+        } catch (thumbErr) {
+          console.warn('Could not auto-generate PDF thumbnail:', thumbErr);
+        }
+      }
+
       setItemForm((current) => ({
         ...current,
         [field]: url,
-        ...(field === getItemFileField(contentType) && current.type === 'image'
-          ? { [getItemPreviewField(contentType)]: url }
-          : {}),
+        ...(autoPreviewUrl ? { [previewField]: autoPreviewUrl } : {}),
       }));
     } catch (error) {
       alert(error.message);
+    } finally {
+      setUploading('');
+    }
+  };
+
+  const generatePreviewFromPdf = async () => {
+    const fileField = getItemFileField(contentType);
+    const previewField = getItemPreviewField(contentType);
+    const pdfUrl = itemForm[fileField];
+
+    if (!pdfUrl) {
+      alert('Please upload or enter a PDF file URL first.');
+      return;
+    }
+
+    setUploading(previewField);
+    try {
+      const thumbnailBlob = await generatePdfThumbnailBlob(pdfUrl);
+      const safeName = itemForm.title || itemForm.title_en || 'pdf-preview';
+      const cleanName = String(safeName).replace(/[^\w.\-]+/g, '-').toLowerCase();
+      const previewFile = new File([thumbnailBlob], `${cleanName}-${Date.now()}.png`, { type: 'image/png' });
+      const previewUrl = await uploadPortfolioFile(previewFile, buildStorageFolder(contentType, 'previews'));
+
+      await deletePortfolioFileByUrl(itemForm[previewField]);
+
+      setItemForm((current) => ({
+        ...current,
+        [previewField]: previewUrl,
+      }));
+    } catch (err) {
+      alert(`Failed to generate preview from PDF: ${err.message}`);
     } finally {
       setUploading('');
     }
@@ -697,15 +751,29 @@ export default function PortfolioCrudManager({
             onChange={(event) => setItemForm({ ...itemForm, [previewField]: event.target.value })}
             placeholder="Upload a preview image or paste an image URL"
           />
-          <label className="upload-inline">
-            <FiImage />
-            {uploading === previewField ? 'Uploading...' : 'Upload Preview Image'}
-            <input
-              type="file"
-              accept="image/*"
-              onChange={(event) => uploadIntoItemField(event.target.files?.[0], previewField, 'previews')}
-            />
-          </label>
+          <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', alignItems: 'center', marginTop: '0.35rem' }}>
+            <label className="upload-inline">
+              <FiImage />
+              {uploading === previewField ? 'Uploading...' : 'Upload Preview Image'}
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(event) => uploadIntoItemField(event.target.files?.[0], previewField, 'previews')}
+              />
+            </label>
+            {itemForm.type === 'pdf' && itemForm[fileField] && (
+              <button
+                type="button"
+                className="upload-inline"
+                style={{ background: 'transparent', border: '1px solid rgba(255, 255, 255, 0.2)', cursor: 'pointer', color: 'inherit' }}
+                onClick={generatePreviewFromPdf}
+                disabled={Boolean(uploading)}
+              >
+                <FiRefreshCw className={uploading === previewField ? 'animate-spin' : ''} />
+                {uploading === previewField ? 'Generating...' : 'Auto-Generate from PDF'}
+              </button>
+            )}
+          </div>
         </div>
 
         <div className="media-preview-panel" style={{ gridColumn: '1 / -1' }}>
