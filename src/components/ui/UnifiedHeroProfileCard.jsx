@@ -56,6 +56,15 @@ export default function UnifiedHeroProfileCard({
     ? (profile?.about_description_en || 'Specialized in developing resilient Multi-Agent Swarms, Sovereign RAG architectures, and deterministic LLM orchestration pipelines with self-hosted homelab telemetry.')
     : (profile?.about_description_id || 'Berfokus pada pengembangan Multi-Agent Swarms mandiri, arsitektur Sovereign RAG berlatensi rendah, serta orkestrasi LLM deterministik yang didukung telemetri homelab self-hosted.'));
 
+  // Dynamic Executive Highlights text (Core Architecture & Production Standard)
+  const coreArchText = lang === 'en'
+    ? (profileConfig.core_architecture_en || profileConfig.core_architecture_id || DEFAULT_PROFILE_CONFIG.core_architecture_en)
+    : (profileConfig.core_architecture_id || profileConfig.core_architecture_en || DEFAULT_PROFILE_CONFIG.core_architecture_id);
+
+  const prodStandardText = lang === 'en'
+    ? (profileConfig.production_standard_en || profileConfig.production_standard_id || DEFAULT_PROFILE_CONFIG.production_standard_en)
+    : (profileConfig.production_standard_id || profileConfig.production_standard_en || DEFAULT_PROFILE_CONFIG.production_standard_id);
+
   const handleCopyEmail = () => {
     navigator.clipboard.writeText(emailToCopy);
     setCopiedEmail(true);
@@ -232,14 +241,14 @@ export default function UnifiedHeroProfileCard({
                   <span className="unified-hl-dot" />
                   <div>
                     <strong>{lang === 'en' ? 'Core Architecture:' : 'Arsitektur Utama:'}</strong>{' '}
-                    <span>{lang === 'en' ? 'Sovereign RAG, Autonomous Swarms, Deterministic Tool Gates' : 'Sovereign RAG, Agen Mandiri, Evaluasi Tool Deterministik'}</span>
+                    <span>{coreArchText}</span>
                   </div>
                 </div>
                 <div className="unified-highlight-item">
                   <span className="unified-hl-dot" />
                   <div>
                     <strong>{lang === 'en' ? 'Production Standard:' : 'Standar Produksi:'}</strong>{' '}
-                    <span>{lang === 'en' ? 'Sub-second latency (<1.2s), continuous homelab telemetry' : 'Latensi sub-detik (<1.2s), pemantauan telemetri homelab kontinu'}</span>
+                    <span>{prodStandardText}</span>
                   </div>
                 </div>
               </div>

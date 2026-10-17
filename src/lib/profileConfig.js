@@ -11,6 +11,10 @@ export const DEFAULT_PROFILE_CONFIG = {
     id: 'Indonesian (Native)',
     en: 'English (Professional Working)',
   },
+  core_architecture_en: 'Sovereign RAG, Autonomous Swarms, Deterministic Tool Gates',
+  core_architecture_id: 'Sovereign RAG, Agen Mandiri, Evaluasi Tool Deterministik',
+  production_standard_en: 'Sub-second latency (<1.2s), continuous homelab telemetry',
+  production_standard_id: 'Latensi sub-detik (<1.2s), pemantauan telemetri homelab kontinu',
   agentz_prompts: [
     {
       text_id: 'Ceritakan proyek Agent-Z Homelab di ThinkPad T440',
@@ -140,6 +144,10 @@ export async function fetchFullProfile() {
         email: data.email || localConfig.email,
         chips: data.chips || localConfig.chips,
         languages: data.languages || localConfig.languages,
+        core_architecture_en: data.core_architecture_en || localConfig.core_architecture_en || DEFAULT_PROFILE_CONFIG.core_architecture_en,
+        core_architecture_id: data.core_architecture_id || localConfig.core_architecture_id || DEFAULT_PROFILE_CONFIG.core_architecture_id,
+        production_standard_en: data.production_standard_en || localConfig.production_standard_en || DEFAULT_PROFILE_CONFIG.production_standard_en,
+        production_standard_id: data.production_standard_id || localConfig.production_standard_id || DEFAULT_PROFILE_CONFIG.production_standard_id,
         agentz_prompts: Array.isArray(data.agentz_prompts) && data.agentz_prompts.length > 0
           ? data.agentz_prompts
           : localConfig.agentz_prompts,
@@ -161,6 +169,10 @@ ALTER TABLE public.profile ADD COLUMN IF NOT EXISTS hero_role TEXT;
 ALTER TABLE public.profile ADD COLUMN IF NOT EXISTS email TEXT;
 ALTER TABLE public.profile ADD COLUMN IF NOT EXISTS chips JSONB;
 ALTER TABLE public.profile ADD COLUMN IF NOT EXISTS languages JSONB;
+ALTER TABLE public.profile ADD COLUMN IF NOT EXISTS core_architecture_en TEXT;
+ALTER TABLE public.profile ADD COLUMN IF NOT EXISTS core_architecture_id TEXT;
+ALTER TABLE public.profile ADD COLUMN IF NOT EXISTS production_standard_en TEXT;
+ALTER TABLE public.profile ADD COLUMN IF NOT EXISTS production_standard_id TEXT;
 ALTER TABLE public.profile ADD COLUMN IF NOT EXISTS agentz_prompts JSONB;
 ALTER TABLE public.profile ADD COLUMN IF NOT EXISTS specialization_decks JSONB;
 `;

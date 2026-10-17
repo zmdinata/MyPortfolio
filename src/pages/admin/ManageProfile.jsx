@@ -87,6 +87,10 @@ const ManageProfile = () => {
     hero_description_id: '',
     about_description_en: '',
     about_description_id: '',
+    core_architecture_en: DEFAULT_PROFILE_CONFIG.core_architecture_en,
+    core_architecture_id: DEFAULT_PROFILE_CONFIG.core_architecture_id,
+    production_standard_en: DEFAULT_PROFILE_CONFIG.production_standard_en,
+    production_standard_id: DEFAULT_PROFILE_CONFIG.production_standard_id,
     avatar_url: '/assets/images/photo.png',
     cover_url: '',
     full_name: 'Zacky Muhammad Dinata',
@@ -114,6 +118,10 @@ const ManageProfile = () => {
         hero_description_id: fullProfile.hero_description_id || LATEST_CV_PROFILE.hero_description_id,
         about_description_en: fullProfile.about_description_en || LATEST_CV_PROFILE.about_description_en,
         about_description_id: fullProfile.about_description_id || LATEST_CV_PROFILE.about_description_id,
+        core_architecture_en: fullProfile.core_architecture_en || DEFAULT_PROFILE_CONFIG.core_architecture_en,
+        core_architecture_id: fullProfile.core_architecture_id || DEFAULT_PROFILE_CONFIG.core_architecture_id,
+        production_standard_en: fullProfile.production_standard_en || DEFAULT_PROFILE_CONFIG.production_standard_en,
+        production_standard_id: fullProfile.production_standard_id || DEFAULT_PROFILE_CONFIG.production_standard_id,
         avatar_url: fullProfile.avatar_url || DEFAULT_PROFILE_CONFIG.avatar_url,
         cover_url: fullProfile.cover_url || '',
         full_name: fullProfile.full_name || DEFAULT_PROFILE_CONFIG.full_name,
@@ -220,6 +228,10 @@ const ManageProfile = () => {
       hero_description_id: LATEST_CV_PROFILE.hero_description_id,
       about_description_en: LATEST_CV_PROFILE.about_description_en,
       about_description_id: LATEST_CV_PROFILE.about_description_id,
+      core_architecture_en: DEFAULT_PROFILE_CONFIG.core_architecture_en,
+      core_architecture_id: DEFAULT_PROFILE_CONFIG.core_architecture_id,
+      production_standard_en: DEFAULT_PROFILE_CONFIG.production_standard_en,
+      production_standard_id: DEFAULT_PROFILE_CONFIG.production_standard_id,
       full_name: 'Zacky Muhammad Dinata',
       hero_role: 'AI Engineer & Multi-Agent Architect',
       chips_string: 'PyTorch, LLMs & RAG, Computer Vision, Fullstack',
@@ -276,6 +288,10 @@ const ManageProfile = () => {
       hero_description_id: formData.hero_description_id,
       about_description_en: formData.about_description_en,
       about_description_id: formData.about_description_id,
+      core_architecture_en: formData.core_architecture_en,
+      core_architecture_id: formData.core_architecture_id,
+      production_standard_en: formData.production_standard_en,
+      production_standard_id: formData.production_standard_id,
       avatar_url: formData.avatar_url,
       cover_url: formData.cover_url,
       full_name: formData.full_name,
@@ -325,6 +341,10 @@ const ManageProfile = () => {
             email: formData.email,
             chips: chipsArray,
             languages: fullConfig.languages,
+            core_architecture_en: formData.core_architecture_en,
+            core_architecture_id: formData.core_architecture_id,
+            production_standard_en: formData.production_standard_en,
+            production_standard_id: formData.production_standard_id,
             specialization_decks: formData.decks,
             agentz_prompts: formData.agentz_prompts || DEFAULT_PROFILE_CONFIG.agentz_prompts,
           })
@@ -938,6 +958,98 @@ const ManageProfile = () => {
               placeholder="Detail profil dan ringkasan keahlian dalam bahasa Indonesia..."
             />
             <div className="char-count">{formData.about_description_id.length} karakter</div>
+          </div>
+        </div>
+
+        {/* Section 8: Poin Kunci Ringkasan Eksekutif (Core Architecture & Production Standard) */}
+        <div className="form-section" style={{ borderBottom: 'none' }}>
+          <h3>
+            <FiCheckCircle /> Poin Kunci Ringkasan Eksekutif (Highlights)
+          </h3>
+          <p className="section-desc">
+            Edit teks 2 poin sorotan arsitektur dan standar produksi di bawah ringkasan eksekutif kartu beranda.
+          </p>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '20px', marginTop: '16px' }}>
+            {/* Box 1: Core Architecture */}
+            <div
+              style={{
+                background: 'rgba(255, 255, 255, 0.02)',
+                border: '1px solid rgba(0, 221, 179, 0.25)',
+                borderRadius: '12px',
+                padding: '18px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '12px',
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#00ddb3', display: 'inline-block' }} />
+                <strong style={{ color: '#00ddb3', fontSize: '0.95rem' }}>1. Core Architecture (Arsitektur Utama)</strong>
+              </div>
+
+              <div className="form-group" style={{ margin: 0 }}>
+                <label style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.8)', marginBottom: '4px' }}>Teks English (EN)</label>
+                <input
+                  type="text"
+                  value={formData.core_architecture_en}
+                  onChange={(e) => setFormData({ ...formData, core_architecture_en: e.target.value })}
+                  placeholder="e.g. Sovereign RAG, Autonomous Swarms, Deterministic Tool Gates"
+                  style={{ width: '100%', padding: '9px 12px', background: 'rgba(0,0,0,0.35)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px', color: '#fff', fontSize: '0.85rem' }}
+                />
+              </div>
+
+              <div className="form-group" style={{ margin: 0 }}>
+                <label style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.8)', marginBottom: '4px' }}>Teks Bahasa Indonesia (ID)</label>
+                <input
+                  type="text"
+                  value={formData.core_architecture_id}
+                  onChange={(e) => setFormData({ ...formData, core_architecture_id: e.target.value })}
+                  placeholder="contoh: Sovereign RAG, Agen Mandiri, Evaluasi Tool Deterministik"
+                  style={{ width: '100%', padding: '9px 12px', background: 'rgba(0,0,0,0.35)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px', color: '#fff', fontSize: '0.85rem' }}
+                />
+              </div>
+            </div>
+
+            {/* Box 2: Production Standard */}
+            <div
+              style={{
+                background: 'rgba(255, 255, 255, 0.02)',
+                border: '1px solid rgba(0, 210, 255, 0.25)',
+                borderRadius: '12px',
+                padding: '18px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '12px',
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#00d2ff', display: 'inline-block' }} />
+                <strong style={{ color: '#00d2ff', fontSize: '0.95rem' }}>2. Production Standard (Standar Produksi)</strong>
+              </div>
+
+              <div className="form-group" style={{ margin: 0 }}>
+                <label style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.8)', marginBottom: '4px' }}>Teks English (EN)</label>
+                <input
+                  type="text"
+                  value={formData.production_standard_en}
+                  onChange={(e) => setFormData({ ...formData, production_standard_en: e.target.value })}
+                  placeholder="e.g. Sub-second latency (<1.2s), continuous homelab telemetry"
+                  style={{ width: '100%', padding: '9px 12px', background: 'rgba(0,0,0,0.35)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px', color: '#fff', fontSize: '0.85rem' }}
+                />
+              </div>
+
+              <div className="form-group" style={{ margin: 0 }}>
+                <label style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.8)', marginBottom: '4px' }}>Teks Bahasa Indonesia (ID)</label>
+                <input
+                  type="text"
+                  value={formData.production_standard_id}
+                  onChange={(e) => setFormData({ ...formData, production_standard_id: e.target.value })}
+                  placeholder="contoh: Latensi sub-detik (<1.2s), pemantauan telemetri homelab kontinu"
+                  style={{ width: '100%', padding: '9px 12px', background: 'rgba(0,0,0,0.35)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px', color: '#fff', fontSize: '0.85rem' }}
+                />
+              </div>
+            </div>
           </div>
         </div>
 
