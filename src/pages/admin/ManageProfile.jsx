@@ -38,6 +38,7 @@ import {
   CATEGORY_ICON_GROUPS,
   normalizeIconName,
 } from '../../lib/categoryIcons';
+import CoverCropperModal from '../../components/ui/CoverCropperModal';
 import '../../styles/pages/admin-manage.css';
 import '../../styles/pages/admin-profile.css';
 
@@ -45,9 +46,13 @@ const ManageProfile = () => {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
+  const [uploadingCover, setUploadingCover] = useState(false);
+  const [cropperOpen, setCropperOpen] = useState(false);
+  const [cropperRawSrc, setCropperRawSrc] = useState(null);
   const [statusMsg, setStatusMsg] = useState(null);
   const [copiedSql, setCopiedSql] = useState(false);
   const fileInputRef = useRef(null);
+  const coverFileInputRef = useRef(null);
   const [tabIconSearch, setTabIconSearch] = useState({ 0: '', 1: '', 2: '' });
   const [iconModal, setIconModal] = useState({
     isOpen: false,
@@ -83,6 +88,7 @@ const ManageProfile = () => {
     about_description_en: '',
     about_description_id: '',
     avatar_url: '/assets/images/photo.png',
+    cover_url: '',
     full_name: 'Zacky Muhammad Dinata',
     hero_role: 'AI Engineer & Multi-Agent Architect',
     email: 'zmdinata@gmail.com',
@@ -109,6 +115,7 @@ const ManageProfile = () => {
         about_description_en: fullProfile.about_description_en || LATEST_CV_PROFILE.about_description_en,
         about_description_id: fullProfile.about_description_id || LATEST_CV_PROFILE.about_description_id,
         avatar_url: fullProfile.avatar_url || DEFAULT_PROFILE_CONFIG.avatar_url,
+        cover_url: fullProfile.cover_url || '',
         full_name: fullProfile.full_name || DEFAULT_PROFILE_CONFIG.full_name,
         hero_role: fullProfile.hero_role || DEFAULT_PROFILE_CONFIG.hero_role,
         email: fullProfile.email || DEFAULT_PROFILE_CONFIG.email,
@@ -163,6 +170,45 @@ const ManageProfile = () => {
       });
     } finally {
       setUploadingAvatar(false);
+    }
+  };
+
+  const handleCoverFileSelected = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const localUrl = URL.createObjectURL(file);
+    setCropperRawSrc(localUrl);
+    setCropperOpen(true);
+    // Reset file input value so user can re-select same file if needed
+    e.target.value = '';
+  };
+
+  const handleCoverCropComplete = async ({ file, dataUrl }) => {
+    setUploadingCover(true);
+    setStatusMsg(null);
+
+    // 1. Instant preview using cropped dataURL
+    setFormData((prev) => ({ ...prev, cover_url: dataUrl }));
+
+    // 2. Upload to Supabase Storage
+    try {
+      const uploadedUrl = await uploadPortfolioFile(file, 'profile/covers');
+      if (uploadedUrl) {
+        setFormData((prev) => ({ ...prev, cover_url: uploadedUrl }));
+        setStatusMsg({
+          type: 'success',
+          text: 'Foto sampul HD berhasil dipotong & diunggah ke Supabase Storage!',
+        });
+      }
+    } catch (uploadErr) {
+      console.warn('Supabase storage cover upload note, using local dataUrl:', uploadErr);
+      setStatusMsg({
+        type: 'info',
+        text: 'Foto sampul disimpan ke sesi lokal. Klik "Simpan Semua Perubahan Profil" untuk menerapkan.',
+      });
+    } finally {
+      setUploadingCover(false);
     }
   };
 
@@ -231,6 +277,7 @@ const ManageProfile = () => {
       about_description_en: formData.about_description_en,
       about_description_id: formData.about_description_id,
       avatar_url: formData.avatar_url,
+      cover_url: formData.cover_url,
       full_name: formData.full_name,
       hero_role: formData.hero_role,
       email: formData.email,
@@ -272,6 +319,7 @@ const ManageProfile = () => {
           .from('profile')
           .update({
             avatar_url: formData.avatar_url,
+            cover_url: formData.cover_url,
             full_name: formData.full_name,
             hero_role: formData.hero_role,
             email: formData.email,
@@ -371,6 +419,67 @@ const ManageProfile = () => {
 
       {/* Main Profile Form Card */}
       <form onSubmit={handleSubmit} className="form-card profile-form">
+        {/* Section 0: Foto Sampul (Cover Banner HD 16:5) */}
+        <div className="form-section">
+          <h3>
+            <FiImage /> Foto Sampul (Cover Banner HD)
+          </h3>
+          <p className="section-desc">
+            Foto sampul horizontal pada kartu profil eksekutif beranda dengan rasio aspek tetap (16:5 HD). Dilengkapi fitur crop manual interaktif untuk memilih posisi dan komposisi terbaik.
+          </p>
+
+          <div className="cover-edit-layout">
+            <div className="cover-preview-box">
+              {formData.cover_url ? (
+                <img
+                  src={formData.cover_url}
+                  alt="Cover Banner Preview"
+                  className="cover-preview-img"
+                  onError={(e) => {
+                    e.currentTarget.style.display = 'none';
+                    e.currentTarget.parentElement.classList.add('cover-preview-fallback');
+                  }}
+                />
+              ) : (
+                <div className="cover-preview-empty">
+                  <span>Belum ada foto sampul kustom (menggunakan tema gradien atmospheric bawaan)</span>
+                </div>
+              )}
+              <div className="cover-ratio-badge">HD 16:5 Fixed</div>
+            </div>
+
+            <div className="cover-controls">
+              <input
+                type="file"
+                ref={coverFileInputRef}
+                accept="image/*"
+                style={{ display: 'none' }}
+                onChange={handleCoverFileSelected}
+              />
+              <button
+                type="button"
+                className="upload-avatar-btn"
+                onClick={() => coverFileInputRef.current?.click()}
+                disabled={uploadingCover}
+              >
+                <FiUpload /> {uploadingCover ? 'Mengunggah Sampul...' : 'Pilih Foto & Crop Sampul'}
+              </button>
+              {formData.cover_url && (
+                <button
+                  type="button"
+                  className="reset-avatar-btn"
+                  onClick={() => setFormData({ ...formData, cover_url: '' })}
+                >
+                  Hapus / Reset ke Gradien Bawaan
+                </button>
+              )}
+              <small className="avatar-hint">
+                Resolusi rekomendasi: 1600x500px atau rasio 16:5. Foto dapat di-zoom dan digeser bebas sebelum disimpan.
+              </small>
+            </div>
+          </div>
+        </div>
+
         {/* Section 1: Foto Profil & Avatar */}
         <div className="form-section">
           <h3>
@@ -966,6 +1075,14 @@ const ManageProfile = () => {
           </div>
         </div>
       )}
+
+      {/* Modal Crop Manual Foto Sampul (HD 16:5) */}
+      <CoverCropperModal
+        isOpen={cropperOpen}
+        imageSrc={cropperRawSrc}
+        onClose={() => setCropperOpen(false)}
+        onCropComplete={handleCoverCropComplete}
+      />
     </div>
   );
 };

@@ -98,6 +98,23 @@
 }
 
 /* Card layout sizing */
+.bento-card-unified-hero {
+  grid-column: span 12;
+  padding: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(180deg, rgba(16, 20, 32, 0.96) 0%, rgba(10, 13, 22, 0.98) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-xl);
+  min-height: 520px;
+}
+
+[data-theme="light"] .bento-card-unified-hero {
+  background: #ffffff;
+  border-color: rgba(0, 0, 0, 0.08);
+}
+
 .bento-card-main {
   grid-column: span 7;
   padding: 2.25rem;
@@ -1107,3 +1124,684 @@
     font-size: 0.8rem;
   }
 }
+
+/* ========================================================
+   Unified Executive Profile Card (LinkedIn Style)
+   Full 12-Column Hero Card: Anti AI-Slop, Clean, Recruiter-Ready
+   ======================================================== */
+.unified-cover-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 5;
+  min-height: 140px;
+  max-height: 280px;
+  overflow: hidden;
+  background: #090d18;
+}
+
+.unified-cover-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.unified-cover-gradient {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 80% 20%, rgba(0, 221, 179, 0.22) 0%, rgba(124, 111, 255, 0.18) 45%, rgba(10, 13, 24, 0.98) 100%);
+}
+
+.unified-cover-mesh {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 32px 32px;
+  opacity: 0.8;
+}
+
+.unified-cover-vignette {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(10, 13, 22, 0.1) 0%, rgba(10, 13, 22, 0.4) 60%, rgba(10, 13, 22, 0.98) 100%);
+  pointer-events: none;
+}
+
+[data-theme="light"] .unified-cover-vignette {
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.5) 60%, #ffffff 100%);
+}
+
+.unified-content-body {
+  padding: 0 2.25rem 2.25rem;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  z-index: 2;
+}
+
+/* Primary Identity Header: Avatar LEFT, Details RIGHT */
+.unified-identity-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 2rem;
+  margin-top: -3.5rem;
+  margin-bottom: 2rem;
+}
+
+.unified-avatar-container {
+  flex-shrink: 0;
+  position: relative;
+}
+
+.unified-avatar-ring {
+  position: relative;
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  padding: 4px;
+  background: linear-gradient(135deg, rgba(0, 221, 179, 0.8) 0%, rgba(124, 111, 255, 0.6) 100%);
+  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.65), 0 0 24px rgba(0, 221, 179, 0.25);
+}
+
+.unified-avatar-img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #0e121e;
+  border: 3px solid #0e121e;
+  display: block;
+}
+
+.unified-beacon-dot {
+  position: absolute;
+  bottom: 6px;
+  right: 6px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #00ddb3;
+  border: 3px solid #0e121e;
+  box-shadow: 0 0 10px #00ddb3;
+  animation: pulseBeacon 2s infinite;
+}
+
+/* Right Details Column */
+.unified-identity-details {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.unified-name-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.unified-name-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.unified-title {
+  font-family: var(--font-heading);
+  font-size: clamp(1.8rem, 3.2vw, 2.5rem);
+  font-weight: 900;
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+  margin: 0;
+}
+
+.unified-verified-icon {
+  color: #00d2ff;
+  display: inline-flex;
+  align-items: center;
+  filter: drop-shadow(0 0 8px rgba(0, 210, 255, 0.5));
+}
+
+.unified-avail-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.95rem;
+  border-radius: var(--radius-pill);
+  background: rgba(0, 221, 179, 0.12);
+  border: 1px solid rgba(0, 221, 179, 0.3);
+  color: var(--accent-secondary, #00ddb3);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.unified-role-headline {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #00d2ff;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.unified-bio-subtitle {
+  font-size: 0.95rem;
+  color: #c4c4dc;
+  line-height: 1.6;
+  margin: 0;
+  max-width: 880px;
+}
+
+[data-theme="light"] .unified-bio-subtitle {
+  color: #4b4b66;
+}
+
+/* Meta row: languages & tech stack chips */
+.unified-meta-row {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+  margin-top: 0.35rem;
+}
+
+.unified-lang-badges {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.unified-pill-lang {
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.78rem;
+  font-weight: 500;
+}
+
+.unified-chips-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+}
+
+.unified-chip-item {
+  padding: 0.25rem 0.7rem;
+  border-radius: 6px;
+  background: rgba(0, 210, 255, 0.07);
+  border: 1px solid rgba(0, 210, 255, 0.2);
+  color: #a5ecff;
+  font-size: 0.78rem;
+  font-weight: 500;
+}
+
+/* 2-Tier Action Buttons */
+.unified-actions-tier {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 0.8rem;
+}
+
+.unified-actions-row-primary {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.unified-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.7rem 1.4rem;
+  border-radius: var(--radius-pill);
+  background: linear-gradient(135deg, #00ddb3 0%, #00b4d8 100%);
+  color: #041019 !important;
+  font-weight: 700;
+  font-size: 0.92rem;
+  text-decoration: none;
+  border: none;
+  box-shadow: 0 4px 18px rgba(0, 221, 179, 0.35);
+  transition: all 0.22s ease;
+}
+
+.unified-btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 221, 179, 0.45);
+}
+
+.unified-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.7rem 1.3rem;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.unified-btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+.unified-btn-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.7rem 1.15rem;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.unified-btn-action:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  transform: translateY(-2px);
+}
+
+.unified-btn-action.copied {
+  background: rgba(46, 213, 115, 0.15);
+  border-color: #2ed573;
+  color: #2ed573;
+}
+
+.unified-btn-agentz {
+  border-color: rgba(0, 221, 179, 0.3);
+  color: #00ddb3;
+}
+
+.unified-btn-agentz:hover {
+  background: rgba(0, 221, 179, 0.15);
+  border-color: #00ddb3;
+  box-shadow: 0 0 16px rgba(0, 221, 179, 0.25);
+}
+
+.unified-actions-row-secondary {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.unified-btn-credential {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.95rem;
+  border-radius: 8px;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 0.82rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.unified-btn-credential:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.25);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+/* Lower Content Split (2 Balanced Columns) */
+.unified-lower-split {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  gap: 2rem;
+  margin-top: 1.5rem;
+  padding-top: 1.75rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+[data-theme="light"] .unified-lower-split {
+  border-color: rgba(0, 0, 0, 0.07);
+}
+
+.unified-section-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: #00d2ff;
+  margin-bottom: 0.85rem;
+}
+
+/* Left Column: Executive Summary */
+.unified-about-box {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 14px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  height: calc(100% - 2rem);
+}
+
+[data-theme="light"] .unified-about-box {
+  background: #f8fafc;
+  border-color: rgba(0, 0, 0, 0.06);
+}
+
+.unified-about-text {
+  font-size: 0.95rem;
+  color: #d1d5db;
+  line-height: 1.75;
+  margin: 0;
+}
+
+[data-theme="light"] .unified-about-text {
+  color: #374151;
+}
+
+.unified-about-highlights {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px dashed rgba(255, 255, 255, 0.08);
+}
+
+.unified-highlight-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  font-size: 0.86rem;
+  color: #9ca3af;
+  line-height: 1.5;
+}
+
+.unified-hl-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #00ddb3;
+  margin-top: 6px;
+  flex-shrink: 0;
+  box-shadow: 0 0 6px #00ddb3;
+}
+
+/* Right Column: 3 Tab Specialization Deck */
+.unified-deck-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.unified-deck-tabs {
+  display: flex;
+  gap: 0.5rem;
+  padding: 4px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  overflow-x: auto;
+}
+
+.unified-deck-tab-btn {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  padding: 0.55rem 0.85rem;
+  border-radius: 8px;
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.unified-deck-tab-btn:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.unified-deck-tab-btn.active {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--deck-accent, #00d2ff);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+}
+
+.unified-deck-tabpanel {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-left: 3px solid var(--deck-accent, #00d2ff);
+  border-radius: 14px;
+  padding: 1.4rem;
+  min-height: 220px;
+}
+
+[data-theme="light"] .unified-deck-tabpanel {
+  background: #f8fafc;
+  border-color: rgba(0, 0, 0, 0.06);
+  border-left-color: var(--deck-accent, #00d2ff);
+}
+
+.unified-deck-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.unified-deck-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.unified-deck-badge {
+  padding: 0.25rem 0.65rem;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--deck-accent, #00d2ff);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.unified-deck-link {
+  color: rgba(255, 255, 255, 0.6);
+  display: inline-flex;
+  align-items: center;
+  padding: 4px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.unified-deck-link:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.unified-deck-title {
+  margin: 0;
+  font-size: 1.12rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+[data-theme="light"] .unified-deck-title {
+  color: #111827;
+}
+
+.unified-deck-metric {
+  margin: 0;
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: var(--deck-accent, #00d2ff);
+}
+
+.unified-deck-desc {
+  margin: 0;
+  font-size: 0.88rem;
+  color: #9ca3af;
+  line-height: 1.6;
+}
+
+.unified-deck-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.4rem;
+}
+
+.unified-tag-pill {
+  padding: 0.2rem 0.6rem;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* ========================================================
+   Responsive Breakpoints for Unified Hero Card
+   Guaranteeing: Avatar LEFT, Text RIGHT on Desktop, Tablet & Mobile!
+   ======================================================== */
+@media (max-width: 1024px) {
+  .unified-identity-header {
+    margin-top: -2.8rem;
+    gap: 1.5rem;
+  }
+  .unified-avatar-ring {
+    width: 105px;
+    height: 105px;
+  }
+  .unified-lower-split {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .unified-content-body {
+    padding: 0 1.25rem 1.5rem;
+  }
+  .unified-identity-header {
+    display: flex;
+    flex-direction: row; /* TETAP KIRI (Avatar) & KANAN (Teks) */
+    align-items: flex-start;
+    gap: 1rem;
+    margin-top: -2.2rem;
+    margin-bottom: 1.25rem;
+  }
+  .unified-avatar-ring {
+    width: 82px;
+    height: 82px;
+    padding: 3px;
+  }
+  .unified-beacon-dot {
+    width: 14px;
+    height: 14px;
+    bottom: 2px;
+    right: 2px;
+  }
+  .unified-title {
+    font-size: 1.45rem;
+  }
+  .unified-role-headline {
+    font-size: 0.95rem;
+  }
+  .unified-bio-subtitle {
+    font-size: 0.85rem;
+    line-height: 1.5;
+  }
+  .unified-actions-row-primary {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    width: 100%;
+    gap: 0.5rem;
+  }
+  .unified-btn-primary {
+    grid-column: 1 / -1;
+    justify-content: center;
+  }
+  .unified-btn-secondary,
+  .unified-btn-action {
+    justify-content: center;
+  }
+  .unified-actions-row-secondary {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    width: 100%;
+    gap: 0.5rem;
+  }
+  .unified-btn-credential {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .unified-content-body {
+    padding: 0 1rem 1.25rem;
+  }
+  .unified-identity-header {
+    display: flex;
+    flex-direction: row; /* Konsisten KIRI (Avatar) & KANAN (Teks) */
+    align-items: flex-start;
+    gap: 0.75rem;
+    margin-top: -1.8rem;
+  }
+  .unified-avatar-ring {
+    width: 72px;
+    height: 72px;
+    padding: 2.5px;
+  }
+  .unified-beacon-dot {
+    width: 12px;
+    height: 12px;
+  }
+  .unified-title {
+    font-size: 1.25rem;
+  }
+  .unified-role-headline {
+    font-size: 0.85rem;
+  }
+  .unified-bio-subtitle {
+    font-size: 0.8rem;
+  }
+  .unified-meta-row {
+    gap: 0.5rem;
+  }
+  .unified-deck-tabs {
+    overflow-x: auto;
+  }
+  .unified-deck-tab-btn {
+    padding: 0.45rem 0.6rem;
+    font-size: 0.76rem;
+  }
+}
+

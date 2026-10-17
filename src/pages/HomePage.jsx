@@ -14,7 +14,7 @@ import PreviewModal from '../components/ui/PreviewModal';
 import SpotlightCard from '../components/ui/SpotlightCard';
 import InteractiveTerminal from '../components/ui/InteractiveTerminal';
 import AiTelemetryCard from '../components/ui/AiTelemetryCard';
-import ProfileInteractiveDeck from '../components/ui/ProfileInteractiveDeck';
+import UnifiedHeroProfileCard from '../components/ui/UnifiedHeroProfileCard';
 import AmbientGridMesh from '../components/ui/AmbientGridMesh';
 import { fadeLeft, fadeRight, fadeUp, scaleUp, smoothEase, stagger, staggerFast } from '../lib/motionConfig';
 import { projectCategoryFallbacks, projectItemFallbacks, mergePortfolioItems, resolveFeaturedProjects } from '../lib/portfolioFallbacks';
@@ -241,73 +241,14 @@ export default function HomePage() {
           animate="visible"
           variants={stagger}
         >
-          {/* Card 1: Main Hero Identity Card */}
-          <SpotlightCard className="bento-card-main" spotlightColor="rgba(124, 111, 255, 0.18)">
-            <div>
-              <div className="bento-hero-badge-row">
-                {isAvailable && (
-                  <div className="bento-avail-badge">
-                    <span className="bento-avail-beacon"></span>
-                    {t('hero.available')}
-                  </div>
-                )}
-                <span className="bento-kicker">{t('bento.kicker')}</span>
-              </div>
-              <motion.h1 className="bento-hero-title gradient-text" variants={fadeUp}>
-                {profileConfig.full_name || t('hero.name')}
-              </motion.h1>
-              <p className="bento-hero-bio">
-                {heroJob}
-              </p>
-            </div>
-
-            <div>
-              <div className="hero-meta" style={{ marginBottom: '1.5rem' }}>
-                <span className="hero-pill">{profileConfig.languages?.id || t('hero.langId')}</span>
-                <span className="hero-pill">{profileConfig.languages?.en || t('hero.langEn')}</span>
-              </div>
-
-              <div className="bento-hero-actions">
-                {/* Row 1: 100% Full-Width Primary CTA */}
-                <Link to="/projects" className="btn-primary">
-                  {t('hero.viewProjects')} <FiArrowRight />
-                </Link>
-
-                {/* Row 2: 50:50 Dynamic Action Pair */}
-                <button 
-                  type="button"
-                  onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })} 
-                  className="btn-secondary"
-                >
-                  {t('hero.contactMe')}
-                </button>
-                <button
-                  type="button"
-                  onClick={handleChatAgentZ}
-                  className="btn-secondary btn-hero-agentz"
-                  title="Chat dengan AI Assistant Agent-Z"
-                >
-                  <FiMessageSquare /> <span>Chat Agent-Z</span>
-                </button>
-
-                {/* Row 3: 50:50 Credential Pair */}
-                <Link to="/certificates" className="btn-outline">
-                  {t('hero.viewCertificates')}
-                </Link>
-                <Link to="/honors" className="btn-outline">
-                  {t('hero.viewHonors')}
-                </Link>
-              </div>
-            </div>
-          </SpotlightCard>
-
-          {/* Card 2: Interactive Profile Showcase Deck */}
-          <SpotlightCard className="bento-card-profile" borderBeam={true} spotlightColor="rgba(0, 221, 179, 0.18)">
-            <ProfileInteractiveDeck
-              name={profileConfig.full_name || t('hero.name')}
-              role={profileConfig.hero_role || t('bento.role')}
-            />
-          </SpotlightCard>
+          {/* Card 1: Unified Executive Hero & Profile Card (Span 12 Bento) */}
+          <UnifiedHeroProfileCard
+            profile={profile}
+            profileConfig={profileConfig}
+            isAvailable={isAvailable}
+            heroJob={heroJob}
+            aboutContent={aboutContent}
+          />
 
           {/* Card 3: Interactive Terminal Card */}
           <div className="bento-card-terminal">

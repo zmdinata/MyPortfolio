@@ -2,6 +2,7 @@ import { supabase } from './supabase';
 
 export const DEFAULT_PROFILE_CONFIG = {
   avatar_url: '/assets/images/photo.png',
+  cover_url: '', // Empty defaults to sleek SVG/CSS dark gradient atmospheric banner
   full_name: 'Zacky Muhammad Dinata',
   hero_role: 'AI Engineer & Multi-Agent Architect',
   email: 'zmdinata@gmail.com',
@@ -133,6 +134,7 @@ export async function fetchFullProfile() {
         about_description_en: data.about_description_en || '',
         about_description_id: data.about_description_id || '',
         avatar_url: data.avatar_url || localConfig.avatar_url,
+        cover_url: data.cover_url || localConfig.cover_url || '',
         full_name: data.full_name || localConfig.full_name,
         hero_role: data.hero_role || localConfig.hero_role,
         email: data.email || localConfig.email,
@@ -153,6 +155,7 @@ export async function fetchFullProfile() {
 
 export const PROFILE_SQL_MIGRATION = `-- Tambahkan kolom konfigurasi Profile interaktif ke tabel public.profile di Supabase
 ALTER TABLE public.profile ADD COLUMN IF NOT EXISTS avatar_url TEXT;
+ALTER TABLE public.profile ADD COLUMN IF NOT EXISTS cover_url TEXT;
 ALTER TABLE public.profile ADD COLUMN IF NOT EXISTS full_name TEXT;
 ALTER TABLE public.profile ADD COLUMN IF NOT EXISTS hero_role TEXT;
 ALTER TABLE public.profile ADD COLUMN IF NOT EXISTS email TEXT;
