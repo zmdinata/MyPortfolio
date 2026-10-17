@@ -5,10 +5,10 @@ import { generateChatResponse } from '../../lib/aiClient';
 import { loadMemory, saveMemory, clearMemory, refreshMemoryTTL } from '../../lib/chatMemory';
 import { useLang } from '../../context/LangContext';
 import { FiMessageSquare, FiSend, FiX, FiTrash2 } from 'react-icons/fi';
+import ChatMarkdown from './ChatMarkdown';
 import './Chatbot.css';
 
 // Maks riwayat pesan yang dikirim ke AI sebagai konteks (sliding window)
-// Dikecilkan ke 6 agar tidak melebihi batas token Groq (6000 TPM)
 const CONTEXT_WINDOW = 6;
 
 export default function Chatbot() {
@@ -21,7 +21,7 @@ export default function Chatbot() {
   const [isOffline, setIsOffline] = useState(false);
   const messagesEndRef = useRef(null);
   const inputElementRef = useRef(null);
-  const { contextString, isLoading } = usePortfolioContext();
+  const { contextString, isLoading, refreshContext } = usePortfolioContext();
 
   // Teks bilingual untuk speech bubble maskot
   const speechText = {
@@ -48,10 +48,15 @@ export default function Chatbot() {
     }
   }, [lang]);
 
-  // ── Refresh TTL setiap kali chatbot dibuka ──────────────────────────────
+  // ── Refresh TTL & Context setiap kali chatbot dibuka ───────────────────
   useEffect(() => {
-    if (isOpen) refreshMemoryTTL();
-  }, [isOpen]);
+    if (isOpen) {
+      refreshMemoryTTL();
+      if (typeof refreshContext === 'function') {
+        refreshContext();
+      }
+    }
+  }, [isOpen, refreshContext]);
 
   // ── Listener Event Kustom 'open-chatbot' (dari Profile Deck / Hero Actions) ──
   useEffect(() => {
@@ -83,27 +88,19 @@ export default function Chatbot() {
     setMessages(updatedMessages);
     setInput('');
 
-    // Tampilkan typing indicator segera
+    // Tampilkan typing indicator
     setIsTyping(true);
-
-    // Delay 2 detik agar terasa natural seperti Agent-Z sedang mengetik
-    await new Promise((resolve) => setTimeout(resolve, 2000));
 
     // Ambil N pesan terakhir sebagai konteks (sliding window, skip greeting)
     const contextMessages = updatedMessages
       .filter(m => m.id !== 'greeting')
       .slice(-CONTEXT_WINDOW);
 
-    let aiResponseText = await generateChatResponse(contextMessages, {
-      profile: contextString,
-      contact: contextString,
-      education: contextString,
-      skills: contextString,
-      experience: contextString,
-      projects: contextString,
-      certifications: contextString,
-      awards: contextString,
-    }, lang);
+    let aiResponseText = await generateChatResponse(
+      contextMessages,
+      { contextText: contextString },
+      lang
+    );
 
     if (aiResponseText.startsWith('TOKEN_LIMIT_REACHED|')) {
       aiResponseText = aiResponseText.replace('TOKEN_LIMIT_REACHED|', '');
@@ -169,7 +166,9 @@ export default function Chatbot() {
             <div className="chatbot-messages">
               {messages.map((msg) => (
                 <div key={msg.id} className={`chatbot-message ${msg.sender}`}>
-                  <div className="chatbot-message-content">{msg.text}</div>
+                  <div className="chatbot-message-content">
+                    <ChatMarkdown content={msg.text} />
+                  </div>
                 </div>
               ))}
               {isTyping && (

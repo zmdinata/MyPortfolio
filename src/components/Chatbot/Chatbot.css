@@ -420,9 +420,8 @@
 .chatbot-message-content {
   padding: 10px 14px;
   border-radius: 14px;
-  font-size: 0.95rem;
-  line-height: 1.4;
-  white-space: pre-wrap;
+  font-size: 0.92rem;
+  line-height: 1.48;
 }
 
 .chatbot-message.user .chatbot-message-content {
@@ -435,6 +434,101 @@
   background: rgba(255, 255, 255, 0.1);
   color: var(--text-primary, #fff);
   border-bottom-left-radius: 4px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* ===== Markdown Elements in Chat ===== */
+.chat-markdown-body {
+  word-break: break-word;
+}
+
+.chat-paragraph {
+  margin: 0 0 0.55rem 0;
+  line-height: 1.5;
+}
+
+.chat-paragraph:last-child {
+  margin-bottom: 0;
+}
+
+.chat-bold {
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.chatbot-message.ai .chat-bold {
+  color: #f1f5f9;
+  text-shadow: 0 0 1px rgba(255, 255, 255, 0.3);
+}
+
+.chat-italic {
+  font-style: italic;
+  opacity: 0.95;
+}
+
+.chat-link {
+  color: #00e1d9;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  word-break: break-all;
+}
+
+.chat-link:hover {
+  color: #5ce1e6;
+  text-shadow: 0 0 8px rgba(0, 225, 217, 0.5);
+}
+
+.chatbot-message.user .chat-link {
+  color: #ffffff;
+  text-decoration: underline;
+}
+
+.chat-inline-code {
+  background: rgba(0, 210, 255, 0.14);
+  color: #00ddb3;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: 0.85em;
+  border: 1px solid rgba(0, 221, 179, 0.25);
+}
+
+.chatbot-message.user .chat-inline-code {
+  background: rgba(0, 0, 0, 0.25);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.chat-code-block {
+  background: rgba(10, 15, 25, 0.7);
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  overflow-x: auto;
+  font-family: monospace;
+  font-size: 0.82rem;
+  margin: 0.5rem 0;
+  color: #00ddb3;
+}
+
+.chat-list {
+  margin: 0.4rem 0 0.6rem 0;
+  padding-left: 1.25rem;
+}
+
+.chat-list:last-child {
+  margin-bottom: 0;
+}
+
+.chat-list li {
+  margin-bottom: 0.35rem;
+  line-height: 1.45;
+}
+
+.chat-list li:last-child {
+  margin-bottom: 0;
 }
 
 /* =============================================================
