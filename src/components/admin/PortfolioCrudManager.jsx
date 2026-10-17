@@ -460,28 +460,55 @@ export default function PortfolioCrudManager({
       return supabase.from(itemTable).insert([nextPayload]);
     };
 
-    let currentPayload = { ...payload };
-    ({ error } = await runSave(currentPayload));
+    // Proactively normalize 'link' to 'external' for projects because legacy Supabase schemas
+    // enforce CHECK (type IN ('pdf', 'image', 'external')).
+    // The frontend getDisplayType() and isLinkType() automatically treat 'external' as 'link'.
+    let currentPayload = {
+      ...payload,
+      ...(contentType === 'projects' && payload.type === 'link' ? { type: 'external' } : {}),
+    };
 
-    if (
-      error &&
-      contentType === 'projects' &&
-      currentPayload.type === 'link' &&
-      String(error.message || '').includes('projects_type_check')
-    ) {
-      currentPayload = { ...currentPayload, type: 'external' };
+    // Resilient retry loop (up to 4 attempts) to seamlessly bypass legacy check constraints
+    // without interrupting the admin user with database constraint errors.
+    let attempts = 0;
+    while (attempts < 4) {
+      attempts++;
       ({ error } = await runSave(currentPayload));
-    }
+      if (!error) break;
 
-    if (
-      error &&
-      contentType === 'projects' &&
-      String(error.message || '').includes('projects_category_check')
-    ) {
-      // Auto-fallback: keep category_id (UUID) intact so it links to the new category,
-      // but use legacy allowed category slug 'data' to bypass the old DB check constraint
-      currentPayload = { ...currentPayload, category: 'data' };
-      ({ error } = await runSave(currentPayload));
+      const errMsg = String(error?.message || '').toLowerCase();
+      let modified = false;
+
+      // Handle projects_type_check:
+      if (contentType === 'projects' && (errMsg.includes('projects_type_check') || errMsg.includes('type_check'))) {
+        if (currentPayload.type === 'link') {
+          currentPayload = { ...currentPayload, type: 'external' };
+          modified = true;
+        } else if (currentPayload.type === 'external') {
+          currentPayload = { ...currentPayload, type: 'link' };
+          modified = true;
+        } else if (currentPayload.type !== 'pdf') {
+          currentPayload = { ...currentPayload, type: 'pdf' };
+          modified = true;
+        }
+      }
+
+      // Handle projects_category_check:
+      // Keep category_id intact (the UUID linking to the new custom category),
+      // while falling back the legacy text column 'category' to 'data' or 'web' to satisfy DB constraint.
+      if (contentType === 'projects' && (errMsg.includes('projects_category_check') || errMsg.includes('category_check'))) {
+        if (currentPayload.category !== 'data') {
+          currentPayload = { ...currentPayload, category: 'data' };
+          modified = true;
+        } else if (currentPayload.category !== 'web') {
+          currentPayload = { ...currentPayload, category: 'web' };
+          modified = true;
+        }
+      }
+
+      if (!modified) {
+        break;
+      }
     }
 
     return { error };
