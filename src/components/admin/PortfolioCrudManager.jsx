@@ -1,8 +1,11 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { supabase } from '../../lib/supabase';
 import {
+  FiCheck,
+  FiChevronDown,
   FiEdit2,
   FiExternalLink,
+  FiFilter,
   FiImage,
   FiPlus,
   FiRefreshCw,
@@ -223,11 +226,33 @@ export default function PortfolioCrudManager({
   const [uploading, setUploading] = useState('');
   const [previewLoading, setPreviewLoading] = useState(false);
   const [iconSearch, setIconSearch] = useState('');
+  const [selectedCategoryFilter, setSelectedCategoryFilter] = useState('all');
+  const [categoryFilterOpen, setCategoryFilterOpen] = useState(false);
+  const categoryFilterRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (categoryFilterRef.current && !categoryFilterRef.current.contains(event.target)) {
+        setCategoryFilterOpen(false);
+      }
+    };
+    if (categoryFilterOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [categoryFilterOpen]);
 
   const categoryMap = useMemo(
     () => new Map(categories.flatMap((category) => [[category.id, category], [category.slug, category]])),
     [categories]
   );
+
+  const resolveItemCategory = (item) => {
+    if (!item) return null;
+    return categoryMap.get(item.category_id) || categories.find((c) => c.slug === item.category || c.id === item.category);
+  };
 
   const sortedItems = useMemo(() => {
     return [...items].sort((a, b) => {
@@ -240,9 +265,22 @@ export default function PortfolioCrudManager({
 
   const filteredItems = useMemo(() => {
     const query = searchTerm.toLowerCase().trim();
-    if (!query) return sortedItems;
 
     return sortedItems.filter((item) => {
+      // 1. Filter by Category
+      if (selectedCategoryFilter !== 'all') {
+        const itemCat = resolveItemCategory(item);
+        const matchesCategory =
+          item.category_id === selectedCategoryFilter ||
+          itemCat?.id === selectedCategoryFilter ||
+          itemCat?.slug === selectedCategoryFilter ||
+          item.category === selectedCategoryFilter;
+        if (!matchesCategory) return false;
+      }
+
+      // 2. Filter by Search Query
+      if (!query) return true;
+
       const values = [
         item.title,
         item.title_en,
@@ -254,7 +292,7 @@ export default function PortfolioCrudManager({
 
       return values.some((value) => String(value || '').toLowerCase().includes(query));
     });
-  }, [categoryMap, searchTerm, sortedItems]);
+  }, [categories, categoryMap, searchTerm, selectedCategoryFilter, sortedItems]);
 
   const filteredIcons = useMemo(() => {
     const base = iconSearch
@@ -842,16 +880,104 @@ export default function PortfolioCrudManager({
       {activeTab === 'items' && (
         <>
           <div className="action-bar">
-            <div className="search-box">
-              <FiSearch />
-              <input
-                className="search-input"
-                type="text"
-                placeholder={`Search ${label.plural.toLowerCase()}...`}
-                value={searchTerm}
-                onChange={(event) => setSearchTerm(event.target.value)}
-              />
+            <div className="action-bar-controls">
+              <div className="search-box">
+                <FiSearch />
+                <input
+                  className="search-input"
+                  type="text"
+                  placeholder={`Search ${label.plural.toLowerCase()}...`}
+                  value={searchTerm}
+                  onChange={(event) => setSearchTerm(event.target.value)}
+                />
+              </div>
+
+              <div className="category-filter-dropdown" ref={categoryFilterRef}>
+                <button
+                  type="button"
+                  className={`category-filter-trigger ${categoryFilterOpen ? 'active' : ''} ${selectedCategoryFilter !== 'all' ? 'has-filter' : ''}`}
+                  onClick={() => setCategoryFilterOpen(!categoryFilterOpen)}
+                >
+                  <div className="category-filter-trigger-label">
+                    <FiFilter className="filter-icon" />
+                    <span>
+                      {selectedCategoryFilter === 'all'
+                        ? 'All Categories'
+                        : categoryLabel(categories.find((c) => c.id === selectedCategoryFilter || c.slug === selectedCategoryFilter))}
+                    </span>
+                  </div>
+                  <div className="category-filter-trigger-right">
+                    {selectedCategoryFilter !== 'all' && (
+                      <span className="filter-count-badge">
+                        {filteredItems.length}
+                      </span>
+                    )}
+                    <FiChevronDown className={`chevron ${categoryFilterOpen ? 'rotate' : ''}`} />
+                  </div>
+                </button>
+
+                {categoryFilterOpen && (
+                  <div className="category-filter-menu">
+                    <div
+                      className={`category-filter-option ${selectedCategoryFilter === 'all' ? 'selected' : ''}`}
+                      onClick={() => {
+                        setSelectedCategoryFilter('all');
+                        setCategoryFilterOpen(false);
+                      }}
+                    >
+                      <div className="category-filter-option-left">
+                        <FiFilter className="opt-icon" />
+                        <span>All Categories</span>
+                      </div>
+                      <div className="category-filter-option-right">
+                        <span className="opt-count">{items.length}</span>
+                        {selectedCategoryFilter === 'all' && <FiCheck className="opt-check" />}
+                      </div>
+                    </div>
+
+                    <div className="category-filter-divider" />
+
+                    <div className="category-filter-scroll-area">
+                      {categories.map((cat) => {
+                        const count = items.filter((item) => {
+                          const itemCat = resolveItemCategory(item);
+                          return (
+                            item.category_id === cat.id ||
+                            itemCat?.id === cat.id ||
+                            itemCat?.slug === cat.slug ||
+                            item.category === cat.slug
+                          );
+                        }).length;
+                        const isSelected = selectedCategoryFilter === cat.id || selectedCategoryFilter === cat.slug;
+
+                        return (
+                          <div
+                            key={cat.id || cat.slug}
+                            className={`category-filter-option ${isSelected ? 'selected' : ''}`}
+                            onClick={() => {
+                              setSelectedCategoryFilter(cat.id);
+                              setCategoryFilterOpen(false);
+                            }}
+                          >
+                            <div className="category-filter-option-left">
+                              <span className="cat-icon-wrap">
+                                <CategoryIcon name={cat.icon_name} size={15} />
+                              </span>
+                              <span className="cat-name">{categoryLabel(cat)}</span>
+                            </div>
+                            <div className="category-filter-option-right">
+                              <span className="opt-count">{count}</span>
+                              {isSelected && <FiCheck className="opt-check" />}
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
+
             <button className="add-btn" onClick={() => openItemModal()}>
               <FiPlus /> Add {label.singular}
             </button>
@@ -871,7 +997,44 @@ export default function PortfolioCrudManager({
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredItems.map((item) => {
+                  {filteredItems.length === 0 ? (
+                    <tr>
+                      <td
+                        colSpan={label.titleColumns.length + 1}
+                        style={{
+                          textAlign: 'center',
+                          padding: '48px 20px',
+                          color: 'rgba(255, 255, 255, 0.5)',
+                        }}
+                      >
+                        <div style={{ fontSize: '0.95rem', marginBottom: '10px' }}>
+                          No {label.plural.toLowerCase()} found matching your filter.
+                        </div>
+                        {(selectedCategoryFilter !== 'all' || searchTerm) && (
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setSelectedCategoryFilter('all');
+                              setSearchTerm('');
+                            }}
+                            style={{
+                              background: 'rgba(0, 210, 255, 0.1)',
+                              border: '1px solid rgba(0, 210, 255, 0.3)',
+                              color: '#00d2ff',
+                              padding: '6px 14px',
+                              borderRadius: '6px',
+                              cursor: 'pointer',
+                              fontSize: '0.85rem',
+                              fontWeight: 500,
+                            }}
+                          >
+                            Reset Filter to All
+                          </button>
+                        )}
+                      </td>
+                    </tr>
+                  ) : (
+                    filteredItems.map((item) => {
                     const preview = getPreviewForItem(item);
                     const type = getDisplayType(item.type);
                     return (
@@ -921,7 +1084,7 @@ export default function PortfolioCrudManager({
                         </td>
                       </tr>
                     );
-                  })}
+                  }))}
                 </tbody>
               </table>
             </div>
