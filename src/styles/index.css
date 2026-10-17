@@ -43,9 +43,19 @@ body {
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-button {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+::-webkit-scrollbar-corner {
+  background: transparent;
 }
 ::-webkit-scrollbar-track {
   background: var(--scrollbar-bg);
+  border-radius: 999px;
 }
 ::-webkit-scrollbar-thumb {
   background: var(--scrollbar-thumb);
