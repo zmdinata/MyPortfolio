@@ -362,3 +362,102 @@ input:checked + .slider:before {
   box-shadow: 0 0 8px rgba(0, 210, 255, 0.25);
 }
 
+/* Deck Inline Icon Grid (Like Category Icon Picker) */
+.deck-open-modal-link {
+  background: transparent;
+  border: 1px solid rgba(0, 210, 255, 0.35);
+  color: #00d2ff;
+  border-radius: 6px;
+  padding: 3px 8px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.deck-open-modal-link:hover {
+  background: rgba(0, 210, 255, 0.15);
+  border-color: #00d2ff;
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.deck-inline-grid {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(36px, 1fr)) !important;
+  gap: 6px !important;
+  max-height: 140px !important;
+  overflow-y: auto;
+  padding: 6px !important;
+  background: rgba(0, 0, 0, 0.35);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.deck-inline-grid .icon-picker-item {
+  height: 36px !important;
+  border-radius: 6px !important;
+  background: #121212;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: all 0.15s ease;
+}
+
+.deck-inline-grid .icon-picker-item:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.deck-inline-grid .icon-picker-item.selected {
+  background: rgba(0, 210, 255, 0.18);
+  border-color: #00d2ff;
+  color: #00d2ff;
+  box-shadow: 0 0 8px rgba(0, 210, 255, 0.3);
+}
+
+/* Full Catalog Icon Modal Elements */
+.modal-icon-categories-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.modal-cat-chip {
+  padding: 5px 12px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.78rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.modal-cat-chip:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.modal-cat-chip.active {
+  background: rgba(0, 210, 255, 0.16);
+  border-color: #00d2ff;
+  color: #00d2ff;
+  font-weight: 600;
+  box-shadow: 0 0 10px rgba(0, 210, 255, 0.2);
+}
+
+.modal-icon-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(48px, 1fr));
+  gap: 10px;
+  max-height: 360px;
+  overflow-y: auto;
+  padding: 8px;
+  background: #0c0c0c;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+

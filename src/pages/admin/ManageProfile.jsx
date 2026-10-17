@@ -17,6 +17,9 @@ import {
   FiCheck,
   FiArrowRight,
   FiStar,
+  FiSearch,
+  FiGrid,
+  FiX,
 } from 'react-icons/fi';
 import { LATEST_CV_PROFILE } from '../../data/latestCvData';
 import { uploadPortfolioFile } from '../../lib/portfolioMedia';
@@ -27,7 +30,13 @@ import {
   DEFAULT_PROFILE_CONFIG,
   PROFILE_SQL_MIGRATION,
 } from '../../lib/profileConfig';
-import { CategoryIcon, suggestedDeckIcons } from '../../lib/categoryIcons';
+import {
+  CategoryIcon,
+  allCategoryIconNames,
+  commonCategoryIcons,
+  CATEGORY_ICON_GROUPS,
+  normalizeIconName,
+} from '../../lib/categoryIcons';
 import '../../styles/pages/admin-manage.css';
 import '../../styles/pages/admin-profile.css';
 
@@ -38,6 +47,32 @@ const ManageProfile = () => {
   const [statusMsg, setStatusMsg] = useState(null);
   const [copiedSql, setCopiedSql] = useState(false);
   const fileInputRef = useRef(null);
+  const [tabIconSearch, setTabIconSearch] = useState({ 0: '', 1: '', 2: '' });
+  const [iconModal, setIconModal] = useState({
+    isOpen: false,
+    tabIndex: 0,
+    search: '',
+    activeCategory: 'all',
+  });
+
+  const getFilteredIcons = (searchQuery, categoryId = 'all') => {
+    let baseList = allCategoryIconNames;
+    if (categoryId !== 'all') {
+      const group = CATEGORY_ICON_GROUPS.find((g) => g.id === categoryId);
+      if (group) baseList = group.icons;
+    } else if (!searchQuery) {
+      baseList = commonCategoryIcons;
+    }
+
+    const q = String(searchQuery || '').toLowerCase().trim();
+    if (!q) {
+      return baseList.slice(0, 72);
+    }
+
+    return allCategoryIconNames
+      .filter((name) => name.includes(q))
+      .slice(0, 100);
+  };
 
   const [formData, setFormData] = useState({
     id: 1,
@@ -503,34 +538,47 @@ const ManageProfile = () => {
                     />
                   </div>
 
-                  {/* Lucide Icon Selector */}
+                  {/* Lucide Icon Selector (Interactive Grid & Search) */}
                   <div className="form-group deck-icon-picker-group">
                     <div className="deck-icon-label-row">
                       <label style={{ margin: 0 }}>Ikon Lucide (Tab Icon)</label>
-                      <div className="deck-icon-badge-preview">
-                        <CategoryIcon name={currentIconName} size={14} />
-                        <code>{currentIconName}</code>
-                      </div>
+                      <button
+                        type="button"
+                        className="deck-open-modal-link"
+                        onClick={() => setIconModal({ isOpen: true, tabIndex: idx, search: '', activeCategory: 'all' })}
+                        title="Buka katalog lengkap 1,700+ ikon Lucide dengan filter kategori"
+                      >
+                        <FiGrid size={11} /> Katalog Lengkap
+                      </button>
                     </div>
-                    <input
-                      type="text"
-                      value={deck.icon || ''}
-                      onChange={(e) => handleDeckChange(idx, 'icon', e.target.value)}
-                      placeholder="e.g. cpu, bot, brain, zap, cloud, activity..."
-                    />
-                    <div className="deck-icon-quick-chips">
-                      {suggestedDeckIcons.map((item) => (
+
+                    <div className="search-box icon-search" style={{ margin: '6px 0 8px' }}>
+                      <FiSearch />
+                      <input
+                        className="search-input"
+                        type="text"
+                        placeholder="Cari ikon: cpu, brain, robot, zap..."
+                        value={tabIconSearch[idx] || ''}
+                        onChange={(e) => setTabIconSearch({ ...tabIconSearch, [idx]: e.target.value })}
+                      />
+                    </div>
+
+                    <div className="icon-picker-grid deck-inline-grid">
+                      {getFilteredIcons(tabIconSearch[idx]).map((iconName) => (
                         <button
-                          key={item.id}
                           type="button"
-                          className={`deck-icon-chip ${currentIconName === item.name ? 'selected' : ''}`}
-                          onClick={() => handleDeckChange(idx, 'icon', item.name)}
-                          title={item.label}
+                          key={iconName}
+                          className={`icon-picker-item ${currentIconName === iconName ? 'selected' : ''}`}
+                          onClick={() => handleDeckChange(idx, 'icon', iconName)}
+                          title={iconName}
                         >
-                          <CategoryIcon name={item.name} size={12} />
-                          <span>{item.name}</span>
+                          <CategoryIcon name={iconName} size={18} />
                         </button>
                       ))}
+                    </div>
+
+                    <div className="selected-icon-label" style={{ marginTop: '8px', fontSize: '0.82rem' }}>
+                      Terpilih: <CategoryIcon name={currentIconName} size={15} /> <strong>{currentIconName}</strong>
                     </div>
                   </div>
 
@@ -692,6 +740,116 @@ const ManageProfile = () => {
           </button>
         </div>
       </form>
+
+      {/* Modal Pemilih Katalog Ikon Lucide Lengkap (1,700+ Ikon) */}
+      {iconModal.isOpen && (
+        <div className="modal-overlay" onClick={() => setIconModal({ ...iconModal, isOpen: false })}>
+          <div
+            className="modal-content large-modal"
+            onClick={(e) => e.stopPropagation()}
+            style={{ maxWidth: '820px' }}
+          >
+            <div className="modal-header">
+              <div>
+                <h2 style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <FiGrid style={{ color: '#00d2ff' }} />
+                  Katalog Ikon Lucide: TAB #{iconModal.tabIndex + 1} ({formData.decks[iconModal.tabIndex]?.tabLabel || 'Spesialisasi'})
+                </h2>
+                <p style={{ margin: '4px 0 0', fontSize: '0.82rem', color: 'rgba(255,255,255,0.5)' }}>
+                  Pilih dari seluruh 1,700+ ikon Lucide atau gunakan filter kategori dan pencarian.
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIconModal({ ...iconModal, isOpen: false })}
+                title="Tutup Modal"
+                style={{ background: 'transparent', border: 'none', color: '#fff', cursor: 'pointer', fontSize: '1.4rem' }}
+              >
+                <FiX />
+              </button>
+            </div>
+
+            <div style={{ padding: '20px 30px', display: 'flex', flexDirection: 'column', gap: '14px', flex: 1, overflow: 'hidden' }}>
+              {/* Category Filter Pills */}
+              <div className="modal-icon-categories-bar">
+                <button
+                  type="button"
+                  className={`modal-cat-chip ${iconModal.activeCategory === 'all' ? 'active' : ''}`}
+                  onClick={() => setIconModal({ ...iconModal, activeCategory: 'all' })}
+                >
+                  Semua ({allCategoryIconNames.length})
+                </button>
+                {CATEGORY_ICON_GROUPS.map((grp) => (
+                  <button
+                    key={grp.id}
+                    type="button"
+                    className={`modal-cat-chip ${iconModal.activeCategory === grp.id ? 'active' : ''}`}
+                    onClick={() => setIconModal({ ...iconModal, activeCategory: grp.id })}
+                  >
+                    {grp.label} ({grp.icons.length})
+                  </button>
+                ))}
+              </div>
+
+              {/* Search Box */}
+              <div className="search-box icon-search" style={{ margin: 0 }}>
+                <FiSearch />
+                <input
+                  className="search-input"
+                  type="text"
+                  placeholder="Ketik kata kunci ikon, misal: brain, robot, server, database, code, cloud, rocket, activity..."
+                  value={iconModal.search}
+                  onChange={(e) => setIconModal({ ...iconModal, search: e.target.value })}
+                  autoFocus
+                />
+              </div>
+
+              {/* Large Scrollable Icon Grid */}
+              <div className="icon-picker-grid modal-icon-grid" style={{ maxHeight: '360px', padding: '6px' }}>
+                {getFilteredIcons(iconModal.search, iconModal.activeCategory).map((iconName) => {
+                  const currentTabIcon = formData.decks[iconModal.tabIndex]?.icon ||
+                    (iconModal.tabIndex === 1 ? 'zap' : iconModal.tabIndex === 2 ? 'activity' : 'cpu');
+                  const isSelected = currentTabIcon === iconName;
+
+                  return (
+                    <button
+                      type="button"
+                      key={iconName}
+                      className={`icon-picker-item ${isSelected ? 'selected' : ''}`}
+                      onClick={() => handleDeckChange(iconModal.tabIndex, 'icon', iconName)}
+                      title={iconName}
+                    >
+                      <CategoryIcon name={iconName} size={22} />
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Bottom selection bar */}
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '10px', borderTop: '1px solid rgba(255,255,255,0.08)' }}>
+                <div className="selected-icon-label" style={{ margin: 0 }}>
+                  Ikon Terpilih:{' '}
+                  <CategoryIcon
+                    name={formData.decks[iconModal.tabIndex]?.icon || (iconModal.tabIndex === 1 ? 'zap' : iconModal.tabIndex === 2 ? 'activity' : 'cpu')}
+                    size={20}
+                  />{' '}
+                  <strong style={{ color: '#00d2ff', fontSize: '1rem', marginLeft: '6px' }}>
+                    {formData.decks[iconModal.tabIndex]?.icon || (iconModal.tabIndex === 1 ? 'zap' : iconModal.tabIndex === 2 ? 'activity' : 'cpu')}
+                  </strong>
+                </div>
+                <button
+                  type="button"
+                  className="save-btn"
+                  style={{ padding: '8px 24px', borderRadius: '8px', width: 'auto' }}
+                  onClick={() => setIconModal({ ...iconModal, isOpen: false })}
+                >
+                  Terapkan Ikon
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
