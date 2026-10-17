@@ -191,7 +191,7 @@ export default function InteractiveTerminal() {
             '  * CPU Temp: ~51°C (Very cool & safe, critical threshold 70°C).',
             '  * System Load: Lightweight, RAM usage 3.1 GB / 6.9 GB.',
             '',
-            '• Active Agents: 3 Sub-Agents',
+            '• Autonomous Multi-Agent (Hermes & OpenClaw Sub-Agents)',
             '  * Hermes Agent: Primary orchestrator (task execution, system automation, model integration).',
             '  * OpenClaw: Workspace file manager & local data assistant.',
             '  * RimbaPulse: Cloud Run AI vision sub-agent.',
