@@ -179,3 +179,39 @@ export function mergePortfolioItems(dbItems = [], fallbackItems = [], categories
 
   return merged.sort((a, b) => (a.sort_order ?? 999) - (b.sort_order ?? 999));
 }
+
+export function resolveFeaturedProjects(allProjects = []) {
+  const pool = Array.isArray(allProjects) && allProjects.length > 0 ? allProjects : projectItemFallbacks;
+
+  // 1. Explicitly featured projects from database / portfolio
+  const explicitlyFeatured = pool
+    .filter((project) => Boolean(project.is_featured))
+    .sort((a, b) => (Number(a.featured_order) || 999) - (Number(b.featured_order) || 999));
+
+  // If user has 3 or more explicitly featured projects, take top 3
+  if (explicitlyFeatured.length >= 3) {
+    return explicitlyFeatured.slice(0, 3);
+  }
+
+  // 2. Guaranteed fallback: if fewer than 3 are explicitly marked, backfill from flagship fallbacks
+  const usedIds = new Set();
+  explicitlyFeatured.forEach((p) => {
+    if (p.id) usedIds.add(String(p.id));
+    if (p.source_key) usedIds.add(String(p.source_key));
+    if (p.id_string) usedIds.add(String(p.id_string));
+  });
+
+  const deletedStaticIds = getDeletedStaticIds();
+  const fallbackCards = projectItemFallbacks.filter((fallback) => {
+    if (deletedStaticIds.includes(fallback.id) || (fallback.source_key && deletedStaticIds.includes(fallback.source_key))) {
+      return false;
+    }
+    const id = String(fallback.id);
+    const sourceKey = String(fallback.source_key);
+    const idStr = String(fallback.id_string);
+    return !usedIds.has(id) && !usedIds.has(sourceKey) && !usedIds.has(idStr);
+  });
+
+  return [...explicitlyFeatured, ...fallbackCards].slice(0, 3);
+}
+

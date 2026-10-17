@@ -17,7 +17,7 @@ import AiTelemetryCard from '../components/ui/AiTelemetryCard';
 import ProfileInteractiveDeck from '../components/ui/ProfileInteractiveDeck';
 import AmbientGridMesh from '../components/ui/AmbientGridMesh';
 import { fadeLeft, fadeRight, fadeUp, scaleUp, smoothEase, stagger, staggerFast } from '../lib/motionConfig';
-import { projectCategoryFallbacks, projectItemFallbacks, mergePortfolioItems } from '../lib/portfolioFallbacks';
+import { projectCategoryFallbacks, projectItemFallbacks, mergePortfolioItems, resolveFeaturedProjects } from '../lib/portfolioFallbacks';
 import { getDisplayType, getFileForItem, getPreviewForItem, isLinkType } from '../lib/portfolioMedia';
 import { useDocumentTitle } from '../hooks/useDocumentTitle';
 import AnimatedCounter from '../components/ui/AnimatedCounter';
@@ -51,34 +51,12 @@ export default function HomePage() {
   const [dbExperiences, setDbExperiences] = useState([]);
   const [dbEducation, setDbEducation] = useState([]);
   const [dbSkills, setDbSkills] = useState([]);
-  const [featuredProjects, setFeaturedProjects] = useState(projectItemFallbacks.filter((project) => project.is_featured).slice(0, 3));
+  const [featuredProjects, setFeaturedProjects] = useState(() => resolveFeaturedProjects(projectItemFallbacks));
   const [projectModal, setProjectModal] = useState({ open: false, src: '', type: '' });
   
   useEffect(() => {
     let isMounted = true;
     let featuredChannel = null;
-
-    const loadFeaturedProjects = async () => {
-      const { data: projectRows, error: projectError } = await supabase
-        .from('projects')
-        .select('*')
-        .order('sort_order', { ascending: true });
-
-      const mergedProjects = mergePortfolioItems(
-        !projectError ? projectRows || [] : [],
-        projectItemFallbacks,
-        projectCategoryFallbacks,
-        'projects'
-      );
-
-      if (!isMounted) return;
-      setFeaturedProjects(
-        mergedProjects
-          .filter((project) => project.is_featured)
-          .sort((a, b) => (a.featured_order ?? 999) - (b.featured_order ?? 999))
-          .slice(0, 3)
-      );
-    };
 
     const fetchData = async () => {
       const [
@@ -113,10 +91,10 @@ export default function HomePage() {
           certifications: cachedCerts?.length || 32,
           honors: cachedHonors?.length || 4,
         });
+        setFeaturedProjects(resolveFeaturedProjects(cachedProj));
       }
 
       if (!isMounted) return;
-      loadFeaturedProjects();
 
       if (!featuredChannel) {
         featuredChannel = supabase
@@ -146,7 +124,6 @@ export default function HomePage() {
     const handleSync = () => {
       if (isMounted) {
         fetchData();
-        loadFeaturedProjects();
       }
     };
 
@@ -429,15 +406,23 @@ export default function HomePage() {
               {featuredProjects.map((project, idx) => {
                 const type = getDisplayType(project.type);
                 return (
-                  <Tilt
-                    key={project.id}
-                    tiltMaxAngleX={8}
-                    tiltMaxAngleY={8}
-                    scale={1.03}
-                    transitionSpeed={2500}
-                    className="tilt-wrapper"
+                  <motion.div
+                    key={project.id || project.source_key || `featured-${idx}`}
+                    variants={scaleUp}
+                    custom={idx}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, margin: '-40px' }}
+                    style={{ height: '100%' }}
                   >
-                    <motion.div variants={scaleUp} custom={idx} style={{ height: '100%' }}>
+                    <Tilt
+                      tiltMaxAngleX={8}
+                      tiltMaxAngleY={8}
+                      scale={1.03}
+                      transitionSpeed={2500}
+                      className="tilt-wrapper"
+                      style={{ height: '100%' }}
+                    >
                       <SpotlightCard
                         className="project-card featured-project-card"
                         borderBeam={true}
@@ -463,8 +448,8 @@ export default function HomePage() {
                           </div>
                         </div>
                       </SpotlightCard>
-                    </motion.div>
-                  </Tilt>
+                    </Tilt>
+                  </motion.div>
                 );
               })}
             </motion.div>
