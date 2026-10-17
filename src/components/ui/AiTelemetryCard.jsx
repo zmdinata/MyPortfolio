@@ -1,25 +1,42 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLang } from '../../context/LangContext';
 import { FiCpu, FiActivity, FiMessageSquare, FiArrowUpRight, FiTerminal, FiServer } from 'react-icons/fi';
 import { SiPython, SiSupabase, SiDocker } from 'react-icons/si';
 import { FaBrain, FaRobot } from 'react-icons/fa';
+import { getLocalProfileConfig, DEFAULT_PROFILE_CONFIG } from '../../lib/profileConfig';
 
 export default function AiTelemetryCard() {
   const { lang } = useLang();
+  const [prompts, setPrompts] = useState(() => {
+    const config = getLocalProfileConfig();
+    return Array.isArray(config.agentz_prompts) && config.agentz_prompts.length > 0
+      ? config.agentz_prompts
+      : DEFAULT_PROFILE_CONFIG.agentz_prompts;
+  });
+
+  useEffect(() => {
+    const handleProfileUpdate = (e) => {
+      if (e.detail?.agentz_prompts && Array.isArray(e.detail.agentz_prompts)) {
+        setPrompts(e.detail.agentz_prompts);
+      }
+    };
+    window.addEventListener('profile-updated', handleProfileUpdate);
+    return () => window.removeEventListener('profile-updated', handleProfileUpdate);
+  }, []);
 
   const handlePromptClick = (promptText) => {
+    // 1. Dispatch custom event for Chatbot.jsx to open and populate input
+    window.dispatchEvent(
+      new CustomEvent('open-chatbot', {
+        detail: { message: promptText },
+      })
+    );
+
+    // 2. Safe DOM fallback in case chatbot trigger button exists
     const chatbotToggle = document.querySelector('.chatbot-toggle-button, .chatbot-trigger, [aria-label*="chat" i]');
     if (chatbotToggle) {
       chatbotToggle.click();
     }
-    setTimeout(() => {
-      const input = document.querySelector('.chatbot-input input, .chatbot-input textarea, input[placeholder*="tanya" i], input[placeholder*="ask" i]');
-      if (input) {
-        input.value = promptText;
-        input.focus();
-        input.dispatchEvent(new Event('input', { bubbles: true }));
-      }
-    }, 300);
   };
 
   const stackItems = [
@@ -29,21 +46,6 @@ export default function AiTelemetryCard() {
     { name: 'Python (ML / EDA)', icon: <SiPython />, color: '#3776AB' },
     { name: 'Linux Homelab T440', icon: <FiServer />, color: '#E95420' },
     { name: 'Supabase & Cloud Run', icon: <SiSupabase />, color: '#3ECF8E' },
-  ];
-
-  const suggestedPrompts = [
-    {
-      text_id: 'Ceritakan proyek Agent-Z Homelab di ThinkPad T440',
-      text_en: 'Tell me about Agent-Z Homelab on ThinkPad T440',
-    },
-    {
-      text_id: 'Bagaimana riset prediksi harga tiket di SISFOTEK?',
-      text_en: 'How was the flight price prediction research done at SISFOTEK?',
-    },
-    {
-      text_id: 'Apa itu proyek LestariRimba & RimbaPulse AI?',
-      text_en: 'What is LestariRimba & RimbaPulse AI prototype?',
-    },
   ];
 
   return (
@@ -85,8 +87,8 @@ export default function AiTelemetryCard() {
           <FiMessageSquare /> {lang === 'en' ? 'Ask Agent-Z About Zacky' : 'Tanya Agent-Z Seputar Zacky'}
         </div>
         <div className="telemetry-prompts-list">
-          {suggestedPrompts.map((p, idx) => {
-            const promptText = lang === 'en' ? p.text_en : p.text_id;
+          {prompts.map((p, idx) => {
+            const promptText = lang === 'en' ? (p.text_en || p.text_id) : (p.text_id || p.text_en);
             return (
               <button
                 key={idx}

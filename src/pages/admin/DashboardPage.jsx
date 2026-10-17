@@ -26,6 +26,12 @@ import {
   LATEST_CV_PROFILE,
   LATEST_CV_PROJECTS,
 } from '../../data/latestCvData';
+import {
+  getCachedProjects,
+  getCachedCertificates,
+  getCachedHonors,
+  invalidatePortfolioCache,
+} from '../../lib/portfolioCache';
 import '../../styles/pages/admin-dashboard.css';
 
 export default function DashboardPage() {
@@ -45,22 +51,52 @@ export default function DashboardPage() {
 
   useEffect(() => {
     fetchDashboardData();
+
+    const handleInvalidation = () => {
+      fetchDashboardData();
+    };
+
+    window.addEventListener('portfolio-cache-invalidated', handleInvalidation);
+
+    const channel = supabase
+      .channel('dashboard-realtime-sync')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'projects' }, () => {
+        invalidatePortfolioCache();
+        fetchDashboardData();
+      })
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'certificates' }, () => {
+        invalidatePortfolioCache();
+        fetchDashboardData();
+      })
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'honors' }, () => {
+        invalidatePortfolioCache();
+        fetchDashboardData();
+      })
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'experience' }, fetchDashboardData)
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'education' }, fetchDashboardData)
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'skills' }, fetchDashboardData)
+      .subscribe();
+
+    return () => {
+      window.removeEventListener('portfolio-cache-invalidated', handleInvalidation);
+      supabase.removeChannel(channel);
+    };
   }, []);
 
   const fetchDashboardData = async () => {
     setDbStatus('checking');
     try {
       const [
-        { count: projCount, error: projErr },
-        { count: certCount },
-        { count: honorCount },
+        { projects: cachedProj, error: projErr },
+        { certificates: cachedCerts },
+        { honors: cachedHonors },
         { count: expCount },
         { count: eduCount },
         { count: skillCount },
       ] = await Promise.all([
-        supabase.from('projects').select('*', { count: 'exact', head: true }),
-        supabase.from('certificates').select('*', { count: 'exact', head: true }),
-        supabase.from('honors').select('*', { count: 'exact', head: true }),
+        getCachedProjects(),
+        getCachedCertificates(),
+        getCachedHonors(),
         supabase.from('experience').select('*', { count: 'exact', head: true }),
         supabase.from('education').select('*', { count: 'exact', head: true }),
         supabase.from('skills').select('*', { count: 'exact', head: true }),
@@ -73,23 +109,23 @@ export default function DashboardPage() {
       }
 
       setStats({
-        projects: projCount || 24,
-        certificates: certCount || 18,
-        honors: honorCount || 5,
-        experience: expCount || 2,
+        projects: cachedProj?.length || 24,
+        certificates: cachedCerts?.length || 32,
+        honors: cachedHonors?.length || 4,
+        experience: expCount || 3,
         education: eduCount || 1,
-        skills: skillCount || 6,
+        skills: skillCount || 4,
       });
     } catch (err) {
       console.warn('Supabase fetch error, fallback active:', err);
       setDbStatus('fallback');
       setStats({
         projects: 24,
-        certificates: 18,
-        honors: 5,
-        experience: 2,
+        certificates: 32,
+        honors: 4,
+        experience: 3,
         education: 1,
-        skills: 6,
+        skills: 4,
       });
     }
   };

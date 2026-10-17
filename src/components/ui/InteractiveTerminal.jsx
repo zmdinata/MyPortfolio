@@ -5,6 +5,19 @@ import { supabase } from '../../lib/supabase';
 import { getCachedProjects } from '../../lib/portfolioCache';
 import { fetchFullProfile, getLocalProfileConfig } from '../../lib/profileConfig';
 
+// Anchor: July 1, 2026 00:00:00 WIB (Asia/Jakarta, UTC+7) => Exactly 108 days on Oct 17, 2026, auto-increments every 00:00 WIB
+const UPTIME_ANCHOR_WIB = new Date('2026-06-30T17:00:00.000Z');
+
+function calculateWibUptime() {
+  const now = new Date();
+  const utcMs = now.getTime() + (now.getTimezoneOffset() * 60000);
+  const nowWib = new Date(utcMs + (7 * 3600000));
+  const diffMs = Math.max(0, nowWib.getTime() - UPTIME_ANCHOR_WIB.getTime());
+  const days = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  return { days, hours };
+}
+
 export default function InteractiveTerminal() {
   const { lang } = useLang();
   const [input, setInput] = useState('');
@@ -87,7 +100,12 @@ export default function InteractiveTerminal() {
   // Auto scroll terminal container only, NEVER the window
   useEffect(() => {
     if (terminalBodyRef.current) {
-      terminalBodyRef.current.scrollTop = terminalBodyRef.current.scrollHeight;
+      const scrollEl = terminalBodyRef.current;
+      requestAnimationFrame(() => {
+        if (scrollEl) {
+          scrollEl.scrollTop = scrollEl.scrollHeight;
+        }
+      });
     }
   }, [terminalLog]);
 
@@ -140,7 +158,8 @@ export default function InteractiveTerminal() {
 
       case 'neofetch':
       case 'sysinfo':
-      case 'system':
+      case 'system': {
+        const { days: upDays, hours: upHours } = calculateWibUptime();
         newLog.push({
           type: 'output',
           text: [
@@ -149,7 +168,7 @@ export default function InteractiveTerminal() {
             '      ███╔╝ ██╔████╔██║██║  ██║ OS: Linux Homelab (ThinkPad T440)',
             '     ███╔╝  ██║╚██╔╝██║██║  ██║ Host: Lenovo ThinkPad T440 Core i5',
             '    ███████╗██║ ╚═╝ ██║██████╔╝ Kernel: Linux 6.1.0-agentz-ai',
-            '    ╚══════╝╚═╝     ╚═╝╚═════╝  Uptime: 42 days, 13 hours',
+            `    ╚══════╝╚═╝     ╚═╝╚═════╝  Uptime: ${upDays} days, ${upHours} hours`,
             '                                Shell: zsh 5.9 / agent-z runtime',
             '                                Stack: Nous Hermes • OpenClaw • n8n',
             '                                Database: Supabase Cloud (Live)',
@@ -159,34 +178,42 @@ export default function InteractiveTerminal() {
           ].join('\n'),
         });
         break;
+      }
 
       case 'telemetry':
-      case 'status':
+      case 'status': {
+        const { days: curUptimeDays } = calculateWibUptime();
         newLog.push({
           type: 'output',
-          text: lang === 'en'
-            ? [
-                '⚡ AGENT-Z AI HOMELAB TELEMETRY (LIVE):',
-                '• Orchestrator Node: ThinkPad T440 (Linux Always-On Server)',
-                '• Active Agents    : 3 Sub-Agents (Hermes, OpenClaw, RimbaPulse)',
-                '• Gateway Router   : 9Router Multi-Agent Gateway (Latency: ~240ms)',
-                '• Workflow Engine  : n8n Automated Webhook Pipelines (Active)',
-                '• Database Engine  : Supabase Cloud PostgreSQL (Synchronized)',
-                `• Live Index       : ${liveData.projects.length} Projects, ${liveData.certificates.length} Certificates`,
-                '• Telemetry Status : HEALTHY / OPERATIONAL (100% Uptime)',
-              ].join('\n')
-            : [
-                '⚡ TELEMETRI AI HOMELAB AGENT-Z (LIVE):',
-                '• Server Mandiri   : ThinkPad T440 (Linux Server Always-On)',
-                '• Agen Aktif       : 3 Sub-Agen (Hermes, OpenClaw, RimbaPulse)',
-                '• Router Fallback  : 9Router Multi-Agent Gateway (Latensi: ~240ms)',
-                '• Mesin Otomasi    : Pipeline Webhook n8n (Aktif)',
-                '• Mesin Database   : Supabase Cloud PostgreSQL (Tersinkronisasi)',
-                `• Indeks Data      : ${liveData.projects.length} Proyek, ${liveData.certificates.length} Sertifikat`,
-                '• Status Telemetri : SEHAT / BERJALAN NORMAL (Uptime 100%)',
-              ].join('\n'),
+          text: [
+            '• Orchestrator Node: ThinkPad T440 (Linux Server)',
+            `  * Status: Uptime ${curUptimeDays}+ hari nonstop tanpa reboot.`,
+            '  * Suhu CPU: ~51°C (Sangat dingin & aman, batas bahaya 70°C).',
+            '  * Beban Sistem: Sangat ringan, RAM terpakai 3.1 GB / 6.9 GB.',
+            '',
+            '• Active Agents: 3 Sub-Agents',
+            '  * Hermes Agent: Orkestrator utama (eksekusi tugas, otomasi sistem, integrasi model).',
+            '  * OpenClaw: Pengelola file workspace & asisten data lokal.',
+            '  * RimbaPulse: Sub-agen AI vision berbasis Cloud Run.',
+            '',
+            '• Gateway Router: 9Router Multi-Agent Gateway',
+            '  * Status: Aktif sebagai router cerdas & auto-failover antar-model LLM.',
+            '  * Latensi: Cepat dan stabil di kisaran ~240 ms.',
+            '',
+            '• Workflow Engine: n8n Webhook Pipelines',
+            '  * Status: 100% Aktif (HTTP 200 OK).',
+            '  * Fungsi: Menjalankan pipeline webhook otomatisasi tanpa membebani proses utama.',
+            '',
+            '• Database Engine: Cloud PostgreSQL',
+            '  * Status: Tersinkronisasi penuh dengan latensi query ~241 ms.',
+            '  * Fungsi: Menyimpan data dinamis web portofolio & aset sistem.',
+            '',
+            '• Telemetry Status: HEALTHY / OPERATIONAL',
+            '  * Semua proses berjalan normal, nol insiden OOM/memory crash, sistem siap pakai.',
+          ].join('\n'),
         });
         break;
+      }
 
       case 'whoami':
       case 'about':
@@ -445,21 +472,26 @@ export default function InteractiveTerminal() {
         </div>
       </div>
 
-      {/* Quick Action Chips Bar */}
-      <div className="terminal-quick-chips">
-        <span className="quick-label">
-          <span className="pulse-dot" /> QUICK RUNS
-        </span>
-        {quickCommands.map((cmd) => (
-          <button
-            key={cmd}
-            type="button"
-            className="chip-btn"
-            onClick={() => executeCommand(cmd)}
-          >
-            ${cmd}
-          </button>
-        ))}
+      {/* Modern Cyberpunk Quick Action Chips Bar with Horizontal Scroll */}
+      <div className="terminal-quick-container">
+        <div className="terminal-quick-sticky-label">
+          <span className="terminal-quick-badge">
+            <span className="terminal-quick-pulse" /> QUICK RUNS
+          </span>
+        </div>
+        <div className="terminal-quick-chips-scroll">
+          {quickCommands.map((cmd) => (
+            <button
+              key={cmd}
+              type="button"
+              className="terminal-chip cyberpunk-chip"
+              onClick={() => executeCommand(cmd)}
+            >
+              <span className="chip-prompt">$</span>
+              <span className="chip-cmd">{cmd}</span>
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   );

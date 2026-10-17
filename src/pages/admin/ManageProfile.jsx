@@ -20,6 +20,7 @@ import {
   FiSearch,
   FiGrid,
   FiX,
+  FiMessageSquare,
 } from 'react-icons/fi';
 import { LATEST_CV_PROFILE } from '../../data/latestCvData';
 import { uploadPortfolioFile } from '../../lib/portfolioMedia';
@@ -89,6 +90,7 @@ const ManageProfile = () => {
     lang_id: 'Indonesian (Native)',
     lang_en: 'English (Professional Working)',
     decks: DEFAULT_PROFILE_CONFIG.specialization_decks,
+    agentz_prompts: DEFAULT_PROFILE_CONFIG.agentz_prompts,
   });
 
   useEffect(() => {
@@ -114,6 +116,7 @@ const ManageProfile = () => {
         lang_id: fullProfile.languages?.id || DEFAULT_PROFILE_CONFIG.languages.id,
         lang_en: fullProfile.languages?.en || DEFAULT_PROFILE_CONFIG.languages.en,
         decks: fullProfile.specialization_decks || DEFAULT_PROFILE_CONFIG.specialization_decks,
+        agentz_prompts: fullProfile.agentz_prompts || DEFAULT_PROFILE_CONFIG.agentz_prompts,
       });
     } catch (err) {
       console.warn('Error loading profile in ManageProfile:', err);
@@ -175,6 +178,7 @@ const ManageProfile = () => {
       hero_role: 'AI Engineer & Multi-Agent Architect',
       chips_string: 'PyTorch, LLMs & RAG, Computer Vision, Fullstack',
       decks: DEFAULT_PROFILE_CONFIG.specialization_decks,
+      agentz_prompts: DEFAULT_PROFILE_CONFIG.agentz_prompts,
     }));
     setStatusMsg({
       type: 'info',
@@ -190,6 +194,17 @@ const ManageProfile = () => {
         [field]: value,
       };
       return { ...prev, decks: nextDecks };
+    });
+  };
+
+  const handleAgentzPromptChange = (index, field, value) => {
+    setFormData((prev) => {
+      const nextPrompts = [...(prev.agentz_prompts || DEFAULT_PROFILE_CONFIG.agentz_prompts)];
+      nextPrompts[index] = {
+        ...nextPrompts[index],
+        [field]: value,
+      };
+      return { ...prev, agentz_prompts: nextPrompts };
     });
   };
 
@@ -224,6 +239,7 @@ const ManageProfile = () => {
         id: formData.lang_id,
         en: formData.lang_en,
       },
+      agentz_prompts: formData.agentz_prompts || DEFAULT_PROFILE_CONFIG.agentz_prompts,
       specialization_decks: formData.decks,
     };
 
@@ -262,6 +278,7 @@ const ManageProfile = () => {
             chips: chipsArray,
             languages: fullConfig.languages,
             specialization_decks: formData.decks,
+            agentz_prompts: formData.agentz_prompts || DEFAULT_PROFILE_CONFIG.agentz_prompts,
           })
           .eq('id', 1);
       } catch (schemaErr) {
@@ -270,7 +287,7 @@ const ManageProfile = () => {
 
       setStatusMsg({
         type: 'success',
-        text: 'Profil, foto avatar, dan kartu spesialisasi berhasil diperbarui dan disinkronkan ke Landing Page!',
+        text: 'Profil, foto avatar, kartu spesialisasi, dan pertanyaan Agent-Z berhasil diperbarui dan disinkronkan ke Landing Page!',
       });
     } catch (err) {
       console.warn('Supabase upsert notice:', err);
@@ -660,7 +677,106 @@ const ManageProfile = () => {
         </div>
         </div>
 
-        {/* Section 5: Deskripsi Hero Subtitle */}
+        {/* Section 5: Pertanyaan Interaktif AI Agent-Z (Ask Agent-Z About Zacky) */}
+        <div className="form-section">
+          <h3>
+            <FiMessageSquare /> Pertanyaan Interaktif AI Agent-Z (Kartu Homelab Live Preview)
+          </h3>
+          <p className="section-desc">
+            Kelola 3 tombol pertanyaan cepat pada kartu "AI Homelab Online" di beranda. Saat pengunjung mengklik salah satu tombol ini, Chatbot Agent-Z akan langsung terbuka otomatis dengan pertanyaan yang Anda tentukan di sini.
+          </p>
+
+          <div
+            className="agentz-prompts-admin-grid"
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+              gap: '16px',
+              marginTop: '16px',
+            }}
+          >
+            {(formData.agentz_prompts || DEFAULT_PROFILE_CONFIG.agentz_prompts).map((prompt, idx) => (
+              <div
+                key={idx}
+                className="deck-admin-card"
+                style={{
+                  background: 'rgba(255, 255, 255, 0.02)',
+                  border: '1px solid rgba(0, 210, 255, 0.22)',
+                  borderRadius: '12px',
+                  padding: '16px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '10px',
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <span
+                    className="deck-admin-badge"
+                    style={{
+                      borderColor: '#00d2ff',
+                      color: '#00d2ff',
+                      padding: '3px 8px',
+                      borderRadius: '6px',
+                      fontSize: '0.75rem',
+                      fontWeight: 600,
+                      border: '1px solid #00d2ff',
+                      background: 'rgba(0, 210, 255, 0.08)',
+                    }}
+                  >
+                    TOMBOL PERTANYAAN #{idx + 1}
+                  </span>
+                  <span style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.45)' }}>
+                    Trigger Live Chatbot
+                  </span>
+                </div>
+
+                <div className="form-group" style={{ margin: 0 }}>
+                  <label style={{ fontSize: '0.8rem', marginBottom: '4px', color: 'rgba(255,255,255,0.8)' }}>
+                    Teks Pertanyaan (Bahasa Indonesia)
+                  </label>
+                  <input
+                    type="text"
+                    value={prompt.text_id || ''}
+                    onChange={(e) => handleAgentzPromptChange(idx, 'text_id', e.target.value)}
+                    placeholder="Contoh: Ceritakan proyek Agent-Z..."
+                    style={{
+                      width: '100%',
+                      padding: '8px 12px',
+                      background: 'rgba(0, 0, 0, 0.35)',
+                      border: '1px solid rgba(255, 255, 255, 0.1)',
+                      borderRadius: '8px',
+                      color: '#fff',
+                      fontSize: '0.85rem',
+                    }}
+                  />
+                </div>
+
+                <div className="form-group" style={{ margin: 0 }}>
+                  <label style={{ fontSize: '0.8rem', marginBottom: '4px', color: 'rgba(255,255,255,0.8)' }}>
+                    Question Text (English)
+                  </label>
+                  <input
+                    type="text"
+                    value={prompt.text_en || ''}
+                    onChange={(e) => handleAgentzPromptChange(idx, 'text_en', e.target.value)}
+                    placeholder="Example: Tell me about Agent-Z..."
+                    style={{
+                      width: '100%',
+                      padding: '8px 12px',
+                      background: 'rgba(0, 0, 0, 0.35)',
+                      border: '1px solid rgba(255, 255, 255, 0.1)',
+                      borderRadius: '8px',
+                      color: '#fff',
+                      fontSize: '0.85rem',
+                    }}
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Section 6: Deskripsi Hero Subtitle */}
         <div className="form-section">
           <h3>
             <FiGlobe /> Deskripsi Hero (Subtitle Profil)
@@ -688,7 +804,7 @@ const ManageProfile = () => {
           </div>
         </div>
 
-        {/* Section 6: Deskripsi Lengkap (About Me) */}
+        {/* Section 7: Deskripsi Lengkap (About Me) */}
         <div className="form-section" style={{ borderBottom: 'none' }}>
           <h3>
             <FiUser /> Deskripsi Lengkap (About Me)

@@ -5,7 +5,8 @@
   flex-direction: column;
   width: 100%;
   height: 100%;
-  min-height: 290px;
+  min-height: 340px;
+  max-height: 440px;
   background: rgba(12, 12, 22, 0.96);
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: var(--radius-md);
@@ -22,7 +23,8 @@
 }
 
 .ai-terminal-window.is-expanded {
-  min-height: 420px;
+  min-height: 480px;
+  max-height: 600px;
 }
 
 /* Header */
@@ -114,17 +116,35 @@
 
 /* Body */
 .terminal-body {
-  flex: 1;
+  flex: 1 1 0;
+  min-height: 0;
   display: flex;
   flex-direction: column;
   padding: 0.85rem 1rem;
   overflow-y: auto;
-  min-height: 220px;
+  overflow-x: hidden;
   cursor: text;
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 221, 179, 0.4) rgba(0, 0, 0, 0.25);
 }
 
-.ai-terminal-window.is-expanded .terminal-body {
-  min-height: 380px;
+.terminal-body::-webkit-scrollbar {
+  width: 6px;
+  display: block;
+}
+
+.terminal-body::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.25);
+}
+
+.terminal-body::-webkit-scrollbar-thumb {
+  background: rgba(0, 221, 179, 0.4);
+  border-radius: 4px;
+}
+
+.terminal-body::-webkit-scrollbar-thumb:hover {
+  background: #00ddb3;
 }
 
 .terminal-logs {
@@ -314,19 +334,34 @@
   flex: 1;
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   overflow-x: auto;
   overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 221, 179, 0.45) rgba(255, 255, 255, 0.04);
   touch-action: pan-x;
   overscroll-behavior-x: contain;
-  padding: 2px 2px;
+  padding: 4px 4px 6px;
 }
 
 .terminal-quick-chips-scroll::-webkit-scrollbar {
-  display: none;
+  height: 5px;
+  display: block;
+}
+
+.terminal-quick-chips-scroll::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 4px;
+}
+
+.terminal-quick-chips-scroll::-webkit-scrollbar-thumb {
+  background: rgba(0, 221, 179, 0.45);
+  border-radius: 4px;
+}
+
+.terminal-quick-chips-scroll::-webkit-scrollbar-thumb:hover {
+  background: #00ddb3;
 }
 
 .terminal-chip.cyberpunk-chip {

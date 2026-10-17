@@ -20,6 +20,8 @@ import { fadeLeft, fadeRight, fadeUp, scaleUp, smoothEase, stagger, staggerFast 
 import { projectCategoryFallbacks, projectItemFallbacks, mergePortfolioItems } from '../lib/portfolioFallbacks';
 import { getDisplayType, getFileForItem, getPreviewForItem, isLinkType } from '../lib/portfolioMedia';
 import { useDocumentTitle } from '../hooks/useDocumentTitle';
+import AnimatedCounter from '../components/ui/AnimatedCounter';
+import { getCachedProjects, getCachedCertificates, getCachedHonors, invalidatePortfolioCache } from '../lib/portfolioCache';
 import { getLocalProfileConfig, fetchFullProfile } from '../lib/profileConfig';
 
 const skillIcons = {
@@ -84,17 +86,17 @@ export default function HomePage() {
         { data: exp },
         { data: edu },
         { data: skl },
-        { count: projCount },
-        { count: certCount },
-        { count: honorCount },
+        { projects: cachedProj },
+        { certificates: cachedCerts },
+        { honors: cachedHonors },
       ] = await Promise.all([
         fetchFullProfile(),
         supabase.from('experience').select('*').order('date_start', { ascending: false }),
         supabase.from('education').select('*').order('date_start', { ascending: false }),
         supabase.from('skills').select('*').order('name', { ascending: true }),
-        supabase.from('projects').select('*', { count: 'exact', head: true }),
-        supabase.from('certificates').select('*', { count: 'exact', head: true }),
-        supabase.from('honors').select('*', { count: 'exact', head: true }),
+        getCachedProjects(),
+        getCachedCertificates(),
+        getCachedHonors(),
       ]);
 
       if (fullProfile && isMounted) {
@@ -107,23 +109,36 @@ export default function HomePage() {
 
       if (isMounted) {
         setMetricsStats({
-          projects: projCount || projectItemFallbacks.length || 24,
-          certifications: certCount || 18,
-          honors: honorCount || 5,
+          projects: cachedProj?.length || projectItemFallbacks.length || 24,
+          certifications: cachedCerts?.length || 32,
+          honors: cachedHonors?.length || 4,
         });
       }
 
       if (!isMounted) return;
       loadFeaturedProjects();
 
-      featuredChannel = supabase
-        .channel('home-data-sync')
-        .on('postgres_changes', { event: '*', schema: 'public', table: 'projects' }, loadFeaturedProjects)
-        .on('postgres_changes', { event: '*', schema: 'public', table: 'education' }, fetchData)
-        .on('postgres_changes', { event: '*', schema: 'public', table: 'experience' }, fetchData)
-        .on('postgres_changes', { event: '*', schema: 'public', table: 'skills' }, fetchData)
-        .on('postgres_changes', { event: '*', schema: 'public', table: 'profile' }, fetchData)
-        .subscribe();
+      if (!featuredChannel) {
+        featuredChannel = supabase
+          .channel('home-data-sync')
+          .on('postgres_changes', { event: '*', schema: 'public', table: 'projects' }, () => {
+            invalidatePortfolioCache();
+            handleSync();
+          })
+          .on('postgres_changes', { event: '*', schema: 'public', table: 'certificates' }, () => {
+            invalidatePortfolioCache();
+            handleSync();
+          })
+          .on('postgres_changes', { event: '*', schema: 'public', table: 'honors' }, () => {
+            invalidatePortfolioCache();
+            handleSync();
+          })
+          .on('postgres_changes', { event: '*', schema: 'public', table: 'education' }, fetchData)
+          .on('postgres_changes', { event: '*', schema: 'public', table: 'experience' }, fetchData)
+          .on('postgres_changes', { event: '*', schema: 'public', table: 'skills' }, fetchData)
+          .on('postgres_changes', { event: '*', schema: 'public', table: 'profile' }, fetchData)
+          .subscribe();
+      }
     };
 
     fetchData();
@@ -331,15 +346,21 @@ export default function HomePage() {
           <SpotlightCard className="bento-card-metrics" borderBeam={false} spotlightColor="rgba(124, 111, 255, 0.14)">
             <div className="bento-metrics-grid">
               <div className="bento-metric-col">
-                <span className="bento-metric-num gradient-text">{metricsStats.projects}+</span>
+                <span className="bento-metric-num gradient-text">
+                  <AnimatedCounter target={metricsStats.projects} suffix="+" />
+                </span>
                 <span className="bento-metric-label">{t('bento.metrics.projects')}</span>
               </div>
               <div className="bento-metric-col">
-                <span className="bento-metric-num gradient-text">{metricsStats.certifications}+</span>
+                <span className="bento-metric-num gradient-text">
+                  <AnimatedCounter target={metricsStats.certifications} suffix="+" />
+                </span>
                 <span className="bento-metric-label">{t('bento.metrics.certifications')}</span>
               </div>
               <div className="bento-metric-col">
-                <span className="bento-metric-num gradient-text">{metricsStats.honors}+</span>
+                <span className="bento-metric-num gradient-text">
+                  <AnimatedCounter target={metricsStats.honors} suffix="+" />
+                </span>
                 <span className="bento-metric-label">{t('bento.metrics.honors')}</span>
               </div>
             </div>

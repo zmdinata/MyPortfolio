@@ -20,6 +20,7 @@ export default function Chatbot() {
   const [isHovered, setIsHovered] = useState(false);
   const [isOffline, setIsOffline] = useState(false);
   const messagesEndRef = useRef(null);
+  const inputElementRef = useRef(null);
   const { contextString, isLoading } = usePortfolioContext();
 
   // Teks bilingual untuk speech bubble maskot
@@ -59,6 +60,9 @@ export default function Chatbot() {
       if (event?.detail?.message) {
         setInput(event.detail.message);
       }
+      setTimeout(() => {
+        inputElementRef.current?.focus();
+      }, 250);
     };
     window.addEventListener('open-chatbot', handleOpenChatbot);
     return () => window.removeEventListener('open-chatbot', handleOpenChatbot);
@@ -179,6 +183,7 @@ export default function Chatbot() {
             </div>
             <form className="chatbot-input-area" onSubmit={handleSend}>
               <input
+                ref={inputElementRef}
                 type="text"
                 placeholder={
                   isOffline

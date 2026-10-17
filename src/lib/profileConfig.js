@@ -10,6 +10,20 @@ export const DEFAULT_PROFILE_CONFIG = {
     id: 'Indonesian (Native)',
     en: 'English (Professional Working)',
   },
+  agentz_prompts: [
+    {
+      text_id: 'Ceritakan proyek Agent-Z Homelab di ThinkPad T440',
+      text_en: 'Tell me about Agent-Z Homelab on ThinkPad T440',
+    },
+    {
+      text_id: 'Bagaimana riset prediksi harga tiket di SISFOTEK?',
+      text_en: 'How was the flight price prediction research done at SISFOTEK?',
+    },
+    {
+      text_id: 'Apa itu proyek LestariRimba & RimbaPulse AI?',
+      text_en: 'What is LestariRimba & RimbaPulse AI prototype?',
+    },
+  ],
   specialization_decks: [
     {
       id: 'llm',
@@ -76,6 +90,9 @@ export function getLocalProfileConfig() {
           ...DEFAULT_PROFILE_CONFIG.languages,
           ...(parsed.languages || {}),
         },
+        agentz_prompts: Array.isArray(parsed.agentz_prompts) && parsed.agentz_prompts.length > 0
+          ? parsed.agentz_prompts
+          : DEFAULT_PROFILE_CONFIG.agentz_prompts,
         specialization_decks: decks,
         chips: parsed.chips || DEFAULT_PROFILE_CONFIG.chips,
       };
@@ -121,6 +138,9 @@ export async function fetchFullProfile() {
         email: data.email || localConfig.email,
         chips: data.chips || localConfig.chips,
         languages: data.languages || localConfig.languages,
+        agentz_prompts: Array.isArray(data.agentz_prompts) && data.agentz_prompts.length > 0
+          ? data.agentz_prompts
+          : localConfig.agentz_prompts,
         specialization_decks: data.specialization_decks || localConfig.specialization_decks,
       };
     }
@@ -138,5 +158,6 @@ ALTER TABLE public.profile ADD COLUMN IF NOT EXISTS hero_role TEXT;
 ALTER TABLE public.profile ADD COLUMN IF NOT EXISTS email TEXT;
 ALTER TABLE public.profile ADD COLUMN IF NOT EXISTS chips JSONB;
 ALTER TABLE public.profile ADD COLUMN IF NOT EXISTS languages JSONB;
+ALTER TABLE public.profile ADD COLUMN IF NOT EXISTS agentz_prompts JSONB;
 ALTER TABLE public.profile ADD COLUMN IF NOT EXISTS specialization_decks JSONB;
 `;
