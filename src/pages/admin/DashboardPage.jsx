@@ -73,23 +73,23 @@ export default function DashboardPage() {
       }
 
       setStats({
-        projects: projCount || 3,
-        certificates: certCount || 4,
-        honors: honorCount || 1,
+        projects: projCount || 24,
+        certificates: certCount || 18,
+        honors: honorCount || 5,
         experience: expCount || 2,
         education: eduCount || 1,
-        skills: skillCount || 4,
+        skills: skillCount || 6,
       });
     } catch (err) {
       console.warn('Supabase fetch error, fallback active:', err);
       setDbStatus('fallback');
       setStats({
-        projects: 3,
-        certificates: 4,
-        honors: 1,
+        projects: 24,
+        certificates: 18,
+        honors: 5,
         experience: 2,
         education: 1,
-        skills: 4,
+        skills: 6,
       });
     }
   };
@@ -187,9 +187,9 @@ export default function DashboardPage() {
     {
       title: 'Profil & Bio Hero',
       count: 'Aktif',
-      desc: 'Available for Hire diaktifkan',
+      desc: 'Kelola Foto, Identitas & Deck',
       icon: <FiUser />,
-      link: '/admin/quick-editor',
+      link: '/admin/profile',
       color: '#00cec9',
     },
   ];

@@ -1,6 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useLang } from '../../context/LangContext';
-import { FiTerminal, FiCornerDownLeft, FiMaximize2, FiMinimize2 } from 'react-icons/fi';
+import { FiTerminal, FiMaximize2, FiMinimize2 } from 'react-icons/fi';
+import { supabase } from '../../lib/supabase';
+import { getCachedProjects } from '../../lib/portfolioCache';
+import { fetchFullProfile, getLocalProfileConfig } from '../../lib/profileConfig';
 
 export default function InteractiveTerminal() {
   const { lang } = useLang();
@@ -8,6 +11,15 @@ export default function InteractiveTerminal() {
   const [isExpanded, setIsExpanded] = useState(false);
   const [historyIndex, setHistoryIndex] = useState(-1);
   const [commandHistory, setCommandHistory] = useState([]);
+  const [liveData, setLiveData] = useState({
+    profile: getLocalProfileConfig(),
+    projects: [],
+    skills: [],
+    education: [],
+    experience: [],
+    certificates: [],
+  });
+
   const [terminalLog, setTerminalLog] = useState([
     {
       type: 'system',
@@ -19,6 +31,58 @@ export default function InteractiveTerminal() {
 
   const terminalBodyRef = useRef(null);
   const inputRef = useRef(null);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const loadTerminalDatabase = async () => {
+      try {
+        const [
+          profileData,
+          { projects: cachedProjects },
+          { data: skillsData },
+          { data: eduData },
+          { data: expData },
+          { data: certsData },
+        ] = await Promise.all([
+          fetchFullProfile(),
+          getCachedProjects(),
+          supabase.from('skills').select('*').order('name', { ascending: true }),
+          supabase.from('education').select('*').order('date_start', { ascending: false }),
+          supabase.from('experience').select('*').order('date_start', { ascending: false }),
+          supabase.from('certificates').select('*').order('sort_order', { ascending: true }),
+        ]);
+
+        if (isMounted) {
+          setLiveData({
+            profile: profileData || getLocalProfileConfig(),
+            projects: cachedProjects || [],
+            skills: skillsData || [],
+            education: eduData || [],
+            experience: expData || [],
+            certificates: certsData || [],
+          });
+        }
+      } catch (err) {
+        console.warn('Terminal live data load note:', err);
+      }
+    };
+
+    loadTerminalDatabase();
+
+    const handleSync = () => {
+      if (isMounted) loadTerminalDatabase();
+    };
+
+    window.addEventListener('profile-updated', handleSync);
+    window.addEventListener('portfolio-cache-invalidated', handleSync);
+
+    return () => {
+      isMounted = false;
+      window.removeEventListener('profile-updated', handleSync);
+      window.removeEventListener('portfolio-cache-invalidated', handleSync);
+    };
+  }, []);
 
   // Auto scroll terminal container only, NEVER the window
   useEffect(() => {
@@ -44,29 +108,29 @@ export default function InteractiveTerminal() {
           type: 'output',
           text: lang === 'en'
             ? [
-                'Available commands:',
+                'Available commands (synced with Supabase):',
                 '  neofetch     - Display ThinkPad T440 Linux Homelab system info',
                 '  telemetry    - Live health & agent status for Agent-Z stack',
                 '  whoami       - About Zacky Muhammad Dinata & AI focus',
                 '  skills       - LLM automation, data science & tooling stack',
-                '  projects     - Homelab agent orchestrator, LestariRimba & ML research',
-                '  education    - STMIK IKMI Cirebon (GPA 3.55) & awards',
-                '  experience   - Pijak x IBM SkillsBuild & illustration journey',
-                '  cert         - Professional certifications & credentials',
+                '  projects     - Live project catalog from Supabase database',
+                '  education    - STMIK IKMI Cirebon (GPA 3.55) & academic records',
+                '  experience   - Professional experience & scholarship records',
+                '  cert         - Verified certifications & credentials',
                 '  contact      - Email, website, GitHub, LinkedIn & Dicoding',
                 '  agent-z      - Open the floating AI assistant',
                 '  clear        - Clear terminal output',
               ].join('\n')
             : [
-                'Perintah yang tersedia:',
+                'Perintah yang tersedia (terhubung database Supabase):',
                 '  neofetch     - Tampilkan info sistem Linux Homelab ThinkPad T440',
                 '  telemetry    - Status kesehatan & agen aktif stack Agent-Z',
                 '  whoami       - Profil Zacky Muhammad Dinata & fokus AI',
-                '  skills       - Otomasi LLM, data science & stack teknologi',
-                '  projects     - Homelab agent orchestrator, LestariRimba & riset ML',
-                '  education    - STMIK IKMI Cirebon (IPK 3.55) & prestasi',
-                '  experience   - Pijak x IBM SkillsBuild & riwayat ilustrasi',
-                '  cert         - Sertifikasi profesional terverifikasi',
+                '  skills       - Otomasi LLM, data science & keahlian database',
+                '  projects     - Katalog proyek live dari database Supabase',
+                '  education    - STMIK IKMI Cirebon (IPK 3.55) & riwayat edukasi',
+                '  experience   - Pengalaman profesional & beasiswa IBM',
+                '  cert         - Kredensial sertifikasi resmi terverifikasi',
                 '  contact      - Email, website, GitHub, LinkedIn & Dicoding',
                 '  agent-z      - Buka asisten AI Agent-Z',
                 '  clear        - Bersihkan layar terminal',
@@ -88,7 +152,9 @@ export default function InteractiveTerminal() {
             '    ╚══════╝╚═╝     ╚═╝╚═════╝  Uptime: 42 days, 13 hours',
             '                                Shell: zsh 5.9 / agent-z runtime',
             '                                Stack: Nous Hermes • OpenClaw • n8n',
-            '                                LLM Engine: Gemini API + 9Router',
+            '                                Database: Supabase Cloud (Live)',
+            `                                Projects: ${liveData.projects.length} Active in Database`,
+            `                                Credentials: ${liveData.certificates.length} Verified`,
             '                                Status: Online & Telemetry Active',
           ].join('\n'),
         });
@@ -100,21 +166,23 @@ export default function InteractiveTerminal() {
           type: 'output',
           text: lang === 'en'
             ? [
-                '⚡ AGENT-Z AI HOMELAB TELEMETRY:',
+                '⚡ AGENT-Z AI HOMELAB TELEMETRY (LIVE):',
                 '• Orchestrator Node: ThinkPad T440 (Linux Always-On Server)',
                 '• Active Agents    : 3 Sub-Agents (Hermes, OpenClaw, RimbaPulse)',
                 '• Gateway Router   : 9Router Multi-Agent Gateway (Latency: ~240ms)',
                 '• Workflow Engine  : n8n Automated Webhook Pipelines (Active)',
-                '• Cloud Sync       : Google Cloud Run (LestariRimba API)',
+                '• Database Engine  : Supabase Cloud PostgreSQL (Synchronized)',
+                `• Live Index       : ${liveData.projects.length} Projects, ${liveData.certificates.length} Certificates`,
                 '• Telemetry Status : HEALTHY / OPERATIONAL (100% Uptime)',
               ].join('\n')
             : [
-                '⚡ TELEMETRI AI HOMELAB AGENT-Z:',
+                '⚡ TELEMETRI AI HOMELAB AGENT-Z (LIVE):',
                 '• Server Mandiri   : ThinkPad T440 (Linux Server Always-On)',
                 '• Agen Aktif       : 3 Sub-Agen (Hermes, OpenClaw, RimbaPulse)',
                 '• Router Fallback  : 9Router Multi-Agent Gateway (Latensi: ~240ms)',
                 '• Mesin Otomasi    : Pipeline Webhook n8n (Aktif)',
-                '• Sinkronisasi     : Google Cloud Run (LestariRimba API)',
+                '• Mesin Database   : Supabase Cloud PostgreSQL (Tersinkronisasi)',
+                `• Indeks Data      : ${liveData.projects.length} Proyek, ${liveData.certificates.length} Sertifikat`,
                 '• Status Telemetri : SEHAT / BERJALAN NORMAL (Uptime 100%)',
               ].join('\n'),
         });
@@ -122,145 +190,142 @@ export default function InteractiveTerminal() {
 
       case 'whoami':
       case 'about':
+        const name = liveData.profile.full_name || 'Zacky Muhammad Dinata';
+        const role = liveData.profile.hero_role || 'AI Engineer & Multi-Agent Architect';
+        const summary = lang === 'en'
+          ? (liveData.profile.about_description_en || 'Results-driven AI Engineer & Autonomous Agent Architect.')
+          : (liveData.profile.about_description_id || 'AI Engineer & Arsitek Agen Mandiri berfokus pada otomasi LLM.');
         newLog.push({
           type: 'output',
-          text: lang === 'en'
-            ? '🤖 Zacky Muhammad Dinata\n📍 Cirebon, West Java, Indonesia | https://zmdinata.web.id\n💼 Role: AI Engineer & LLM Automation Specialist\n\n📌 Summary:\nResults-driven AI Engineer focused on building automated systems powered by Large Language Models. Backed by a strong technical foundation from PIJAK in collaboration with the IBM SkillsBuild AI Intensive Program. Actively using OpenClaw, Hermes Agent, and n8n to integrate state-of-the-art LLMs (such as Gemini) into seamless, automated workflows.'
-            : '🤖 Zacky Muhammad Dinata\n📍 Cirebon, Jawa Barat, Indonesia | https://zmdinata.web.id\n💼 Peran: AI Engineer & Spesialis Otomasi LLM\n\n📌 Ringkasan:\nAI Engineer yang berfokus pada pembangunan sistem otomasi bertenaga Large Language Models (LLM). Didukung fondasi teknis dari program intensif PIJAK x IBM SkillsBuild. Menggunakan OpenClaw, Hermes Agent, dan n8n untuk mengintegrasikan model AI terkini (seperti Gemini) ke dalam alur kerja otomatis yang efisien.',
+          text: `🤖 ${name}\n📍 Cirebon, Jawa Barat, Indonesia | https://zmdinata.web.id\n💼 Role: ${role}\n📧 Email: ${liveData.profile.email || 'zmdinata@gmail.com'}\n\n📌 Summary:\n${summary}`,
         });
         break;
 
       case 'skills':
       case 'stack':
-        newLog.push({
-          type: 'output',
-          text: [
-            '🧠 AI & LLM Automation: OpenClaw, Hermes Agent (Nous Research), n8n, Gemini API, 9Router Fallback, PyTorch',
-            '📊 Data & Analytics: Python (pandas, modeling), Statistics (Regression, EDA), SQL (MySQL, MS SQL), Tableau, R, Excel',
-            '💻 Homelab & DevOps: Linux Homelab (ThinkPad T440), PM2, systemd, Docker, Git/GitHub, Cloud Run, Supabase',
-            '🌐 Web & Frontend: React 19, Vite, Tailwind CSS, Framer Motion, Recharts',
-          ].join('\n'),
-        });
+        if (liveData.skills && liveData.skills.length > 0) {
+          const skillLines = liveData.skills.map((s, idx) => `• ${s.name}: ${lang === 'en' ? (s.description_en || '') : (s.description_id || s.description_en || '')}`);
+          newLog.push({
+            type: 'output',
+            text: [
+              '🧠 Active Skills from Supabase Database:',
+              ...skillLines,
+            ].join('\n'),
+          });
+        } else {
+          newLog.push({
+            type: 'output',
+            text: [
+              '🧠 AI & LLM Automation: OpenClaw, Hermes Agent, n8n, Gemini API, PyTorch',
+              '📊 Data & Analytics: Python (pandas, modeling), Statistics (Regression, EDA), SQL, Tableau',
+              '💻 Homelab & DevOps: Linux Homelab (ThinkPad T440), Docker, Git/GitHub, Cloud Run, Supabase',
+              '🌐 Web & Frontend: React 19, Vite, Tailwind CSS, Framer Motion',
+            ].join('\n'),
+          });
+        }
         break;
 
       case 'projects':
-        newLog.push({
-          type: 'output',
-          text: lang === 'en'
-            ? [
-                '🚀 Featured AI Projects:',
-                '1. AutoOverlay AI: Autonomous Options Alpha & Risk Engine (Aug - Sep 2026)',
-                '   • Alpaca AI Trading Hackathon: Monte Carlo Merton Jump Diffusion VaR.',
-                '   • 6-persona investor consensus council + deterministic kill-switches.',
-                '',
-                '2. Agent-Z Homelab: AI Agent Orchestrator (Jan 2026 - Present)',
-                '   • Self-hosted Linux on ThinkPad T440 running Hermes Agent + OpenClaw.',
-                '   • Coordinates sub-agents, automated n8n & Telegram flows, 9Router LLM fallback.',
-                '',
-                '3. LestariRimba: AI-Powered Sustainability Platform (May 2026)',
-                '   • #JuaraVibeCoding prototype featuring RimbaPulse AI & Gemini Deep Research.',
-                '   • Cloud Run: https://lestari-rimba-661373468998.asia-southeast2.run.app/',
-                '',
-                '4. A2Z Agentz: Autonomous Web3 Airdrop Intelligence (AMD Hackathon ACT II)',
-                '5. Flight Ticket Price Prediction with MLR (SISFOTEK National Paper)',
-              ].join('\n')
-            : [
-                '🚀 Proyek AI Unggulan:',
-                '1. AutoOverlay AI: Mesin Alpha & Risiko Opsi Mandiri (Ags - Sep 2026)',
-                '   • Alpaca AI Trading Hackathon: Simulasi Monte Carlo Merton Jump Diffusion VaR.',
-                '   • Konsensus 6 persona investor + pre-trade kill-switch deterministik.',
-                '',
-                '2. Agent-Z Homelab: AI Agent Orchestrator (Jan 2026 - Sekarang)',
-                '   • Server Linux mandiri di ThinkPad T440 dengan Hermes Agent + OpenClaw.',
-                '   • Orkestrasi tim sub-agent, alur n8n & Telegram, fallback API 9Router.',
-                '',
-                '3. LestariRimba: Platform AI Keberlanjutan Lingkungan (Mei 2026)',
-                '   • Karya #JuaraVibeCoding dengan fitur RimbaPulse AI & Gemini Deep Research.',
-                '   • Live URL: https://lestari-rimba-661373468998.asia-southeast2.run.app/',
-                '',
-                '4. A2Z Agentz: Agen Intelijen Airdrop Web3 (AMD Hackathon ACT II)',
-                '5. Prediksi Harga Tiket Penerbangan (Publikasi Riset SISFOTEK MLR)',
-              ].join('\n'),
-        });
+        if (liveData.projects && liveData.projects.length > 0) {
+          const projLines = liveData.projects.slice(0, 6).map((p, idx) => {
+            const title = lang === 'en' ? (p.title_en || p.title) : (p.title_id || p.title_en || p.title);
+            const isFeat = p.is_featured ? ' [FEATURED BENTO]' : '';
+            return `${idx + 1}. ${title}${isFeat}\n   • Kategori: ${(p.category || 'General').toUpperCase()} | Tipe: ${p.type}\n   • Link: ${p.file || '-'}`;
+          });
+          newLog.push({
+            type: 'output',
+            text: [
+              `🚀 Live Projects Catalog (${liveData.projects.length} Total in Supabase):`,
+              ...projLines,
+              '',
+              'Ketik "help" untuk melihat perintah lainnya.',
+            ].join('\n'),
+          });
+        } else {
+          newLog.push({
+            type: 'output',
+            text: '🚀 Loading projects from Supabase database...',
+          });
+        }
         break;
 
       case 'education':
       case 'edu':
-        newLog.push({
-          type: 'output',
-          text: lang === 'en'
-            ? [
-                '🎓 STMIK IKMI Cirebon (Oct 2024 - 2028)',
-                '• Degree: Pursuing Bachelor\'s degree in Information Systems',
-                '• Current GPA: 3.55 / 4.00',
-                '• Achievement: Bronze Medal, National Business Plan Competition "Cipta Nusantara Fest Vol. 2" (2025), Universitas Negeri Yogyakarta (Idea: "Es Krim Jamu")',
-                '• Coursework: Data Science, Statistics, Machine Learning, AI Engineer',
-              ].join('\n')
-            : [
-                '🎓 STMIK IKMI Cirebon (Okt 2024 - 2028)',
-                '• Program: Sarjana Sistem Informasi',
-                '• IPK Terkini: 3.55 / 4.00',
-                '• Prestasi: Medali Perunggu, National Business Plan Competition "Cipta Nusantara Fest Vol. 2" (2025) di Universitas Negeri Yogyakarta (ide: "Es Krim Jamu")',
-                '• Mata Kuliah Utama: Data Science, Statistika, Machine Learning, AI Engineer',
-              ].join('\n'),
-        });
+        if (liveData.education && liveData.education.length > 0) {
+          const eduLines = liveData.education.map((e) => {
+            const level = lang === 'en' ? (e.level_en || '') : (e.level_id || e.level_en || '');
+            const major = lang === 'en' ? (e.major_en || '') : (e.major_id || e.major_en || '');
+            const desc = lang === 'en' ? (e.description_en || '') : (e.description_id || e.description_en || '');
+            return `🎓 ${e.school} (${level} ${major})\n• Nilai/IPK: ${e.grade_value || '3.55'}\n• Detail: ${desc}`;
+          });
+          newLog.push({
+            type: 'output',
+            text: [
+              '🎓 Riwayat Pendidikan (Live Database):',
+              ...eduLines,
+            ].join('\n'),
+          });
+        } else {
+          newLog.push({
+            type: 'output',
+            text: '🎓 STMIK IKMI Cirebon — Sarjana Sistem Informasi (IPK: 3.55 / 4.00)',
+          });
+        }
         break;
 
       case 'experience':
       case 'exp':
-        newLog.push({
-          type: 'output',
-          text: lang === 'en'
-            ? [
-                '💼 Professional Experience:',
-                '1. Pijak in collaboration with IBM SkillsBuild (Feb 2026 - Jul 2026)',
-                '   • Role: AI Engineer Intensive Program Scholar',
-                '   • Awarded full scholarship through competitive selection.',
-                '   • Completed end-to-end ML & AI curriculum + 7 ILT soft skill sessions.',
-                '',
-                '2. Freelance NFT & Digital Illustration Artist (Dec 2020 - Oct 2024)',
-                '   • Completed 60+ custom illustrations for FlokyApe NFT collection.',
-                '   • Designed 30+ layered traits inspired by Azuki-style art.',
-              ].join('\n')
-            : [
-                '💼 Pengalaman Profesional:',
-                '1. Pijak x IBM SkillsBuild (Feb 2026 - Jul 2026)',
-                '   • Peran: AI Engineer Intensive Program Scholar',
-                '   • Penerima beasiswa penuh melalui seleksi kompetitif nasional.',
-                '   • Menyelesaikan kurikulum AI, Deep Learning, ML Systems & 7 sesi ILT soft skills.',
-                '',
-                '2. Seniman Ilustrasi Digital & NFT Lepas (Des 2020 - Okt 2024)',
-                '   • Menyelesaikan 60+ karya NFT untuk koleksi FlokyApe.',
-                '   • Mendesain 30+ trait berlayer bergaya Azuki.',
-              ].join('\n'),
-        });
+        if (liveData.experience && liveData.experience.length > 0) {
+          const expLines = liveData.experience.map((e, idx) => {
+            const company = lang === 'en' ? (e.company_en || '') : (e.company_id || e.company_en || '');
+            const role = lang === 'en' ? (e.role_en || '') : (e.role_id || e.role_en || '');
+            const period = lang === 'en' ? (e.period_en || '') : (e.period_id || e.period_en || '');
+            const desc = lang === 'en' ? (e.description_en || '') : (e.description_id || e.description_en || '');
+            return `${idx + 1}. ${company} (${period})\n   • Peran: ${role}\n   • Ringkasan: ${desc}`;
+          });
+          newLog.push({
+            type: 'output',
+            text: [
+              '💼 Riwayat Pengalaman Profesional (Live Database):',
+              ...expLines,
+            ].join('\n'),
+          });
+        } else {
+          newLog.push({
+            type: 'output',
+            text: '💼 Pijak x IBM SkillsBuild — AI Engineer Intensive Program Scholar',
+          });
+        }
         break;
 
       case 'cert':
       case 'certifications':
-        newLog.push({
-          type: 'output',
-          text: [
-            '📜 Key Certifications:',
-            '• AI Engineer Intensive Program Scholar (Pijak x IBM SkillsBuild)',
-            '• Data Science with Python: from A to Z (Fastcampus IDN)',
-            '• Python Essentials 1 (Cisco Networking Academy)',
-            '• Fundamental Database MySQL (Coding Studio)',
-            '• Fundamental Excel (Coding Studio)',
-            '• Introduction to Artificial Intelligence (IBM SkillsBuild)',
-          ].join('\n'),
-        });
+        if (liveData.certificates && liveData.certificates.length > 0) {
+          const certLines = liveData.certificates.slice(0, 8).map((c, idx) => `• ${c.title}`);
+          newLog.push({
+            type: 'output',
+            text: [
+              `📜 Verified Certifications (${liveData.certificates.length} Total in Supabase):`,
+              ...certLines,
+            ].join('\n'),
+          });
+        } else {
+          newLog.push({
+            type: 'output',
+            text: '📜 Loading certifications from Supabase...',
+          });
+        }
         break;
 
       case 'contact':
         newLog.push({
           type: 'output',
           text: [
-            '📧 Email: zmdinata@gmail.com',
+            `📧 Email: ${liveData.profile.email || 'zmdinata@gmail.com'}`,
             '🌐 Website: https://zmdinata.web.id',
             '💼 LinkedIn: https://www.linkedin.com/in/zacky-muhammad-dinata-463995280',
             '🐙 GitHub: https://github.com/zmdinata',
-            '🎓 Dicoding Profile: https://pijak-career-fair.dicoding.com/u/dc_4435233',
+            '🎓 Dicoding: https://pijak-career-fair.dicoding.com/u/dc_4435233',
             '📸 Instagram: @zmdinataaa',
           ].join('\n'),
         });
@@ -362,7 +427,7 @@ export default function InteractiveTerminal() {
           ))}
         </div>
 
-        {/* Input Prompt Row */}
+        {/* Input Line */}
         <div className="terminal-input-row">
           <span className="prompt-symbol">❯</span>
           <input
@@ -375,41 +440,26 @@ export default function InteractiveTerminal() {
             placeholder={lang === 'en' ? 'type command...' : 'ketik perintah...'}
             autoCapitalize="none"
             autoCorrect="off"
-            spellCheck={false}
+            spellCheck="false"
           />
-          <button 
-            type="button" 
-            className="terminal-send-btn" 
-            onClick={() => executeCommand(input)}
-            aria-label="Send Command"
-          >
-            <FiCornerDownLeft />
-          </button>
         </div>
       </div>
 
-      {/* Quick Action Chips - Modern Cyberpunk Glass */}
-      <div className="terminal-quick-container">
-        <div className="terminal-quick-sticky-label">
-          <span className="terminal-quick-badge">
-            <span className="terminal-quick-pulse"></span>
-            ⚡ {lang === 'en' ? 'QUICK RUNS' : 'AKSI CEPAT'}
-          </span>
-        </div>
-        <div className="terminal-quick-chips-scroll">
-          {quickCommands.map((cmd) => (
-            <button
-              key={cmd}
-              type="button"
-              className="terminal-chip cyberpunk-chip"
-              onClick={() => executeCommand(cmd)}
-              title={lang === 'en' ? `Run command: ${cmd}` : `Jalankan perintah: ${cmd}`}
-            >
-              <span className="chip-prompt">$</span>
-              <span className="chip-cmd">{cmd}</span>
-            </button>
-          ))}
-        </div>
+      {/* Quick Action Chips Bar */}
+      <div className="terminal-quick-chips">
+        <span className="quick-label">
+          <span className="pulse-dot" /> QUICK RUNS
+        </span>
+        {quickCommands.map((cmd) => (
+          <button
+            key={cmd}
+            type="button"
+            className="chip-btn"
+            onClick={() => executeCommand(cmd)}
+          >
+            ${cmd}
+          </button>
+        ))}
       </div>
     </div>
   );

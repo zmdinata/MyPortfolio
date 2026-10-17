@@ -20,6 +20,7 @@ import { fadeLeft, fadeRight, fadeUp, scaleUp, smoothEase, stagger, staggerFast 
 import { projectCategoryFallbacks, projectItemFallbacks, mergePortfolioItems } from '../lib/portfolioFallbacks';
 import { getDisplayType, getFileForItem, getPreviewForItem, isLinkType } from '../lib/portfolioMedia';
 import { useDocumentTitle } from '../hooks/useDocumentTitle';
+import { getLocalProfileConfig, fetchFullProfile } from '../lib/profileConfig';
 
 const skillIcons = {
   data: <FaIcons.FaChartBar />,
@@ -39,6 +40,12 @@ export default function HomePage() {
   );
 
   const [profile, setProfile] = useState(null);
+  const [profileConfig, setProfileConfig] = useState(getLocalProfileConfig());
+  const [metricsStats, setMetricsStats] = useState({
+    projects: 24,
+    certifications: 18,
+    honors: 5,
+  });
   const [dbExperiences, setDbExperiences] = useState([]);
   const [dbEducation, setDbEducation] = useState([]);
   const [dbSkills, setDbSkills] = useState([]);
@@ -72,17 +79,39 @@ export default function HomePage() {
     };
 
     const fetchData = async () => {
-      const { data: prof } = await supabase.from('profile').select('*').eq('id', 1).single();
-      if (prof && isMounted) setProfile(prof);
+      const [
+        fullProfile,
+        { data: exp },
+        { data: edu },
+        { data: skl },
+        { count: projCount },
+        { count: certCount },
+        { count: honorCount },
+      ] = await Promise.all([
+        fetchFullProfile(),
+        supabase.from('experience').select('*').order('date_start', { ascending: false }),
+        supabase.from('education').select('*').order('date_start', { ascending: false }),
+        supabase.from('skills').select('*').order('name', { ascending: true }),
+        supabase.from('projects').select('*', { count: 'exact', head: true }),
+        supabase.from('certificates').select('*', { count: 'exact', head: true }),
+        supabase.from('honors').select('*', { count: 'exact', head: true }),
+      ]);
 
-      const { data: exp } = await supabase.from('experience').select('*').order('date_start', { ascending: false });
+      if (fullProfile && isMounted) {
+        setProfile(fullProfile);
+        setProfileConfig(fullProfile);
+      }
       if (exp && isMounted) setDbExperiences(exp);
-
-      const { data: edu } = await supabase.from('education').select('*').order('date_start', { ascending: false });
       if (edu && isMounted) setDbEducation(edu);
-
-      const { data: skl } = await supabase.from('skills').select('*').order('name', { ascending: true });
       if (skl && isMounted) setDbSkills(skl);
+
+      if (isMounted) {
+        setMetricsStats({
+          projects: projCount || projectItemFallbacks.length || 24,
+          certifications: certCount || 18,
+          honors: honorCount || 5,
+        });
+      }
 
       if (!isMounted) return;
       loadFeaturedProjects();
@@ -106,14 +135,23 @@ export default function HomePage() {
       }
     };
 
+    const handleProfileUpdate = (e) => {
+      if (isMounted && e.detail) {
+        setProfileConfig((prev) => ({ ...prev, ...e.detail }));
+        setProfile((prev) => ({ ...prev, ...e.detail }));
+      }
+    };
+
     window.addEventListener('focus', handleSync);
     window.addEventListener('portfolio-cache-invalidated', handleSync);
+    window.addEventListener('profile-updated', handleProfileUpdate);
 
     return () => {
       isMounted = false;
       if (featuredChannel) supabase.removeChannel(featuredChannel);
       window.removeEventListener('focus', handleSync);
       window.removeEventListener('portfolio-cache-invalidated', handleSync);
+      window.removeEventListener('profile-updated', handleProfileUpdate);
     };
   }, []);
 
@@ -224,7 +262,7 @@ export default function HomePage() {
                 <span className="bento-kicker">{t('bento.kicker')}</span>
               </div>
               <motion.h1 className="bento-hero-title gradient-text" variants={fadeUp}>
-                {t('hero.name')}
+                {profileConfig.full_name || t('hero.name')}
               </motion.h1>
               <p className="bento-hero-bio">
                 {heroJob}
@@ -233,8 +271,8 @@ export default function HomePage() {
 
             <div>
               <div className="hero-meta" style={{ marginBottom: '1.5rem' }}>
-                <span className="hero-pill">{t('hero.langId')}</span>
-                <span className="hero-pill">{t('hero.langEn')}</span>
+                <span className="hero-pill">{profileConfig.languages?.id || t('hero.langId')}</span>
+                <span className="hero-pill">{profileConfig.languages?.en || t('hero.langEn')}</span>
               </div>
 
               <div className="bento-hero-actions">
@@ -273,7 +311,10 @@ export default function HomePage() {
 
           {/* Card 2: Interactive Profile Showcase Deck */}
           <SpotlightCard className="bento-card-profile" borderBeam={true} spotlightColor="rgba(0, 221, 179, 0.18)">
-            <ProfileInteractiveDeck name={t('hero.name')} role={t('bento.role')} />
+            <ProfileInteractiveDeck
+              name={profileConfig.full_name || t('hero.name')}
+              role={profileConfig.hero_role || t('bento.role')}
+            />
           </SpotlightCard>
 
           {/* Card 3: Interactive Terminal Card */}
@@ -286,23 +327,19 @@ export default function HomePage() {
             <AiTelemetryCard />
           </SpotlightCard>
 
-          {/* Card 5: Metrics & Impact Overview */}
+          {/* Card 5: Metrics & Impact Overview (Synchronized 3-Column Grid) */}
           <SpotlightCard className="bento-card-metrics" borderBeam={false} spotlightColor="rgba(124, 111, 255, 0.14)">
             <div className="bento-metrics-grid">
               <div className="bento-metric-col">
-                <span className="bento-metric-num gradient-text">24+</span>
+                <span className="bento-metric-num gradient-text">{metricsStats.projects}+</span>
                 <span className="bento-metric-label">{t('bento.metrics.projects')}</span>
               </div>
               <div className="bento-metric-col">
-                <span className="bento-metric-num gradient-text">14+</span>
-                <span className="bento-metric-label">{t('bento.metrics.models')}</span>
-              </div>
-              <div className="bento-metric-col">
-                <span className="bento-metric-num gradient-text">18+</span>
+                <span className="bento-metric-num gradient-text">{metricsStats.certifications}+</span>
                 <span className="bento-metric-label">{t('bento.metrics.certifications')}</span>
               </div>
               <div className="bento-metric-col">
-                <span className="bento-metric-num gradient-text">5+</span>
+                <span className="bento-metric-num gradient-text">{metricsStats.honors}+</span>
                 <span className="bento-metric-label">{t('bento.metrics.honors')}</span>
               </div>
             </div>
