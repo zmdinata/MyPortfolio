@@ -132,8 +132,15 @@ export default function UnifiedHeroProfileCard({
             </div>
           </div>
 
-          {/* Sisi Kanan Atas: Nama, Badge Status, Headline */}
+          {/* Sisi Kanan Atas: Badge Status (Di Atas), Nama Utama, Headline */}
           <div className="unified-identity-details">
+            {isAvailable && (
+              <div className="unified-avail-badge">
+                <span className="bento-avail-beacon" />
+                <span>{t('hero.available')}</span>
+              </div>
+            )}
+
             <div className="unified-name-row">
               <div className="unified-name-group">
                 <h1 className="unified-title gradient-text">{displayName}</h1>
@@ -141,13 +148,6 @@ export default function UnifiedHeroProfileCard({
                   <ShieldCheck size={18} />
                 </span>
               </div>
-
-              {isAvailable && (
-                <div className="unified-avail-badge">
-                  <span className="bento-avail-beacon" />
-                  <span>{t('hero.available')}</span>
-                </div>
-              )}
             </div>
 
             <p className="unified-role-headline">{displayRole}</p>

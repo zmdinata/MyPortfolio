@@ -1169,12 +1169,12 @@
 .unified-cover-vignette {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to bottom, rgba(10, 13, 22, 0.1) 0%, rgba(10, 13, 22, 0.4) 60%, rgba(10, 13, 22, 0.98) 100%);
+  background: linear-gradient(to bottom, transparent 0%, transparent 82%, rgba(10, 13, 22, 0.95) 100%);
   pointer-events: none;
 }
 
 [data-theme="light"] .unified-cover-vignette {
-  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.5) 60%, #ffffff 100%);
+  background: linear-gradient(to bottom, transparent 0%, transparent 82%, rgba(255, 255, 255, 0.95) 100%);
 }
 
 .unified-content-body {
@@ -1199,7 +1199,7 @@
   column-gap: 2rem;
   row-gap: 0.6rem;
   align-items: start;
-  margin-top: -3.5rem;
+  margin-top: 0;
   margin-bottom: 2rem;
   width: 100%;
   max-width: 100%;
@@ -1211,6 +1211,8 @@
   grid-area: avatar;
   flex-shrink: 0;
   position: relative;
+  margin-top: -4.5rem; /* Only the avatar ring overlaps the bottom edge of the banner */
+  z-index: 3;
 }
 
 .unified-avatar-ring {
@@ -1253,6 +1255,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  padding-top: 0.75rem; /* Sits completely below the banner, zero collision with banner text! */
 }
 
 /* Identity Body (Bio, Chips, Action Buttons) */
@@ -1299,6 +1302,8 @@
 .unified-avail-badge {
   display: inline-flex;
   align-items: center;
+  align-self: flex-start;
+  width: fit-content;
   gap: 0.5rem;
   padding: 0.35rem 0.95rem;
   border-radius: var(--radius-pill);
@@ -1497,6 +1502,85 @@
   border-color: rgba(255, 255, 255, 0.25);
   color: #fff;
   transform: translateY(-1px);
+}
+
+/* Light Mode Overrides for Action Buttons, Badges & Credential Links */
+[data-theme="light"] .unified-btn-secondary {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+  color: #0f172a;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+[data-theme="light"] .unified-btn-secondary:hover {
+  background: #e2e8f0;
+  border-color: #94a3b8;
+  color: #020617;
+}
+
+[data-theme="light"] .unified-btn-action {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+  color: #1e293b;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+[data-theme="light"] .unified-btn-action:hover {
+  background: #f1f5f9;
+  border-color: #94a3b8;
+  color: #0f172a;
+}
+
+[data-theme="light"] .unified-btn-action.copied {
+  background: rgba(46, 213, 115, 0.15);
+  border-color: #2ed573;
+  color: #15803d;
+}
+
+[data-theme="light"] .unified-btn-agentz {
+  background: rgba(0, 221, 179, 0.08);
+  border-color: rgba(0, 180, 150, 0.4);
+  color: #00876c;
+}
+
+[data-theme="light"] .unified-btn-agentz:hover {
+  background: rgba(0, 221, 179, 0.16);
+  border-color: #00876c;
+}
+
+[data-theme="light"] .unified-btn-credential {
+  background: #f8fafc;
+  border-color: #e2e8f0;
+  color: #334155;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+}
+
+[data-theme="light"] .unified-btn-credential:hover {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+  color: #0f172a;
+}
+
+[data-theme="light"] .unified-pill-lang {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+  color: #334155;
+}
+
+[data-theme="light"] .unified-chip-item {
+  background: rgba(0, 180, 216, 0.08);
+  border-color: rgba(0, 180, 216, 0.25);
+  color: #007791;
+}
+
+[data-theme="light"] .unified-avail-badge {
+  background: rgba(0, 221, 179, 0.12);
+  border-color: rgba(0, 180, 150, 0.35);
+  color: #00876c;
+}
+
+[data-theme="light"] .unified-role-headline {
+  color: #0284c7;
 }
 
 /* Lower Content Split (2 Balanced Columns) */
@@ -1782,12 +1866,18 @@
    ======================================================== */
 @media (max-width: 1024px) {
   .unified-identity-header {
-    margin-top: -2.8rem;
+    margin-top: 0;
     column-gap: 1.5rem;
+  }
+  .unified-avatar-container {
+    margin-top: -3.8rem;
   }
   .unified-avatar-ring {
     width: 105px;
     height: 105px;
+  }
+  .unified-identity-details {
+    padding-top: 0.5rem;
   }
   .unified-lower-split {
     grid-template-columns: 1fr;
@@ -1810,9 +1900,12 @@
       "body   body";
     column-gap: 1rem;
     row-gap: 0.85rem;
-    align-items: center;
-    margin-top: -2.2rem;
+    align-items: start;
+    margin-top: 0;
     margin-bottom: 1.25rem;
+  }
+  .unified-avatar-container {
+    margin-top: -3rem;
   }
   .unified-avatar-ring {
     width: 82px;
@@ -1826,29 +1919,43 @@
     right: 2px;
   }
   .unified-identity-details {
+    padding-top: 0.35rem;
     min-width: 0;
     gap: 0.35rem;
+  }
+  .unified-avail-badge {
+    align-self: flex-start;
+    padding: 0.22rem 0.65rem;
+    font-size: 0.72rem;
   }
   .unified-name-row {
     gap: 0.5rem;
   }
   .unified-title {
-    font-size: clamp(1.25rem, 5vw, 1.55rem);
+    font-size: clamp(1.15rem, 4.5vw, 1.35rem);
   }
   .unified-role-headline {
-    font-size: 0.92rem;
+    font-size: 0.84rem;
   }
   .unified-identity-body {
     width: 100%;
     min-width: 0;
-    gap: 0.75rem;
+    gap: 0.65rem;
   }
   .unified-bio-subtitle {
-    font-size: 0.86rem;
-    line-height: 1.55;
+    font-size: 0.8rem;
+    line-height: 1.52;
   }
   .unified-meta-row {
-    gap: 0.5rem;
+    gap: 0.45rem;
+  }
+  .unified-pill-lang {
+    font-size: 0.72rem;
+    padding: 0.2rem 0.55rem;
+  }
+  .unified-chip-item {
+    font-size: 0.72rem;
+    padding: 0.2rem 0.5rem;
   }
   .unified-actions-row-primary {
     display: grid;
@@ -1859,19 +1966,22 @@
   .unified-btn-primary {
     grid-column: 1 / -1;
     justify-content: center;
-    padding: 0.75rem 1rem;
-    font-size: 0.88rem;
+    padding: 0.65rem 0.85rem;
+    font-size: 0.84rem;
+    min-height: 42px;
   }
   .unified-btn-secondary {
     grid-column: 1 / -1;
     justify-content: center;
-    padding: 0.7rem 1rem;
-    font-size: 0.86rem;
+    padding: 0.62rem 0.85rem;
+    font-size: 0.82rem;
+    min-height: 40px;
   }
   .unified-btn-action {
     justify-content: center;
-    padding: 0.65rem 0.75rem;
-    font-size: 0.82rem;
+    padding: 0.55rem 0.7rem;
+    font-size: 0.8rem;
+    min-height: 38px;
     min-width: 0;
   }
   .unified-actions-row-secondary {
@@ -1882,16 +1992,23 @@
   }
   .unified-btn-credential {
     justify-content: center;
-    font-size: 0.78rem;
-    padding: 0.5rem 0.5rem;
+    font-size: 0.75rem;
+    padding: 0.45rem 0.5rem;
     text-align: center;
   }
   .unified-about-box {
     height: auto;
-    padding: 1.25rem;
+    padding: 1.15rem;
+  }
+  .unified-about-text {
+    font-size: 0.88rem;
+    line-height: 1.6;
+  }
+  .unified-highlight-item {
+    font-size: 0.8rem;
   }
   .unified-deck-tabpanel {
-    padding: 1.25rem;
+    padding: 1.15rem;
   }
 }
 
@@ -1902,7 +2019,10 @@
   .unified-identity-header {
     column-gap: 0.75rem;
     row-gap: 0.75rem;
-    margin-top: -1.8rem;
+    margin-top: 0;
+  }
+  .unified-avatar-container {
+    margin-top: -2.6rem;
   }
   .unified-avatar-ring {
     width: 72px;
@@ -1913,30 +2033,30 @@
     width: 12px;
     height: 12px;
   }
+  .unified-avail-badge {
+    padding: 0.18rem 0.55rem;
+    font-size: 0.68rem;
+  }
   .unified-title {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
   }
   .unified-role-headline {
-    font-size: 0.82rem;
+    font-size: 0.78rem;
   }
   .unified-bio-subtitle {
-    font-size: 0.8rem;
-    line-height: 1.5;
-  }
-  .unified-avail-badge {
-    padding: 0.25rem 0.65rem;
-    font-size: 0.75rem;
+    font-size: 0.76rem;
+    line-height: 1.48;
   }
   .unified-meta-row {
     gap: 0.35rem;
   }
   .unified-pill-lang {
-    font-size: 0.72rem;
-    padding: 0.2rem 0.55rem;
+    font-size: 0.68rem;
+    padding: 0.18rem 0.48rem;
   }
   .unified-chip-item {
-    font-size: 0.72rem;
-    padding: 0.2rem 0.5rem;
+    font-size: 0.68rem;
+    padding: 0.18rem 0.45rem;
   }
   .unified-deck-tabs {
     gap: 0.35rem;
@@ -1944,14 +2064,30 @@
   }
   .unified-deck-tab-btn {
     flex: 0 0 auto;
-    padding: 0.45rem 0.7rem;
-    font-size: 0.75rem;
+    padding: 0.42rem 0.65rem;
+    font-size: 0.72rem;
   }
   .unified-about-box {
-    padding: 1rem;
+    padding: 0.95rem;
+  }
+  .unified-about-text {
+    font-size: 0.82rem;
+    line-height: 1.55;
+  }
+  .unified-highlight-item {
+    font-size: 0.76rem;
   }
   .unified-deck-tabpanel {
-    padding: 1rem;
+    padding: 0.95rem;
+  }
+  .unified-deck-title {
+    font-size: 0.98rem;
+  }
+  .unified-deck-metric {
+    font-size: 0.76rem;
+  }
+  .unified-deck-desc {
+    font-size: 0.8rem;
   }
 }
 
