@@ -14,10 +14,10 @@ export function usePortfolioContext() {
         const { data: profile } = await supabase.from('profile').select('*').eq('id', 1).single();
         
         // Fetch Pengalaman
-        const { data: experiences } = await supabase.from('experience').select('*').order('year', { ascending: false });
+        const { data: experiences } = await supabase.from('experience').select('*').order('date_start', { ascending: false });
         
         // Fetch Pendidikan
-        const { data: education } = await supabase.from('education').select('*').order('year_start', { ascending: false });
+        const { data: education } = await supabase.from('education').select('*').order('date_start', { ascending: false });
         
         // Fetch Skills
         const { data: skills } = await supabase.from('skills').select('*').order('name', { ascending: true });
@@ -26,7 +26,7 @@ export function usePortfolioContext() {
         const { data: projects } = await supabase.from('projects').select('*').order('created_at', { ascending: false });
         
         // Fetch Sertifikasi
-        const { data: certificates } = await supabase.from('certificates').select('*').order('year', { ascending: false });
+        const { data: certificates } = await supabase.from('certificates').select('*').order('sort_order', { ascending: true });
 
         // Build context string
         let context = "";

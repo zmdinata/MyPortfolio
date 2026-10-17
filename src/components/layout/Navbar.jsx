@@ -28,11 +28,25 @@ export default function Navbar() {
   const location = useLocation();
 
   useEffect(() => {
+    let isMounted = true;
     const fetchStatus = async () => {
       const { data } = await supabase.from('profile').select('available_for_hire').eq('id', 1).single();
-      if (data) setIsAvailable(data.available_for_hire);
+      if (data && isMounted) setIsAvailable(data.available_for_hire);
     };
     fetchStatus();
+
+    const channel = supabase
+      .channel('navbar-profile-sync')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'profile' }, fetchStatus)
+      .subscribe();
+
+    window.addEventListener('focus', fetchStatus);
+
+    return () => {
+      isMounted = false;
+      supabase.removeChannel(channel);
+      window.removeEventListener('focus', fetchStatus);
+    };
   }, []);
 
   useEffect(() => {

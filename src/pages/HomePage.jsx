@@ -75,10 +75,10 @@ export default function HomePage() {
       const { data: prof } = await supabase.from('profile').select('*').eq('id', 1).single();
       if (prof && isMounted) setProfile(prof);
 
-      const { data: exp } = await supabase.from('experience').select('*').order('year', { ascending: false });
+      const { data: exp } = await supabase.from('experience').select('*').order('date_start', { ascending: false });
       if (exp && isMounted) setDbExperiences(exp);
 
-      const { data: edu } = await supabase.from('education').select('*').order('year_start', { ascending: false });
+      const { data: edu } = await supabase.from('education').select('*').order('date_start', { ascending: false });
       if (edu && isMounted) setDbEducation(edu);
 
       const { data: skl } = await supabase.from('skills').select('*').order('name', { ascending: true });
@@ -86,17 +86,34 @@ export default function HomePage() {
 
       if (!isMounted) return;
       loadFeaturedProjects();
+
       featuredChannel = supabase
-        .channel('home-featured-projects')
+        .channel('home-data-sync')
         .on('postgres_changes', { event: '*', schema: 'public', table: 'projects' }, loadFeaturedProjects)
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'education' }, fetchData)
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'experience' }, fetchData)
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'skills' }, fetchData)
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'profile' }, fetchData)
         .subscribe();
     };
 
     fetchData();
 
+    const handleSync = () => {
+      if (isMounted) {
+        fetchData();
+        loadFeaturedProjects();
+      }
+    };
+
+    window.addEventListener('focus', handleSync);
+    window.addEventListener('portfolio-cache-invalidated', handleSync);
+
     return () => {
       isMounted = false;
       if (featuredChannel) supabase.removeChannel(featuredChannel);
+      window.removeEventListener('focus', handleSync);
+      window.removeEventListener('portfolio-cache-invalidated', handleSync);
     };
   }, []);
 
@@ -133,29 +150,29 @@ export default function HomePage() {
 
   // Fallback Logic
   const experiences = dbExperiences.length > 0 ? dbExperiences.map(e => ({
-    role: lang === 'en' ? e.role_en : e.role_id,
-    company: lang === 'en' ? e.company_en : e.company_id,
+    role: lang === 'en' ? (e.role_en || e.role_id) : (e.role_id || e.role_en),
+    company: lang === 'en' ? (e.company_en || e.company_id) : (e.company_id || e.company_en),
     period: formatPeriod(e.date_start, e.date_end, e.location_en, e.location_id, e.work_type),
-    description: lang === 'en' ? e.description_en : e.description_id,
+    description: lang === 'en' ? (e.description_en || e.description_id) : (e.description_id || e.description_en),
     responsibilities: e.responsibilities || [],
     achievements: e.achievements || []
   })) : t('experience.items');
 
   const education = dbEducation.length > 0 ? dbEducation.map(e => ({
     school: e.school,
-    degree: lang === 'en' ? e.level_en : e.level_id,
-    major: lang === 'en' ? e.major_en : e.major_id,
+    degree: lang === 'en' ? (e.level_en || e.level_id) : (e.level_id || e.level_en),
+    major: lang === 'en' ? (e.major_en || e.major_id) : (e.major_id || e.major_en),
     period: formatPeriod(e.date_start, e.date_end, 'Global', 'Global', '').split('·')[0].trim(), // Reusing formatPeriod but ignoring location/type
     grade_type: e.grade_type,
     grade_value: e.grade_value,
-    description: lang === 'en' ? e.description_en : e.description_id
+    description: lang === 'en' ? (e.description_en || e.description_id) : (e.description_id || e.description_en)
   })) : t('education.items');
 
   const displaySkills = dbSkills.length > 0 ? dbSkills : [];
 
   // Data dynamic from Supabase (fallback to translations)
-  const heroJob = profile ? (lang === 'en' ? profile.hero_description_en : profile.hero_description_id) : t('hero.job');
-  const aboutContent = profile ? (lang === 'en' ? profile.about_description_en : profile.about_description_id) : t('about.content');
+  const heroJob = profile ? (lang === 'en' ? (profile.hero_description_en || profile.hero_description_id) : (profile.hero_description_id || profile.hero_description_en)) : t('hero.job');
+  const aboutContent = profile ? (lang === 'en' ? (profile.about_description_en || profile.about_description_id) : (profile.about_description_id || profile.about_description_en)) : t('about.content');
   const isAvailable = profile ? profile.available_for_hire : true;
   
   const handleFeaturedProjectClick = (project) => {
