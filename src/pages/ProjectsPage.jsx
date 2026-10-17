@@ -58,24 +58,45 @@ export default function ProjectsPage() {
   }, []);
 
   const categoryGroups = useMemo(() => {
-    const categoryMap = new Map(categories.map((category) => [category.id, category]));
+    // Resolve project to exactly ONE category ID to prevent duplicate rendering across multiple groups
+    const resolveCategoryId = (project) => {
+      if (!project) return null;
 
-    return categories
+      // 1. Primary: Exact match on category_id -> category.id (UUID)
+      const byId = categories.find((c) => c.id === project.category_id);
+      if (byId) return byId.id;
+
+      // 2. Secondary: Match category_id to category.slug (used by static fallback projects)
+      const bySlug = categories.find((c) => c.slug === project.category_id);
+      if (bySlug) return bySlug.id;
+
+      // 3. Fallback: Only check legacy text column project.category if category_id didn't match
+      if (project.category) {
+        const byLegacy = categories.find((c) => c.slug === project.category || c.id === project.category);
+        if (byLegacy) return byLegacy.id;
+      }
+
+      return null;
+    };
+
+    const categorizedGroups = categories
       .map((category) => ({
         category,
-        items: projects.filter((project) => project.category_id === category.id || project.category === category.slug),
+        items: projects.filter((project) => resolveCategoryId(project) === category.id),
       }))
-      .filter((group) => group.items.length > 0)
-      .concat(
-        projects
-          .filter((project) => !categoryMap.has(project.category_id) && !categories.some((category) => category.slug === project.category))
-          .length
-          ? [{
-              category: { id: 'uncategorized', name_en: 'Uncategorized', name_id: 'Tanpa Kategori', icon_name: 'folder' },
-              items: projects.filter((project) => !categoryMap.has(project.category_id) && !categories.some((category) => category.slug === project.category)),
-            }]
-          : []
-      );
+      .filter((group) => group.items.length > 0);
+
+    const uncategorizedItems = projects.filter((project) => !resolveCategoryId(project));
+
+    return uncategorizedItems.length > 0
+      ? [
+          ...categorizedGroups,
+          {
+            category: { id: 'uncategorized', name_en: 'Uncategorized', name_id: 'Tanpa Kategori', icon_name: 'folder' },
+            items: uncategorizedItems,
+          },
+        ]
+      : categorizedGroups;
   }, [categories, projects]);
 
   const handleClick = (project) => {
