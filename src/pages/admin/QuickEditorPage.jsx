@@ -1,27 +1,32 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import { supabase } from '../../lib/supabase';
+import { getCachedProjects, invalidatePortfolioCache } from '../../lib/portfolioCache';
 import {
   FiCheckCircle,
   FiExternalLink,
-  FiEye,
   FiGlobe,
   FiLayers,
   FiMonitor,
   FiRefreshCw,
   FiSave,
   FiSmartphone,
+  FiTablet,
   FiUser,
   FiZap,
+  FiStar,
+  FiInfo,
+  FiArrowRight,
 } from 'react-icons/fi';
-import { LATEST_CV_PROFILE, LATEST_CV_PROJECTS } from '../../data/latestCvData';
+import { LATEST_CV_PROFILE } from '../../data/latestCvData';
 import '../../styles/pages/admin-quick-editor.css';
 
 export default function QuickEditorPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [saveStatus, setSaveStatus] = useState(null); // { type: 'success'|'error'|'info', message: '' }
-  const [previewLang, setPreviewLang] = useState('en'); // 'en' or 'id'
-  const [previewDevice, setPreviewDevice] = useState('desktop'); // 'desktop' or 'mobile'
+  const [previewDevice, setPreviewDevice] = useState('desktop'); // 'desktop' | 'tablet' | 'mobile'
+  const [iframeKey, setIframeKey] = useState(Date.now());
 
   const [formData, setFormData] = useState({
     id: 1,
@@ -32,36 +37,57 @@ export default function QuickEditorPage() {
     about_description_id: '',
   });
 
-  const [featuredProjects, setFeaturedProjects] = useState(LATEST_CV_PROJECTS);
+  const [allProjects, setAllProjects] = useState([]);
+  const [featuredSlots, setFeaturedSlots] = useState({
+    slot1: '',
+    slot2: '',
+    slot3: '',
+  });
 
   useEffect(() => {
-    fetchProfile();
+    fetchData();
   }, []);
 
-  const fetchProfile = async () => {
+  const fetchData = async () => {
     setLoading(true);
     try {
-      const { data, error } = await supabase
+      // 1. Fetch Profile from Supabase
+      const { data: profileData } = await supabase
         .from('profile')
         .select('*')
         .eq('id', 1)
         .single();
 
-      if (data) {
+      if (profileData) {
         setFormData({
           id: 1,
-          available_for_hire: data.available_for_hire ?? true,
-          hero_description_en: data.hero_description_en || LATEST_CV_PROFILE.hero_description_en,
-          hero_description_id: data.hero_description_id || LATEST_CV_PROFILE.hero_description_id,
-          about_description_en: data.about_description_en || LATEST_CV_PROFILE.about_description_en,
-          about_description_id: data.about_description_id || LATEST_CV_PROFILE.about_description_id,
+          available_for_hire: profileData.available_for_hire ?? true,
+          hero_description_en: profileData.hero_description_en || LATEST_CV_PROFILE.hero_description_en,
+          hero_description_id: profileData.hero_description_id || LATEST_CV_PROFILE.hero_description_id,
+          about_description_en: profileData.about_description_en || LATEST_CV_PROFILE.about_description_en,
+          about_description_id: profileData.about_description_id || LATEST_CV_PROFILE.about_description_id,
         });
       } else {
-        // Use latest CV defaults
         setFormData(LATEST_CV_PROFILE);
       }
+
+      // 2. Fetch Projects from Cache/Supabase
+      const { projects } = await getCachedProjects();
+      const projList = projects || [];
+      setAllProjects(projList);
+
+      // Identify the 3 featured projects from database
+      const featured = projList
+        .filter((p) => p.is_featured)
+        .sort((a, b) => (a.featured_order ?? 999) - (b.featured_order ?? 999));
+
+      setFeaturedSlots({
+        slot1: featured[0]?.id || projList[0]?.id || '',
+        slot2: featured[1]?.id || projList[1]?.id || '',
+        slot3: featured[2]?.id || projList[2]?.id || '',
+      });
     } catch (err) {
-      console.warn('Using local fallback for profile:', err);
+      console.warn('Error fetching Quick Editor data:', err);
       setFormData(LATEST_CV_PROFILE);
     } finally {
       setLoading(false);
@@ -70,7 +96,17 @@ export default function QuickEditorPage() {
 
   const handleApplyLatestCv = () => {
     setFormData(LATEST_CV_PROFILE);
-    setFeaturedProjects(LATEST_CV_PROJECTS);
+    // Find matching AI projects for slots
+    const ai0 = allProjects.find((p) => p.id === 'ai-0' || p.source_key === 'static:ai-0' || String(p.title_en).includes('AutoOverlay'));
+    const ai1 = allProjects.find((p) => p.id === 'ai-1' || p.source_key === 'static:ai-1' || String(p.title_en).includes('Agent-Z'));
+    const ai2 = allProjects.find((p) => p.id === 'ai-2' || p.source_key === 'static:ai-2' || String(p.title_en).includes('LestariRimba'));
+
+    setFeaturedSlots({
+      slot1: ai0?.id || featuredSlots.slot1,
+      slot2: ai1?.id || featuredSlots.slot2,
+      slot3: ai2?.id || featuredSlots.slot3,
+    });
+
     setSaveStatus({
       type: 'info',
       message: 'Form diisi dengan data CV AI Engineer terbaru. Klik "Simpan Perubahan" untuk menyimpan ke Supabase.',
@@ -83,7 +119,8 @@ export default function QuickEditorPage() {
     setSaveStatus(null);
 
     try {
-      const { error: upsertError } = await supabase
+      // 1. Simpan Profil ke Supabase
+      const { error: profileError } = await supabase
         .from('profile')
         .upsert(
           {
@@ -98,44 +135,92 @@ export default function QuickEditorPage() {
           { onConflict: 'id' }
         );
 
-      if (upsertError) {
-        throw upsertError;
-      }
+      if (profileError) throw profileError;
+
+      // 2. Sinkronkan Status Featured Bento ke Supabase (tabel projects)
+      const selectedSlotIds = [
+        featuredSlots.slot1,
+        featuredSlots.slot2,
+        featuredSlots.slot3,
+      ].filter(Boolean);
+
+      const updatePromises = allProjects.map((proj) => {
+        const slotIndex = selectedSlotIds.indexOf(proj.id);
+        const shouldBeFeatured = slotIndex !== -1;
+        const newOrder = shouldBeFeatured ? slotIndex + 1 : null;
+
+        // Cek apakah ada perubahan
+        if (proj.is_featured !== shouldBeFeatured || proj.featured_order !== newOrder) {
+          const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(String(proj.id));
+          if (isUuid) {
+            return supabase
+              .from('projects')
+              .update({ is_featured: shouldBeFeatured, featured_order: newOrder })
+              .eq('id', proj.id);
+          } else if (proj.source_key) {
+            return supabase
+              .from('projects')
+              .update({ is_featured: shouldBeFeatured, featured_order: newOrder })
+              .eq('source_key', proj.source_key);
+          }
+        }
+        return Promise.resolve(null);
+      });
+
+      await Promise.all(updatePromises);
+
+      // 3. Invalidate in-memory cache agar HomePage & ManageProjects membaca data terbaru
+      invalidatePortfolioCache('projects');
+
+      // 4. Update state lokal
+      setAllProjects((prev) =>
+        prev.map((proj) => {
+          const slotIndex = selectedSlotIds.indexOf(proj.id);
+          const shouldBeFeatured = slotIndex !== -1;
+          const newOrder = shouldBeFeatured ? slotIndex + 1 : null;
+          return {
+            ...proj,
+            is_featured: shouldBeFeatured,
+            featured_order: newOrder,
+          };
+        })
+      );
+
+      // 5. Muat ulang iframe live preview
+      setIframeKey(Date.now());
 
       setSaveStatus({
         type: 'success',
-        message: 'Perubahan berhasil disimpan ke Supabase!',
+        message: 'Perubahan berhasil disimpan! Profil dan 3 Proyek Unggulan telah tersinkronisasi ke Supabase & Live Preview.',
       });
     } catch (err) {
-      console.error('Error saving profile to Supabase:', err);
+      console.error('Error saving in Quick Editor:', err);
       setSaveStatus({
         type: 'info',
         message:
-          'Data tersimpan di sesi lokal. Jika Supabase RLS aktif, Anda dapat menggunakan menu "Database Hub" untuk menyalin skrip SQL langsung ke Supabase.',
+          'Data tersimpan di sesi lokal. Jika Supabase RLS aktif, gunakan menu Dashboard untuk menyalin skrip SQL sinkronisasi.',
       });
     } finally {
       setSaving(false);
     }
   };
 
+  const handleRefreshPreview = () => {
+    setIframeKey(Date.now());
+  };
+
+  const getProject = (id) => allProjects.find((p) => String(p.id) === String(id));
+
+  const previewUrl = `${window.location.origin}${window.location.pathname}#/?preview=${iframeKey}`;
+
   if (loading) {
     return (
       <div className="quick-editor-loading">
         <FiRefreshCw className="spin" />
-        <p>Memuat editor data portofolio...</p>
+        <p>Menghubungkan Quick Editor dengan database Supabase...</p>
       </div>
     );
   }
-
-  const currentHero =
-    previewLang === 'en'
-      ? formData.hero_description_en || LATEST_CV_PROFILE.hero_description_en
-      : formData.hero_description_id || LATEST_CV_PROFILE.hero_description_id;
-
-  const currentAbout =
-    previewLang === 'en'
-      ? formData.about_description_en || LATEST_CV_PROFILE.about_description_en
-      : formData.about_description_id || LATEST_CV_PROFILE.about_description_id;
 
   return (
     <div className="quick-editor-wrapper">
@@ -143,10 +228,10 @@ export default function QuickEditorPage() {
       <div className="qe-top-bar">
         <div>
           <h2 className="qe-title">
-            <FiZap className="qe-title-icon" /> Split-Screen Quick Editor
+            <FiZap className="qe-title-icon" /> Split-Screen Quick Editor (Sinkron Supabase)
           </h2>
           <p className="qe-subtitle">
-            Edit profil & proyek di sisi kiri, lihat pratinjau live kartu portofolio di sisi kanan secara real-time.
+            Edit profil & pilih 3 Proyek AI Unggulan Bento di sisi kiri, lihat pratinjau live website 1:1 di sisi kanan.
           </p>
         </div>
 
@@ -155,9 +240,9 @@ export default function QuickEditorPage() {
             type="button"
             className="qe-btn-outline"
             onClick={handleApplyLatestCv}
-            title="Isi otomatis form dengan data CV terbaru"
+            title="Isi otomatis form dengan preset CV AI Engineer terbaru"
           >
-            <FiRefreshCw /> Isi Data CV Terbaru
+            <FiRefreshCw /> Preset CV AI 2026
           </button>
           <button
             type="button"
@@ -183,7 +268,7 @@ export default function QuickEditorPage() {
 
       {/* Split-Screen Main Layout */}
       <div className="qe-split-grid">
-        {/* Left Side: Forms */}
+        {/* Left Side: Forms & Supabase Bento Selector */}
         <div className="qe-pane-left">
           <form onSubmit={handleSubmit} className="qe-form">
             {/* Status & Availability Card */}
@@ -192,7 +277,7 @@ export default function QuickEditorPage() {
                 <FiUser className="qe-card-icon" />
                 <div>
                   <h3>Status Ketersediaan Kerja</h3>
-                  <p>Menentukan apakah tombol "Available for Hire" muncul pada landing page</p>
+                  <p>Sinkron dengan database profil & tombol status CTA di landing page</p>
                 </div>
               </div>
               <div className="qe-toggle-row">
@@ -210,7 +295,7 @@ export default function QuickEditorPage() {
                   <span className={`qe-status-badge ${formData.available_for_hire ? 'active' : 'inactive'}`}>
                     {formData.available_for_hire ? '● Tersedia untuk Kerja (Available for Hire)' : '○ Sedang Tidak Mencari Pekerjaan'}
                   </span>
-                  <small>AI Chatbot Agent-Z juga akan otomatis menyesuaikan tawaran CTA sesuai status ini.</small>
+                  <small>Agent-Z chatbot juga otomatis menyesuaikan penawaran rekrutmen sesuai status ini.</small>
                 </div>
               </div>
             </div>
@@ -221,7 +306,7 @@ export default function QuickEditorPage() {
                 <FiGlobe className="qe-card-icon" />
                 <div>
                   <h3>Deskripsi Hero (Subtitle Profil)</h3>
-                  <p>Teks ringkas yang muncul tepat di bawah nama Anda pada bagian paling atas portofolio</p>
+                  <p>Teks ringkas yang muncul tepat di bawah nama Anda pada beranda utama</p>
                 </div>
               </div>
 
@@ -235,7 +320,7 @@ export default function QuickEditorPage() {
                   onChange={(e) =>
                     setFormData({ ...formData, hero_description_en: e.target.value })
                   }
-                  placeholder="e.g. Results-driven AI Engineer | LLM Automation..."
+                  placeholder="e.g. AI Engineer & Autonomous Agent Architect | LLM Automation..."
                 />
               </div>
 
@@ -249,7 +334,7 @@ export default function QuickEditorPage() {
                   onChange={(e) =>
                     setFormData({ ...formData, hero_description_id: e.target.value })
                   }
-                  placeholder="contoh: Results-driven AI Engineer | Otomasi LLM..."
+                  placeholder="contoh: AI Engineer & Arsitek Agen Mandiri | Otomasi LLM..."
                 />
               </div>
             </div>
@@ -257,10 +342,10 @@ export default function QuickEditorPage() {
             {/* About Me Card */}
             <div className="qe-card">
               <div className="qe-card-header">
-                <FiEye className="qe-card-icon" />
+                <FiUser className="qe-card-icon" />
                 <div>
                   <h3>Deskripsi Lengkap (About Me)</h3>
-                  <p>Ringkasan komprehensif tentang keahlian AI, latar belakang IBM SkillsBuild, dan spesialisasi Anda</p>
+                  <p>Ringkasan komprehensif keahlian AI, latar belakang beasiswa, dan spesialisasi Anda</p>
                 </div>
               </div>
 
@@ -303,151 +388,209 @@ export default function QuickEditorPage() {
               </div>
             </div>
 
-            {/* Featured Projects Card */}
+            {/* Live Database Bento Selector */}
             <div className="qe-card">
               <div className="qe-card-header">
                 <FiLayers className="qe-card-icon" />
                 <div>
-                  <h3>Proyek AI Unggulan (Featured Bento)</h3>
-                  <p>3 proyek utama yang disorot di Bento Grid beranda</p>
+                  <h3>Proyek AI Unggulan (Featured Bento) — Terhubung Supabase</h3>
+                  <p>Pilih 3 proyek dari database untuk ditampilkan pada Bento Grid beranda</p>
                 </div>
               </div>
 
-              <div className="qe-projects-list">
-                {featuredProjects.map((p, idx) => (
-                  <div key={p.id_string || idx} className="qe-project-row">
-                    <span className="qe-project-badge">#{idx + 1}</span>
-                    <div className="qe-project-details">
-                      <strong>{p.title_en}</strong>
-                      <span className="qe-project-meta">
-                        {p.category.toUpperCase()} • {p.file}
-                      </span>
-                      <div className="qe-project-tags">
-                        {p.tech_stack?.map((tech) => (
-                          <span key={tech} className="qe-tech-tag">
-                            {tech}
-                          </span>
-                        ))}
+              <div className="qe-bento-slots-container">
+                {/* Slot 1: Primary Featured Bento */}
+                <div className="qe-bento-slot">
+                  <div className="qe-slot-header">
+                    <span className="qe-slot-badge slot-1">
+                      <FiStar /> SLOT #1 (UTAMA - BENTO BESAR)
+                    </span>
+                    <small>Proyek unggulan pertama dengan visibilitas paling menonjol</small>
+                  </div>
+                  <select
+                    className="qe-slot-select"
+                    value={featuredSlots.slot1}
+                    onChange={(e) => setFeaturedSlots({ ...featuredSlots, slot1: e.target.value })}
+                  >
+                    <option value="">-- Pilih Proyek untuk Slot #1 --</option>
+                    {allProjects.map((p) => (
+                      <option key={p.id} value={p.id}>
+                        {p.title_en} ({p.category ? p.category.toUpperCase() : 'PROJECT'})
+                      </option>
+                    ))}
+                  </select>
+                  {getProject(featuredSlots.slot1) && (
+                    <div className="qe-slot-preview-card">
+                      <div className="qe-slot-preview-title">
+                        {getProject(featuredSlots.slot1)?.title_en}
+                      </div>
+                      <div className="qe-slot-preview-meta">
+                        Kategori: <strong>{getProject(featuredSlots.slot1)?.category || 'General'}</strong> • Tipe: {getProject(featuredSlots.slot1)?.type}
                       </div>
                     </div>
+                  )}
+                </div>
+
+                {/* Slot 2: Secondary Featured Bento */}
+                <div className="qe-bento-slot">
+                  <div className="qe-slot-header">
+                    <span className="qe-slot-badge slot-2">SLOT #2 (KARTU KEDUA)</span>
+                    <small>Proyek unggulan kedua pada grid portofolio</small>
                   </div>
-                ))}
+                  <select
+                    className="qe-slot-select"
+                    value={featuredSlots.slot2}
+                    onChange={(e) => setFeaturedSlots({ ...featuredSlots, slot2: e.target.value })}
+                  >
+                    <option value="">-- Pilih Proyek untuk Slot #2 --</option>
+                    {allProjects.map((p) => (
+                      <option key={p.id} value={p.id}>
+                        {p.title_en} ({p.category ? p.category.toUpperCase() : 'PROJECT'})
+                      </option>
+                    ))}
+                  </select>
+                  {getProject(featuredSlots.slot2) && (
+                    <div className="qe-slot-preview-card">
+                      <div className="qe-slot-preview-title">
+                        {getProject(featuredSlots.slot2)?.title_en}
+                      </div>
+                      <div className="qe-slot-preview-meta">
+                        Kategori: <strong>{getProject(featuredSlots.slot2)?.category || 'General'}</strong> • Tipe: {getProject(featuredSlots.slot2)?.type}
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Slot 3: Tertiary Featured Bento */}
+                <div className="qe-bento-slot">
+                  <div className="qe-slot-header">
+                    <span className="qe-slot-badge slot-3">SLOT #3 (KARTU KETIGA)</span>
+                    <small>Proyek unggulan ketiga pada grid portofolio</small>
+                  </div>
+                  <select
+                    className="qe-slot-select"
+                    value={featuredSlots.slot3}
+                    onChange={(e) => setFeaturedSlots({ ...featuredSlots, slot3: e.target.value })}
+                  >
+                    <option value="">-- Pilih Proyek untuk Slot #3 --</option>
+                    {allProjects.map((p) => (
+                      <option key={p.id} value={p.id}>
+                        {p.title_en} ({p.category ? p.category.toUpperCase() : 'PROJECT'})
+                      </option>
+                    ))}
+                  </select>
+                  {getProject(featuredSlots.slot3) && (
+                    <div className="qe-slot-preview-card">
+                      <div className="qe-slot-preview-title">
+                        {getProject(featuredSlots.slot3)?.title_en}
+                      </div>
+                      <div className="qe-slot-preview-meta">
+                        Kategori: <strong>{getProject(featuredSlots.slot3)?.category || 'General'}</strong> • Tipe: {getProject(featuredSlots.slot3)?.type}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <div className="qe-bento-footer-hint">
+                <FiInfo />
+                <span>
+                  Ingin menambah proyek baru atau mengubah file media? Kelola secara penuh di{' '}
+                  <Link to="/admin/projects" className="qe-link">
+                    Menu Proyek Portofolio <FiArrowRight />
+                  </Link>
+                </span>
               </div>
             </div>
           </form>
         </div>
 
-        {/* Right Side: Live Interactive Preview */}
+        {/* Right Side: True Interactive Engine Viewport (Real Live Site 1:1) */}
         <div className="qe-pane-right">
           <div className="qe-preview-container">
-            {/* Preview Toolbar */}
+            {/* Viewport Toolbar */}
             <div className="qe-preview-toolbar">
               <div className="qe-preview-title">
-                <span className="qe-live-dot"></span> Pratinjau Langsung (Live Preview)
+                <span className="qe-live-dot"></span>
+                <span>Pratinjau Langsung (Live Website 1:1)</span>
               </div>
 
               <div className="qe-preview-controls">
-                {/* Language Toggle */}
-                <div className="qe-pill-toggle">
-                  <button
-                    type="button"
-                    className={previewLang === 'en' ? 'active' : ''}
-                    onClick={() => setPreviewLang('en')}
-                  >
-                    🇬🇧 EN
-                  </button>
-                  <button
-                    type="button"
-                    className={previewLang === 'id' ? 'active' : ''}
-                    onClick={() => setPreviewLang('id')}
-                  >
-                    🇮🇩 ID
-                  </button>
-                </div>
-
-                {/* Device Toggle */}
+                {/* Device Switcher */}
                 <div className="qe-pill-toggle">
                   <button
                     type="button"
                     className={previewDevice === 'desktop' ? 'active' : ''}
                     onClick={() => setPreviewDevice('desktop')}
-                    title="Tampilan Layar Komputer"
+                    title="Layar Desktop (100%)"
                   >
-                    <FiMonitor />
+                    <FiMonitor /> Desktop
+                  </button>
+                  <button
+                    type="button"
+                    className={previewDevice === 'tablet' ? 'active' : ''}
+                    onClick={() => setPreviewDevice('tablet')}
+                    title="Layar Tablet (768px)"
+                  >
+                    <FiTablet /> Tablet
                   </button>
                   <button
                     type="button"
                     className={previewDevice === 'mobile' ? 'active' : ''}
                     onClick={() => setPreviewDevice('mobile')}
-                    title="Tampilan Layar HP"
+                    title="Layar Ponsel (390px)"
                   >
-                    <FiSmartphone />
+                    <FiSmartphone /> Mobile
                   </button>
                 </div>
+
+                {/* Reload Viewport */}
+                <button
+                  type="button"
+                  className="qe-btn-icon"
+                  onClick={handleRefreshPreview}
+                  title="Muat Ulang Tampilan Pratinjau"
+                >
+                  <FiRefreshCw />
+                </button>
+
+                {/* Open Fullsite in New Tab */}
+                <a
+                  href={`${window.location.origin}${window.location.pathname}#/`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="qe-btn-icon"
+                  title="Buka Website di Tab Baru"
+                >
+                  <FiExternalLink />
+                </a>
               </div>
             </div>
 
-            {/* Preview Viewport Frame */}
-            <div className={`qe-preview-viewport ${previewDevice}`}>
-              {/* Preview Hero Mockup */}
-              <div className="qe-mock-hero">
-                <div className="qe-mock-status-pill">
-                  <span className={`qe-pulse-dot ${formData.available_for_hire ? 'green' : 'gray'}`}></span>
-                  <span>{formData.available_for_hire ? 'AVAILABLE FOR HIRE' : 'CURRENTLY ENGAGED'}</span>
-                </div>
-
-                <h1 className="qe-mock-name">ZACKY MUHAMMAD DINATA</h1>
-                <p className="qe-mock-role">{currentHero}</p>
-
-                <div className="qe-mock-cta-row">
-                  <button type="button" className="qe-mock-btn-primary">
-                    Lihat Proyek
-                  </button>
-                  <button type="button" className="qe-mock-btn-secondary">
-                    Hubungi Saya
-                  </button>
-                </div>
+            {/* Simulated Browser Address Bar */}
+            <div className="qe-browser-bar">
+              <div className="qe-browser-dots">
+                <span className="dot red"></span>
+                <span className="dot yellow"></span>
+                <span className="dot green"></span>
               </div>
-
-              {/* Preview About Me Card Mockup */}
-              <div className="qe-mock-section">
-                <h4 className="qe-mock-section-title">
-                  {previewLang === 'en' ? 'About Me' : 'Tentang Saya'}
-                </h4>
-                <div className="qe-mock-about-card">
-                  <p>{currentAbout}</p>
-                </div>
+              <div className="qe-browser-url">
+                <FiGlobe className="url-icon" />
+                <span>{window.location.host}/#/ (Live Engine)</span>
               </div>
-
-              {/* Preview Featured Projects Mockup */}
-              <div className="qe-mock-section">
-                <h4 className="qe-mock-section-title">
-                  {previewLang === 'en' ? 'Featured AI Work' : 'Karya AI Unggulan'}
-                </h4>
-                <div className="qe-mock-bento-grid">
-                  {featuredProjects.map((p, idx) => (
-                    <div key={idx} className="qe-mock-bento-card">
-                      <div className="qe-mock-card-top">
-                        <span className="qe-mock-category-pill">{p.category}</span>
-                        <FiExternalLink className="qe-mock-ext-icon" />
-                      </div>
-                      <h5 className="qe-mock-card-title">
-                        {previewLang === 'en' ? p.title_en : p.title_id}
-                      </h5>
-                      <p className="qe-mock-card-desc">
-                        {previewLang === 'en' ? p.description_en : p.description_id}
-                      </p>
-                      <div className="qe-mock-card-stack">
-                        {p.tech_stack?.slice(0, 3).map((t) => (
-                          <span key={t} className="qe-mock-tag">
-                            {t}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  ))}
-                </div>
+              <div className="qe-browser-badge">
+                TERHUBUNG SUPABASE
               </div>
+            </div>
+
+            {/* Real Viewport Frame */}
+            <div className={`qe-viewport-wrapper ${previewDevice}`}>
+              <iframe
+                key={iframeKey}
+                src={previewUrl}
+                title="Portofolio Live Preview"
+                className="qe-live-iframe"
+              />
             </div>
           </div>
         </div>
