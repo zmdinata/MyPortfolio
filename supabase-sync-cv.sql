@@ -29,9 +29,26 @@ SET
   updated_at = NOW()
 WHERE school ILIKE '%IKMI%' OR id = 1;
 
--- 3. UPSERT PENGALAMAN KERJA 2026
+-- 3. UPSERT PENGALAMAN KERJA 2026 & ATUR RLS
+ALTER TABLE public.experience ENABLE ROW LEVEL SECURITY;
+
+DO $$ 
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies WHERE tablename = 'experience' AND policyname = 'Allow public read access on experience'
+  ) THEN
+    CREATE POLICY "Allow public read access on experience" ON public.experience FOR SELECT TO anon, authenticated USING (true);
+  END IF;
+
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies WHERE tablename = 'experience' AND policyname = 'Allow authenticated full access on experience'
+  ) THEN
+    CREATE POLICY "Allow authenticated full access on experience" ON public.experience FOR ALL TO authenticated USING (true) WITH CHECK (true);
+  END IF;
+END $$;
+
 INSERT INTO public.experience (
-  company_en, company_id, role_en, role_id, date_start, date_end, description_en, description_id, sort_order
+  company_en, company_id, role_en, role_id, date_start, date_end, description_en, description_id
 ) VALUES 
   (
     'AutoOverlay AI (Alpaca AI Hackathon)',
@@ -41,8 +58,7 @@ INSERT INTO public.experience (
     '2026-08-01',
     '2026-09-04',
     'Architected an autonomous 4-layer options trading engine with Monte Carlo Merton Jump Diffusion VaR and 6-persona investor council.',
-    'Merancang arsitektur 4-layer mesin trading opsi mandiri dengan simulasi Monte Carlo Merton Jump Diffusion VaR dan konsensus 6 persona investor.',
-    1
+    'Merancang arsitektur 4-layer mesin trading opsi mandiri dengan simulasi Monte Carlo Merton Jump Diffusion VaR dan konsensus 6 persona investor.'
   ),
   (
     'LifeOS Agent (AI HACKFEST 2026)',
@@ -52,8 +68,7 @@ INSERT INTO public.experience (
     '2026-08-15',
     '2026-10-01',
     'Leading a 3-person squad in developing an autonomous personal productivity and life management agent leveraging Hermes Agent and OpenClaw on CloudBaik VPS.',
-    'Memimpin tim 3 orang membangun agen produktivitas dan manajemen hidup otonom menggunakan Hermes Agent dan OpenClaw di VPS CloudBaik.',
-    2
+    'Memimpin tim 3 orang membangun agen produktivitas dan manajemen hidup otonom menggunakan Hermes Agent dan OpenClaw di VPS CloudBaik.'
   ),
   (
     'Pijak x IBM SkillsBuild',
@@ -63,8 +78,7 @@ INSERT INTO public.experience (
     '2026-02-01',
     '2026-07-31',
     'Full scholarship graduate across end-to-end Machine Learning, Deep Learning, and Soft Skills curriculum with official Full Graduation credentials.',
-    'Lulusan beasiswa penuh kurikulum Machine Learning, Deep Learning, dan Soft Skills end-to-end dengan sertifikasi Kelulusan Penuh resmi.',
-    3
+    'Lulusan beasiswa penuh kurikulum Machine Learning, Deep Learning, dan Soft Skills end-to-end dengan sertifikasi Kelulusan Penuh resmi.'
   ),
   (
     'Self-Employed (Global Clients)',
@@ -74,10 +88,8 @@ INSERT INTO public.experience (
     '2020-12-01',
     '2024-10-31',
     'Delivered 60+ commercial NFT artworks for FlokyApe and 30+ layered anime traits before career pivoting full-time to AI/ML engineering.',
-    'Menyelesaikan 60+ karya seni NFT komersial FlokyApe dan 30+ trait modular anime sebelum beralih karier penuh ke AI/ML.',
-    4
-  )
-ON CONFLICT DO NOTHING;
+    'Menyelesaikan 60+ karya seni NFT komersial FlokyApe dan 30+ trait modular anime sebelum beralih karier penuh ke AI/ML.'
+  );
 
 -- 4. RESET DAN UPDATE 3 PROYEK UNGGULAN (AutoOverlay AI, Agent-Z Homelab, LestariRimba)
 UPDATE public.projects SET is_featured = false, featured_order = null;

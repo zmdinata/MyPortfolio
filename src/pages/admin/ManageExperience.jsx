@@ -1,12 +1,15 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../../lib/supabase';
-import { FiPlus, FiEdit2, FiTrash2, FiX, FiSave, FiMinus, FiCalendar } from 'react-icons/fi';
+import { FiPlus, FiEdit2, FiTrash2, FiX, FiSave, FiMinus, FiCalendar, FiZap, FiAlertCircle } from 'react-icons/fi';
 import CustomSelect from '../../components/admin/CustomSelect';
+import { LATEST_CV_EXPERIENCE } from '../../data/latestCvData';
 import '../../styles/pages/admin-manage.css';
 
 const ManageExperience = () => {
   const [experiences, setExperiences] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState({
     role_en: '',
@@ -64,6 +67,8 @@ const ManageExperience = () => {
   };
 
   const handleOpenModal = (exp = null) => {
+    setErrorMessage(null);
+    setSaving(false);
     if (exp) {
       setFormData({
         role_en: exp.role_en || '',
@@ -85,7 +90,7 @@ const ManageExperience = () => {
     } else {
       setFormData({
         role_en: '', role_id: '', date_start: '', date_end: '', 
-        location_en: '', location_id: '', company_en: '', company_id: '',
+        location_en: 'Global', location_id: 'Global', company_en: '', company_id: '',
         work_type: 'Remote', description_en: '', description_id: '', 
         responsibilities: [], achievements: [],
         year: new Date().getFullYear()
@@ -93,6 +98,27 @@ const ManageExperience = () => {
       setEditingId(null);
     }
     setIsModalOpen(true);
+  };
+
+  const applyLatestPreset = (preset) => {
+    setFormData(prev => ({
+      ...prev,
+      role_en: preset.role,
+      role_id: preset.role,
+      company_en: preset.company,
+      company_id: preset.company,
+      date_start: preset.date_start,
+      date_end: preset.date_end || '',
+      work_type: preset.work_type || 'Remote',
+      location_en: 'Global',
+      location_id: 'Global',
+      description_en: preset.description,
+      description_id: preset.description,
+      responsibilities: [],
+      achievements: [],
+      year: preset.date_start ? new Date(preset.date_start).getFullYear() : prev.year
+    }));
+    setErrorMessage(null);
   };
 
   const addResponsibility = () => {
@@ -119,23 +145,84 @@ const ManageExperience = () => {
     setFormData({ ...formData, achievements: newAchvs });
   };
 
+  const handleDelete = async (id, roleName) => {
+    if (!window.confirm(`Yakin ingin menghapus pengalaman "${roleName || 'ini'}"?`)) {
+      return;
+    }
+
+    const { error } = await supabase.from('experience').delete().eq('id', id);
+    if (error) {
+      console.error('Error deleting experience:', error);
+      alert(`Gagal menghapus pengalaman: ${error.message}`);
+      return;
+    }
+
+    window.dispatchEvent(new CustomEvent('portfolio-cache-invalidated'));
+    await fetchExperiences();
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const payload = { ...formData, year: formData.date_start ? new Date(formData.date_start).getFullYear() : formData.year };
-    
-    if (editingId) {
-      await supabase.from('experience').update(payload).eq('id', editingId);
-    } else {
-      await supabase.from('experience').insert([payload]);
+    setSaving(true);
+    setErrorMessage(null);
+
+    const payload = {
+      role_en: formData.role_en?.trim(),
+      role_id: formData.role_id?.trim() || formData.role_en?.trim(),
+      date_start: formData.date_start,
+      date_end: formData.date_end ? formData.date_end : null,
+      location_en: formData.location_en?.trim() || 'Global',
+      location_id: formData.location_id?.trim() || formData.location_en?.trim() || 'Global',
+      company_en: formData.company_en?.trim() || '',
+      company_id: formData.company_id?.trim() || formData.company_en?.trim() || '',
+      work_type: formData.work_type || 'Remote',
+      description_en: formData.description_en?.trim() || '',
+      description_id: formData.description_id?.trim() || formData.description_en?.trim() || '',
+      responsibilities: Array.isArray(formData.responsibilities) ? formData.responsibilities : [],
+      achievements: Array.isArray(formData.achievements) ? formData.achievements : [],
+      year: formData.date_start ? new Date(formData.date_start).getFullYear() : (formData.year || new Date().getFullYear())
+    };
+
+    try {
+      const request = editingId
+        ? supabase.from('experience').update(payload).eq('id', editingId).select()
+        : supabase.from('experience').insert([payload]).select();
+
+      const { data, error } = await request;
+
+      if (error) {
+        console.error('Error saving experience:', error);
+        setErrorMessage(`Gagal menyimpan: ${error.message} (Code: ${error.code || 'unknown'})`);
+        setSaving(false);
+        return;
+      }
+
+      if (editingId && (!data || data.length === 0)) {
+        setErrorMessage('Peringatan: Baris tidak diperbarui di Supabase. Ini biasanya terjadi jika aturan Row Level Security (RLS) di Supabase membatasi izin update. Pastikan session login aktif dan jalankan skrip SQL di Dashboard jika diperlukan.');
+        setSaving(false);
+        return;
+      }
+
+      setIsModalOpen(false);
+      setSaving(false);
+      window.dispatchEvent(new CustomEvent('portfolio-cache-invalidated'));
+      await fetchExperiences();
+    } catch (err) {
+      console.error('Unexpected error saving experience:', err);
+      setErrorMessage(`Terjadi kesalahan sistem: ${err.message}`);
+      setSaving(false);
     }
-    setIsModalOpen(false);
-    fetchExperiences();
   };
 
   return (
     <div className="manage-container">
       <div className="action-bar">
-        <h2>Manage Experience</h2>
+        <div>
+          <h2>Manage Experience</h2>
+          <p style={{ margin: '4px 0 0', fontSize: '0.85rem', color: 'rgba(255,255,255,0.5)' }}>
+            Kelola riwayat pekerjaan, kontribusi hackathon, dan program beasiswa AI.
+          </p>
+        </div>
         <button className="add-btn" onClick={() => handleOpenModal()}>
           <FiPlus /> Add Experience
         </button>
@@ -174,8 +261,8 @@ const ManageExperience = () => {
                   <td><span className="badge">{exp.work_type}</span></td>
                   <td>
                     <div className="actions">
-                      <button onClick={() => handleOpenModal(exp)} className="edit-icon"><FiEdit2 /></button>
-                      <button onClick={() => supabase.from('experience').delete().eq('id', exp.id).then(fetchExperiences)} className="delete-icon"><FiTrash2 /></button>
+                      <button onClick={() => handleOpenModal(exp)} className="edit-icon" title="Edit"><FiEdit2 /></button>
+                      <button onClick={() => handleDelete(exp.id, exp.role_en)} className="delete-icon" title="Hapus"><FiTrash2 /></button>
                     </div>
                   </td>
                 </tr>
@@ -189,9 +276,49 @@ const ManageExperience = () => {
         <div className="modal-overlay">
           <div className="modal-content" style={{ maxWidth: '800px' }}>
             <div className="modal-header">
-              <h2>{editingId ? 'Edit Experience' : 'Add Experience'}</h2>
+              <div>
+                <h2>{editingId ? 'Edit Experience' : 'Add Experience'}</h2>
+                <p style={{ margin: '4px 0 0', fontSize: '0.82rem', color: 'rgba(255,255,255,0.6)' }}>
+                  {editingId ? 'Perbarui detail riwayat pengalaman kerja.' : 'Tambahkan riwayat pengalaman kerja atau kontribusi hackathon.'}
+                </p>
+              </div>
               <button onClick={() => setIsModalOpen(false)}><FiX /></button>
             </div>
+
+            {!editingId && LATEST_CV_EXPERIENCE && LATEST_CV_EXPERIENCE.length > 0 && (
+              <div style={{ background: 'rgba(0, 210, 255, 0.08)', border: '1px solid rgba(0, 210, 255, 0.25)', borderRadius: '8px', padding: '10px 14px', marginBottom: '16px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.82rem', fontWeight: 600, color: '#00d2ff', marginBottom: '8px' }}>
+                  <FiZap /> Preset Cepat CV (Klik untuk mengisi otomatis):
+                </div>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                  {LATEST_CV_EXPERIENCE.map((preset, idx) => (
+                    <button
+                      key={idx}
+                      type="button"
+                      onClick={() => applyLatestPreset(preset)}
+                      style={{
+                        background: 'rgba(255,255,255,0.06)',
+                        border: '1px solid rgba(255,255,255,0.18)',
+                        color: '#fff',
+                        borderRadius: '6px',
+                        padding: '4px 10px',
+                        fontSize: '0.78rem',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      + {preset.role.split('(')[0].trim()}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {errorMessage && (
+              <div style={{ background: 'rgba(255, 71, 87, 0.15)', border: '1px solid #ff4757', color: '#ff6b81', padding: '10px 14px', borderRadius: '8px', marginBottom: '16px', fontSize: '0.88rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <FiAlertCircle style={{ flexShrink: 0 }} />
+                <span>{errorMessage}</span>
+              </div>
+            )}
             <form onSubmit={handleSubmit} className="modal-form">
               <div className="form-grid">
                 {/* Basic Info */}
@@ -321,8 +448,10 @@ const ManageExperience = () => {
                 </div>
               </div>
               <div className="modal-footer">
-                <button type="button" onClick={() => setIsModalOpen(false)} className="cancel-btn">Cancel</button>
-                <button type="submit" className="save-btn"><FiSave /> Save</button>
+                <button type="button" onClick={() => setIsModalOpen(false)} className="cancel-btn" disabled={saving}>Cancel</button>
+                <button type="submit" className="save-btn" disabled={saving}>
+                  <FiSave /> {saving ? 'Menyimpan...' : 'Save'}
+                </button>
               </div>
             </form>
           </div>

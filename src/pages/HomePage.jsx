@@ -143,9 +143,9 @@ export default function HomePage() {
     if (years > 0) durStr += `${years} yr${years > 1 ? 's' : ''} `;
     if (remMonths > 0 || years === 0) durStr += `${remMonths} mo${remMonths > 1 ? 's' : ''}`;
 
-    const location = lang === 'en' ? loc_en : loc_id;
-    
-    return `${startStr} — ${endStr} · ${durStr.trim()} · ${location} · ${type}`;
+    const location = (lang === 'en' ? loc_en : loc_id) || loc_en || loc_id || '';
+    const parts = [`${startStr} — ${endStr}`, durStr.trim(), location, type].filter(Boolean);
+    return parts.join(' · ');
   };
 
   // Fallback Logic
