@@ -330,8 +330,9 @@ const ManageProfile = () => {
       if (baseError) throw baseError;
 
       // Coba simpan extended fields ke Supabase jika kolom tersedia
+      let schemaWarning = false;
       try {
-        await supabase
+        const { error: extError } = await supabase
           .from('profile')
           .update({
             avatar_url: formData.avatar_url,
@@ -349,13 +350,20 @@ const ManageProfile = () => {
             agentz_prompts: formData.agentz_prompts || DEFAULT_PROFILE_CONFIG.agentz_prompts,
           })
           .eq('id', 1);
+
+        if (extError) {
+          console.warn('Notice: Extended profile columns not yet present in Supabase table schema:', extError.message);
+          schemaWarning = true;
+        }
       } catch (schemaErr) {
-        console.info('Notice: Extended profile columns not yet present in Supabase table schema, using client store.');
+        schemaWarning = true;
       }
 
       setStatusMsg({
-        type: 'success',
-        text: 'Profil, foto avatar, kartu spesialisasi, dan pertanyaan Agent-Z berhasil diperbarui dan disinkronkan ke Landing Page!',
+        type: schemaWarning ? 'info' : 'success',
+        text: schemaWarning
+          ? 'Perubahan profil & foto sampul tersimpan! Untuk sinkronisasi cloud lintas perangkat, jalankan skrip di supabase-sync-cv.sql pada Supabase SQL Editor.'
+          : 'Profil, foto sampul HD, kartu spesialisasi, dan pertanyaan Agent-Z berhasil diperbarui dan tersinkronisasi ke Supabase Cloud!',
       });
     } catch (err) {
       console.warn('Supabase upsert notice:', err);

@@ -2,7 +2,7 @@ import { supabase } from './supabase';
 
 export const DEFAULT_PROFILE_CONFIG = {
   avatar_url: '/assets/images/photo.png',
-  cover_url: '', // Empty defaults to sleek SVG/CSS dark gradient atmospheric banner
+  cover_url: 'https://iixsejoqecilicxvmjty.supabase.co/storage/v1/object/public/portfolio-media/profile/covers/1792276904902-cover_1792276904820.webp',
   full_name: 'Zacky Muhammad Dinata',
   hero_role: 'AI Engineer & Multi-Agent Architect',
   email: 'zmdinata@gmail.com',
@@ -100,6 +100,7 @@ export function getLocalProfileConfig() {
           : DEFAULT_PROFILE_CONFIG.agentz_prompts,
         specialization_decks: decks,
         chips: parsed.chips || DEFAULT_PROFILE_CONFIG.chips,
+        cover_url: parsed.cover_url || DEFAULT_PROFILE_CONFIG.cover_url,
       };
     }
   } catch (err) {
@@ -138,7 +139,7 @@ export async function fetchFullProfile() {
         about_description_en: data.about_description_en || '',
         about_description_id: data.about_description_id || '',
         avatar_url: data.avatar_url || localConfig.avatar_url,
-        cover_url: data.cover_url || localConfig.cover_url || '',
+        cover_url: data.cover_url || localConfig.cover_url || DEFAULT_PROFILE_CONFIG.cover_url,
         full_name: data.full_name || localConfig.full_name,
         hero_role: data.hero_role || localConfig.hero_role,
         email: data.email || localConfig.email,

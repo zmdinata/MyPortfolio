@@ -4,9 +4,25 @@
 -- Jalankan skrip ini langsung di Supabase Dashboard > SQL Editor
 -- =========================================================
 
+-- 0. TAMBAHKAN KOLOM PROFILE LENGKAP & FOTO SAMPUL JIKA BELUM ADA
+ALTER TABLE public.profile ADD COLUMN IF NOT EXISTS avatar_url TEXT;
+ALTER TABLE public.profile ADD COLUMN IF NOT EXISTS cover_url TEXT;
+ALTER TABLE public.profile ADD COLUMN IF NOT EXISTS full_name TEXT;
+ALTER TABLE public.profile ADD COLUMN IF NOT EXISTS hero_role TEXT;
+ALTER TABLE public.profile ADD COLUMN IF NOT EXISTS email TEXT;
+ALTER TABLE public.profile ADD COLUMN IF NOT EXISTS chips JSONB;
+ALTER TABLE public.profile ADD COLUMN IF NOT EXISTS languages JSONB;
+ALTER TABLE public.profile ADD COLUMN IF NOT EXISTS core_architecture_en TEXT;
+ALTER TABLE public.profile ADD COLUMN IF NOT EXISTS core_architecture_id TEXT;
+ALTER TABLE public.profile ADD COLUMN IF NOT EXISTS production_standard_en TEXT;
+ALTER TABLE public.profile ADD COLUMN IF NOT EXISTS production_standard_id TEXT;
+ALTER TABLE public.profile ADD COLUMN IF NOT EXISTS agentz_prompts JSONB;
+ALTER TABLE public.profile ADD COLUMN IF NOT EXISTS specialization_decks JSONB;
+
 -- 1. UPDATE PROFILE
 UPDATE public.profile
 SET 
+  cover_url = COALESCE(cover_url, 'https://iixsejoqecilicxvmjty.supabase.co/storage/v1/object/public/portfolio-media/profile/covers/1792276904902-cover_1792276904820.webp'),
   hero_description_en = 'AI Engineer & Autonomous Agent Architect | Quantitative Risk Systems & LLM Automation | Scholar at Pijak x IBM SkillsBuild',
   hero_description_id = 'AI Engineer & Arsitek Agen Mandiri | Sistem Risiko Kuantitatif & Otomasi LLM | Lulusan Beasiswa Penuh Pijak x IBM SkillsBuild',
   about_description_en = 'Results-driven AI Engineer & ML Researcher specializing in Autonomous Multi-Agent Orchestration (Hermes Agent, OpenClaw, n8n) and Quantitative Risk Management. Full Scholarship Graduate of the PIJAK x IBM SkillsBuild AI Engineer Cohort. I design explainable agentic workflows, autonomous homelab infrastructure, and deterministic risk layers for algorithmic execution.',
