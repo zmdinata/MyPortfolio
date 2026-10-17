@@ -14,6 +14,7 @@ export const DEFAULT_PROFILE_CONFIG = {
     {
       id: 'llm',
       tabLabel: 'LLM & Agents',
+      icon: 'cpu',
       color: '#00d2ff',
       badge: 'ThinkPad T440 Homelab',
       title: 'Agent-Z Autonomous Orchestrator',
@@ -26,6 +27,7 @@ export const DEFAULT_PROFILE_CONFIG = {
     {
       id: 'workflow',
       tabLabel: 'Workflow & Cloud',
+      icon: 'zap',
       color: '#2ed573',
       badge: 'Google Cloud Run',
       title: 'LestariRimba #JuaraVibeCoding',
@@ -38,6 +40,7 @@ export const DEFAULT_PROFILE_CONFIG = {
     {
       id: 'ml',
       tabLabel: 'ML & Research',
+      icon: 'activity',
       color: '#a55eea',
       badge: 'Makalah SISFOTEK 9',
       title: 'Flight Ticket Price Prediction (MLR)',
@@ -57,6 +60,15 @@ export function getLocalProfileConfig() {
     const raw = typeof window !== 'undefined' ? localStorage.getItem(STORAGE_KEY) : null;
     if (raw) {
       const parsed = JSON.parse(raw);
+      const decks = (parsed.specialization_decks || DEFAULT_PROFILE_CONFIG.specialization_decks).map((d, i) => {
+        const fallback = DEFAULT_PROFILE_CONFIG.specialization_decks[i] || {};
+        return {
+          ...fallback,
+          ...d,
+          icon: d.icon || fallback.icon || (d.id === 'workflow' ? 'zap' : d.id === 'ml' ? 'activity' : 'cpu'),
+        };
+      });
+
       return {
         ...DEFAULT_PROFILE_CONFIG,
         ...parsed,
@@ -64,7 +76,7 @@ export function getLocalProfileConfig() {
           ...DEFAULT_PROFILE_CONFIG.languages,
           ...(parsed.languages || {}),
         },
-        specialization_decks: parsed.specialization_decks || DEFAULT_PROFILE_CONFIG.specialization_decks,
+        specialization_decks: decks,
         chips: parsed.chips || DEFAULT_PROFILE_CONFIG.chips,
       };
     }

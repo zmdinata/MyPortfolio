@@ -27,6 +27,7 @@ import {
   DEFAULT_PROFILE_CONFIG,
   PROFILE_SQL_MIGRATION,
 } from '../../lib/profileConfig';
+import { CategoryIcon, suggestedDeckIcons } from '../../lib/categoryIcons';
 import '../../styles/pages/admin-manage.css';
 import '../../styles/pages/admin-profile.css';
 
@@ -472,22 +473,66 @@ const ManageProfile = () => {
           </p>
 
           <div className="decks-admin-grid">
-            {(formData.decks || []).map((deck, idx) => (
-              <div key={deck.id || idx} className="deck-admin-card">
-                <div className="deck-admin-header">
-                  <span className="deck-admin-badge" style={{ borderColor: deck.color, color: deck.color }}>
-                    TAB #{idx + 1}: {deck.tabLabel}
-                  </span>
-                </div>
+            {(formData.decks || []).map((deck, idx) => {
+              const currentIconName = deck.icon || (deck.id === 'workflow' ? 'zap' : deck.id === 'ml' ? 'activity' : 'cpu');
 
-                <div className="form-group" style={{ marginTop: '10px' }}>
-                  <label>Label Tab</label>
-                  <input
-                    type="text"
-                    value={deck.tabLabel}
-                    onChange={(e) => handleDeckChange(idx, 'tabLabel', e.target.value)}
-                  />
-                </div>
+              return (
+                <div key={deck.id || idx} className="deck-admin-card">
+                  <div className="deck-admin-header">
+                    <span
+                      className="deck-admin-badge"
+                      style={{
+                        borderColor: deck.color,
+                        color: deck.color,
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '6px',
+                      }}
+                    >
+                      <CategoryIcon name={currentIconName} size={14} />
+                      TAB #{idx + 1}: {deck.tabLabel}
+                    </span>
+                  </div>
+
+                  <div className="form-group" style={{ marginTop: '10px' }}>
+                    <label>Label Tab</label>
+                    <input
+                      type="text"
+                      value={deck.tabLabel}
+                      onChange={(e) => handleDeckChange(idx, 'tabLabel', e.target.value)}
+                    />
+                  </div>
+
+                  {/* Lucide Icon Selector */}
+                  <div className="form-group deck-icon-picker-group">
+                    <div className="deck-icon-label-row">
+                      <label style={{ margin: 0 }}>Ikon Lucide (Tab Icon)</label>
+                      <div className="deck-icon-badge-preview">
+                        <CategoryIcon name={currentIconName} size={14} />
+                        <code>{currentIconName}</code>
+                      </div>
+                    </div>
+                    <input
+                      type="text"
+                      value={deck.icon || ''}
+                      onChange={(e) => handleDeckChange(idx, 'icon', e.target.value)}
+                      placeholder="e.g. cpu, bot, brain, zap, cloud, activity..."
+                    />
+                    <div className="deck-icon-quick-chips">
+                      {suggestedDeckIcons.map((item) => (
+                        <button
+                          key={item.id}
+                          type="button"
+                          className={`deck-icon-chip ${currentIconName === item.name ? 'selected' : ''}`}
+                          onClick={() => handleDeckChange(idx, 'icon', item.name)}
+                          title={item.label}
+                        >
+                          <CategoryIcon name={item.name} size={12} />
+                          <span>{item.name}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
 
                 <div className="form-group">
                   <label>Badge Header (Pill)</label>
@@ -562,8 +607,9 @@ const ManageProfile = () => {
                   />
                 </div>
               </div>
-            ))}
-          </div>
+            );
+          })}
+        </div>
         </div>
 
         {/* Section 5: Deskripsi Hero Subtitle */}

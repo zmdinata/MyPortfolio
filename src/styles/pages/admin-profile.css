@@ -280,3 +280,85 @@ input:checked + .slider:before {
   outline: none;
 }
 
+/* Lucide Icon Picker in Admin Decks */
+.deck-icon-picker-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.deck-icon-label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.deck-icon-badge-preview {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 8px;
+  background: rgba(0, 210, 255, 0.1);
+  border: 1px solid rgba(0, 210, 255, 0.25);
+  border-radius: 6px;
+  color: #00d2ff;
+  font-size: 0.75rem;
+}
+
+.deck-icon-badge-preview code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  background: transparent;
+  color: #fff;
+}
+
+.deck-icon-quick-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  max-height: 85px;
+  overflow-y: auto;
+  padding: 4px 2px;
+  scrollbar-width: thin;
+}
+
+.deck-icon-quick-chips::-webkit-scrollbar {
+  width: 4px;
+}
+
+.deck-icon-quick-chips::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+}
+
+.deck-icon-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 0.72rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+
+.deck-icon-chip:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.deck-icon-chip.selected {
+  background: rgba(0, 210, 255, 0.18);
+  border-color: #00d2ff;
+  color: #00d2ff;
+  font-weight: 600;
+  box-shadow: 0 0 8px rgba(0, 210, 255, 0.25);
+}
+

@@ -1,24 +1,15 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-  FiCpu,
-  FiZap,
-  FiActivity,
-  FiMail,
-  FiMessageSquare,
-  FiCheck,
-  FiCopy,
-  FiExternalLink,
-  FiSend,
-} from 'react-icons/fi';
+  Send,
+  Copy,
+  Check,
+  ExternalLink,
+  MessageSquare,
+} from 'lucide-react';
+import { CategoryIcon } from '../../lib/categoryIcons';
 import { useLang } from '../../context/LangContext';
 import { getLocalProfileConfig, fetchFullProfile, DEFAULT_PROFILE_CONFIG } from '../../lib/profileConfig';
-
-const deckIcons = {
-  llm: FiCpu,
-  workflow: FiZap,
-  ml: FiActivity,
-};
 
 export default function ProfileInteractiveDeck({ name, role }) {
   const { lang } = useLang();
@@ -116,7 +107,7 @@ export default function ProfileInteractiveDeck({ name, role }) {
         {/* Tab Navigation */}
         <div className="deck-tabs-row" role="tablist" aria-label="Bidang Spesialisasi">
           {decks.map((deck) => {
-            const Icon = deckIcons[deck.id] || FiCpu;
+            const iconName = deck.icon || (deck.id === 'workflow' ? 'zap' : deck.id === 'ml' ? 'activity' : 'cpu');
             const isActive = activeTab === deck.id;
             return (
               <button
@@ -130,7 +121,7 @@ export default function ProfileInteractiveDeck({ name, role }) {
                 className={`deck-tab-btn ${isActive ? 'active' : ''}`}
                 style={{ '--deck-accent': deck.color || '#00d2ff' }}
               >
-                <Icon className="deck-tab-icon" />
+                <CategoryIcon name={iconName} className="deck-tab-icon" size={16} />
                 <span>{deck.tabLabel}</span>
               </button>
             );
@@ -167,7 +158,7 @@ export default function ProfileInteractiveDeck({ name, role }) {
                     className="deck-link-btn"
                     title="Lihat Detail Proyek"
                   >
-                    <FiExternalLink />
+                    <ExternalLink size={14} />
                   </a>
                 )}
               </div>
@@ -197,7 +188,7 @@ export default function ProfileInteractiveDeck({ name, role }) {
           onClick={handleScrollToContact}
           className="deck-btn-cta"
         >
-          <FiSend /> <span>{lang === 'en' ? `Contact ${displayName.split(' ')[0]}` : `Hubungi ${displayName.split(' ')[0]}`}</span>
+          <Send size={15} /> <span>{lang === 'en' ? `Contact ${displayName.split(' ')[0]}` : `Hubungi ${displayName.split(' ')[0]}`}</span>
         </button>
 
         <button
@@ -206,7 +197,7 @@ export default function ProfileInteractiveDeck({ name, role }) {
           className={`deck-btn-action ${copiedEmail ? 'copied' : ''}`}
           title="Salin alamat email"
         >
-          {copiedEmail ? <FiCheck className="text-green" /> : <FiCopy />}
+          {copiedEmail ? <Check size={15} className="text-green" /> : <Copy size={15} />}
           <span>{copiedEmail ? (lang === 'en' ? 'Copied!' : 'Tersalin!') : 'Email'}</span>
         </button>
 
@@ -216,7 +207,7 @@ export default function ProfileInteractiveDeck({ name, role }) {
           className="deck-btn-action"
           title="Tanya AI Assistant Agent-Z"
         >
-          <FiMessageSquare />
+          <MessageSquare size={15} />
           <span>Agent-Z</span>
         </button>
       </div>
