@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../../lib/supabase';
-import { FiPlus, FiEdit2, FiTrash2, FiX, FiSave, FiMinus, FiCalendar, FiZap, FiAlertCircle } from 'react-icons/fi';
+import { FiPlus, FiEdit2, FiTrash2, FiX, FiSave, FiMinus, FiCalendar, FiZap, FiAlertCircle, FiCopy, FiCheck } from 'react-icons/fi';
 import CustomSelect from '../../components/admin/CustomSelect';
 import { LATEST_CV_EXPERIENCE } from '../../data/latestCvData';
 import '../../styles/pages/admin-manage.css';
@@ -10,6 +10,7 @@ const ManageExperience = () => {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
+  const [copiedSql, setCopiedSql] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState({
     role_en: '',
@@ -161,6 +162,20 @@ const ManageExperience = () => {
     await fetchExperiences();
   };
 
+  const handleCopyRlsSql = () => {
+    const sql = `-- Aktifkan izin CRUD penuh (INSERT, UPDATE, DELETE) untuk tabel experience di Supabase
+ALTER TABLE public.experience ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "experience_all_policy" ON public.experience;
+CREATE POLICY "experience_all_policy" ON public.experience
+FOR ALL TO anon, authenticated
+USING (true)
+WITH CHECK (true);`;
+    navigator.clipboard.writeText(sql);
+    setCopiedSql(true);
+    setTimeout(() => setCopiedSql(false), 3000);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSaving(true);
@@ -192,13 +207,17 @@ const ManageExperience = () => {
 
       if (error) {
         console.error('Error saving experience:', error);
-        setErrorMessage(`Gagal menyimpan: ${error.message} (Code: ${error.code || 'unknown'})`);
+        if (error.code === '42501' || error.message?.includes('row-level security')) {
+          setErrorMessage('Database Supabase menolak penambahan data (Error 42501 - Row Level Security). Izin INSERT belum diaktifkan di Supabase Cloud. Klik tombol "Salin SQL Izin RLS" di bawah dan jalankan di SQL Editor Supabase untuk membukanya.');
+        } else {
+          setErrorMessage(`Gagal menyimpan: ${error.message} (Code: ${error.code || 'unknown'})`);
+        }
         setSaving(false);
         return;
       }
 
       if (editingId && (!data || data.length === 0)) {
-        setErrorMessage('Peringatan: Baris tidak diperbarui di Supabase. Ini biasanya terjadi jika aturan Row Level Security (RLS) di Supabase membatasi izin update. Pastikan session login aktif dan jalankan skrip SQL di Dashboard jika diperlukan.');
+        setErrorMessage('Peringatan: 0 baris diperbarui di Supabase (RLS UPDATE belum aktif). Klik tombol "Salin SQL Izin RLS" di bawah dan jalankan di SQL Editor Supabase agar perubahan tersimpan permanen.');
         setSaving(false);
         return;
       }
@@ -223,9 +242,21 @@ const ManageExperience = () => {
             Kelola riwayat pekerjaan, kontribusi hackathon, dan program beasiswa AI.
           </p>
         </div>
-        <button className="add-btn" onClick={() => handleOpenModal()}>
-          <FiPlus /> Add Experience
-        </button>
+        <div style={{ display: 'flex', gap: '10px' }}>
+          <button
+            type="button"
+            className="add-btn"
+            style={{ background: 'rgba(255,255,255,0.08)', color: '#fff', border: '1px solid rgba(255,255,255,0.2)' }}
+            onClick={handleCopyRlsSql}
+            title="Salin skrip SQL untuk membuka izin Save & Add di Supabase"
+          >
+            {copiedSql ? <FiCheck style={{ color: '#00d2ff' }} /> : <FiCopy />}
+            {copiedSql ? 'SQL RLS Tersalin!' : 'Salin SQL Izin RLS'}
+          </button>
+          <button className="add-btn" onClick={() => handleOpenModal()}>
+            <FiPlus /> Add Experience
+          </button>
+        </div>
       </div>
 
       {loading ? <div className="loading">Loading...</div> : (
@@ -314,9 +345,33 @@ const ManageExperience = () => {
             )}
 
             {errorMessage && (
-              <div style={{ background: 'rgba(255, 71, 87, 0.15)', border: '1px solid #ff4757', color: '#ff6b81', padding: '10px 14px', borderRadius: '8px', marginBottom: '16px', fontSize: '0.88rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <FiAlertCircle style={{ flexShrink: 0 }} />
-                <span>{errorMessage}</span>
+              <div style={{ background: 'rgba(255, 71, 87, 0.15)', border: '1px solid #ff4757', color: '#ff6b81', padding: '12px 14px', borderRadius: '8px', marginBottom: '16px', fontSize: '0.88rem' }}>
+                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                  <FiAlertCircle style={{ flexShrink: 0, marginTop: '2px' }} />
+                  <div>
+                    <div>{errorMessage}</div>
+                    <button
+                      type="button"
+                      onClick={handleCopyRlsSql}
+                      style={{
+                        marginTop: '10px',
+                        background: 'rgba(255,255,255,0.12)',
+                        border: '1px solid rgba(255,255,255,0.25)',
+                        color: '#fff',
+                        borderRadius: '6px',
+                        padding: '6px 12px',
+                        fontSize: '0.8rem',
+                        cursor: 'pointer',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '6px'
+                      }}
+                    >
+                      {copiedSql ? <FiCheck style={{ color: '#00d2ff' }} /> : <FiCopy />}
+                      {copiedSql ? 'Tersalin! Buka Supabase > SQL Editor' : 'Salin SQL Izin RLS (Supabase)'}
+                    </button>
+                  </div>
+                </div>
               </div>
             )}
             <form onSubmit={handleSubmit} className="modal-form">
