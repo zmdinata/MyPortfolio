@@ -96,24 +96,50 @@ export const honorItemFallbacks = localHonors.map((honor, index) => ({
   sort_order: index + 1,
 }));
 
+export const KNOWN_DELETED_STATIC_IDS = [
+  'tugas-1',
+  'tugas-2',
+  'tugas-3',
+  'tugas-4',
+  'lomba-1',
+  'static:tugas-1',
+  'static:tugas-2',
+  'static:tugas-3',
+  'static:tugas-4',
+  'static:lomba-1',
+  'static:honor-3',
+  'static:honor-4',
+];
+
 export function mergePortfolioCategories(dbCategories = [], fallbackCategories = []) {
-  const merged = [...(dbCategories || [])];
+  const deletedStaticIds = getDeletedStaticIds();
 
-  (fallbackCategories || []).forEach((fallback) => {
-    const exists = merged.some((item) => item.id === fallback.id || item.slug === fallback.slug);
-    if (!exists) merged.push(fallback);
-  });
+  // If database categories exist, the database is the authoritative source
+  if (Array.isArray(dbCategories) && dbCategories.length > 0) {
+    return [...dbCategories]
+      .filter((c) => !deletedStaticIds.includes(c.id) && !deletedStaticIds.includes(c.slug))
+      .sort((a, b) => (a.sort_order ?? 999) - (b.sort_order ?? 999));
+  }
 
-  return merged.sort((a, b) => (a.sort_order ?? 999) - (b.sort_order ?? 999));
+  return (fallbackCategories || [])
+    .filter((c) => !deletedStaticIds.includes(c.id) && !deletedStaticIds.includes(c.slug))
+    .sort((a, b) => (a.sort_order ?? 999) - (b.sort_order ?? 999));
 }
 
 export function getDeletedStaticIds() {
+  const ids = new Set(KNOWN_DELETED_STATIC_IDS);
   try {
     const raw = typeof window !== 'undefined' ? localStorage.getItem('portfolio_deleted_static_ids') : null;
-    return raw ? JSON.parse(raw) : [];
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed)) {
+        parsed.forEach((id) => ids.add(id));
+      }
+    }
   } catch {
-    return [];
+    // ignore
   }
+  return Array.from(ids);
 }
 
 export function markStaticIdDeleted(id) {
@@ -166,18 +192,30 @@ function matchesFallback(item, fallbackItem, contentType) {
 }
 
 export function mergePortfolioItems(dbItems = [], fallbackItems = [], categories = [], contentType) {
-  const merged = [...(dbItems || [])];
   const deletedStaticIds = getDeletedStaticIds();
 
-  (fallbackItems || []).forEach((fallbackItem) => {
-    if (deletedStaticIds.includes(fallbackItem.id) || (fallbackItem.source_key && deletedStaticIds.includes(fallbackItem.source_key))) {
-      return;
-    }
-    const exists = merged.some((item) => matchesFallback(item, fallbackItem, contentType));
-    if (!exists) merged.push(fallbackItem);
-  });
+  // If the database has items, the database is the authoritative source of truth.
+  // We do NOT resurrect deleted fallback items when the database is active.
+  if (Array.isArray(dbItems) && dbItems.length > 0) {
+    return [...dbItems]
+      .filter((item) => {
+        if (deletedStaticIds.includes(item.id)) return false;
+        if (item.source_key && deletedStaticIds.includes(item.source_key)) return false;
+        if (item.id_string && deletedStaticIds.includes(item.id_string)) return false;
+        return true;
+      })
+      .sort((a, b) => (a.sort_order ?? 999) - (b.sort_order ?? 999));
+  }
 
-  return merged.sort((a, b) => (a.sort_order ?? 999) - (b.sort_order ?? 999));
+  // Fallback mode: used when the database is empty (e.g. honors) or offline
+  return (fallbackItems || [])
+    .filter((fallbackItem) => {
+      if (deletedStaticIds.includes(fallbackItem.id)) return false;
+      if (fallbackItem.source_key && deletedStaticIds.includes(fallbackItem.source_key)) return false;
+      if (fallbackItem.id_string && deletedStaticIds.includes(fallbackItem.id_string)) return false;
+      return true;
+    })
+    .sort((a, b) => (a.sort_order ?? 999) - (b.sort_order ?? 999));
 }
 
 export function resolveFeaturedProjects(allProjects = []) {

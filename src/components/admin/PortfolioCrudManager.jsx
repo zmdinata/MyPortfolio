@@ -377,9 +377,11 @@ export default function PortfolioCrudManager({
   const deleteItem = async (item) => {
     if (!window.confirm(`Delete this ${label.singular.toLowerCase()}?`)) return;
 
+    if (item.id) markStaticIdDeleted(item.id);
+    if (item.source_key) markStaticIdDeleted(item.source_key);
+    if (item.id_string) markStaticIdDeleted(item.id_string);
+
     if (!isUuid(item.id)) {
-      markStaticIdDeleted(item.id);
-      if (item.source_key) markStaticIdDeleted(item.source_key);
       setItems((current) => current.filter((candidate) => candidate.id !== item.id));
       invalidatePortfolioCache();
       return;
@@ -398,9 +400,10 @@ export default function PortfolioCrudManager({
   const deleteCategory = async (category) => {
     if (!window.confirm(`Delete category "${categoryLabel(category)}"? Existing items will become uncategorized.`)) return;
 
+    if (category.id) markStaticIdDeleted(category.id);
+    if (category.slug) markStaticIdDeleted(category.slug);
+
     if (!isUuid(category.id)) {
-      markStaticIdDeleted(category.id);
-      if (category.slug) markStaticIdDeleted(category.slug);
       setCategories((current) => current.filter((candidate) => candidate.id !== category.id));
       invalidatePortfolioCache();
       return;
