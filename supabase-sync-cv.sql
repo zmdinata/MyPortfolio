@@ -92,6 +92,10 @@ INSERT INTO public.experience (
   );
 
 -- 4. RESET DAN UPDATE 3 PROYEK UNGGULAN (AutoOverlay AI, Agent-Z Homelab, LestariRimba)
+-- Hapus check constraint lama agar kategori kustom baru dapat disimpan tanpa batasan enum
+ALTER TABLE public.projects DROP CONSTRAINT IF EXISTS projects_category_check;
+ALTER TABLE public.projects DROP CONSTRAINT IF EXISTS projects_type_check;
+
 UPDATE public.projects SET is_featured = false, featured_order = null;
 
 -- Proyek 1: AutoOverlay AI

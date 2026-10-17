@@ -460,15 +460,28 @@ export default function PortfolioCrudManager({
       return supabase.from(itemTable).insert([nextPayload]);
     };
 
-    ({ error } = await runSave(payload));
+    let currentPayload = { ...payload };
+    ({ error } = await runSave(currentPayload));
 
     if (
       error &&
       contentType === 'projects' &&
-      payload.type === 'link' &&
+      currentPayload.type === 'link' &&
       String(error.message || '').includes('projects_type_check')
     ) {
-      ({ error } = await runSave({ ...payload, type: 'external' }));
+      currentPayload = { ...currentPayload, type: 'external' };
+      ({ error } = await runSave(currentPayload));
+    }
+
+    if (
+      error &&
+      contentType === 'projects' &&
+      String(error.message || '').includes('projects_category_check')
+    ) {
+      // Auto-fallback: keep category_id (UUID) intact so it links to the new category,
+      // but use legacy allowed category slug 'data' to bypass the old DB check constraint
+      currentPayload = { ...currentPayload, category: 'data' };
+      ({ error } = await runSave(currentPayload));
     }
 
     return { error };
