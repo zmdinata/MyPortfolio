@@ -384,7 +384,10 @@ export default function HomePage() {
                               }
                             }}
                           />
-                          <div className="project-card-title">
+                          <div
+                            className="project-card-title"
+                            title={lang === 'en' ? (project.title_en || project.title?.en) : (project.title_id || project.title?.id)}
+                          >
                             {lang === 'en' ? (project.title_en || project.title?.en) : (project.title_id || project.title?.id)}
                           </div>
                         </div>

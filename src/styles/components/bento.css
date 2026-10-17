@@ -100,6 +100,10 @@
 /* Card layout sizing */
 .bento-card-unified-hero {
   grid-column: span 12;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
   padding: 0;
   overflow: hidden;
   display: flex;
@@ -1179,18 +1183,32 @@
   flex-direction: column;
   position: relative;
   z-index: 2;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
-/* Primary Identity Header: Avatar LEFT, Details RIGHT */
+/* Primary Identity Header: Avatar LEFT, Details RIGHT (Grid-based on Desktop & Tablet) */
 .unified-identity-header {
-  display: flex;
-  align-items: flex-start;
-  gap: 2rem;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-areas:
+    "avatar details"
+    "avatar body";
+  column-gap: 2rem;
+  row-gap: 0.6rem;
+  align-items: start;
   margin-top: -3.5rem;
   margin-bottom: 2rem;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 .unified-avatar-container {
+  grid-area: avatar;
   flex-shrink: 0;
   position: relative;
 }
@@ -1230,11 +1248,20 @@
 
 /* Right Details Column */
 .unified-identity-details {
-  flex: 1;
+  grid-area: details;
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 0.6rem;
+  gap: 0.5rem;
+}
+
+/* Identity Body (Bio, Chips, Action Buttons) */
+.unified-identity-body {
+  grid-area: body;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
 }
 
 .unified-name-row {
@@ -1258,6 +1285,8 @@
   letter-spacing: -0.025em;
   line-height: 1.15;
   margin: 0;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 .unified-verified-icon {
@@ -1287,6 +1316,8 @@
   color: #00d2ff;
   margin: 0;
   letter-spacing: -0.01em;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 .unified-bio-subtitle {
@@ -1295,6 +1326,8 @@
   line-height: 1.6;
   margin: 0;
   max-width: 880px;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 [data-theme="light"] .unified-bio-subtitle {
@@ -1474,10 +1507,22 @@
   margin-top: 1.5rem;
   padding-top: 1.75rem;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 [data-theme="light"] .unified-lower-split {
   border-color: rgba(0, 0, 0, 0.07);
+}
+
+.unified-col-about,
+.unified-col-decks {
+  min-width: 0;
+  max-width: 100%;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .unified-section-label {
@@ -1502,6 +1547,11 @@
   flex-direction: column;
   gap: 1.1rem;
   height: calc(100% - 2rem);
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 [data-theme="light"] .unified-about-box {
@@ -1514,6 +1564,8 @@
   color: #d1d5db;
   line-height: 1.75;
   margin: 0;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 [data-theme="light"] .unified-about-text {
@@ -1535,6 +1587,15 @@
   font-size: 0.86rem;
   color: #9ca3af;
   line-height: 1.5;
+  min-width: 0;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+.unified-highlight-item div {
+  min-width: 0;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 .unified-hl-dot {
@@ -1552,20 +1613,34 @@
   display: flex;
   flex-direction: column;
   gap: 0.85rem;
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .unified-deck-tabs {
   display: flex;
-  gap: 0.5rem;
+  gap: 0.45rem;
   padding: 4px;
   background: rgba(0, 0, 0, 0.3);
   border-radius: 12px;
   border: 1px solid rgba(255, 255, 255, 0.06);
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  scroll-snap-type: x mandatory;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.unified-deck-tabs::-webkit-scrollbar {
+  display: none;
 }
 
 .unified-deck-tab-btn {
-  flex: 1;
+  flex: 1 1 0;
+  min-width: 0;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -1580,6 +1655,7 @@
   cursor: pointer;
   white-space: nowrap;
   transition: all 0.2s ease;
+  scroll-snap-align: start;
 }
 
 .unified-deck-tab-btn:hover {
@@ -1600,6 +1676,11 @@
   border-radius: 14px;
   padding: 1.4rem;
   min-height: 220px;
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 [data-theme="light"] .unified-deck-tabpanel {
@@ -1612,6 +1693,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.65rem;
+  min-width: 0;
 }
 
 .unified-deck-header {
@@ -1651,6 +1733,8 @@
   font-size: 1.12rem;
   font-weight: 700;
   color: #fff;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 [data-theme="light"] .unified-deck-title {
@@ -1662,6 +1746,8 @@
   font-size: 0.84rem;
   font-weight: 600;
   color: var(--deck-accent, #00d2ff);
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 .unified-deck-desc {
@@ -1669,6 +1755,8 @@
   font-size: 0.88rem;
   color: #9ca3af;
   line-height: 1.6;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 .unified-deck-tags {
@@ -1690,11 +1778,12 @@
 /* ========================================================
    Responsive Breakpoints for Unified Hero Card
    Guaranteeing: Avatar LEFT, Text RIGHT on Desktop, Tablet & Mobile!
+   Anti AI-Slop: Zero horizontal overflow leak, touch-first ergonomics
    ======================================================== */
 @media (max-width: 1024px) {
   .unified-identity-header {
     margin-top: -2.8rem;
-    gap: 1.5rem;
+    column-gap: 1.5rem;
   }
   .unified-avatar-ring {
     width: 105px;
@@ -1704,6 +1793,9 @@
     grid-template-columns: 1fr;
     gap: 1.5rem;
   }
+  .unified-about-box {
+    height: auto;
+  }
 }
 
 @media (max-width: 768px) {
@@ -1711,10 +1803,14 @@
     padding: 0 1.25rem 1.5rem;
   }
   .unified-identity-header {
-    display: flex;
-    flex-direction: row; /* TETAP KIRI (Avatar) & KANAN (Teks) */
-    align-items: flex-start;
-    gap: 1rem;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-template-areas:
+      "avatar details"
+      "body   body";
+    column-gap: 1rem;
+    row-gap: 0.85rem;
+    align-items: center;
     margin-top: -2.2rem;
     margin-bottom: 1.25rem;
   }
@@ -1729,15 +1825,30 @@
     bottom: 2px;
     right: 2px;
   }
+  .unified-identity-details {
+    min-width: 0;
+    gap: 0.35rem;
+  }
+  .unified-name-row {
+    gap: 0.5rem;
+  }
   .unified-title {
-    font-size: 1.45rem;
+    font-size: clamp(1.25rem, 5vw, 1.55rem);
   }
   .unified-role-headline {
-    font-size: 0.95rem;
+    font-size: 0.92rem;
+  }
+  .unified-identity-body {
+    width: 100%;
+    min-width: 0;
+    gap: 0.75rem;
   }
   .unified-bio-subtitle {
-    font-size: 0.85rem;
-    line-height: 1.5;
+    font-size: 0.86rem;
+    line-height: 1.55;
+  }
+  .unified-meta-row {
+    gap: 0.5rem;
   }
   .unified-actions-row-primary {
     display: grid;
@@ -1748,10 +1859,20 @@
   .unified-btn-primary {
     grid-column: 1 / -1;
     justify-content: center;
+    padding: 0.75rem 1rem;
+    font-size: 0.88rem;
   }
-  .unified-btn-secondary,
+  .unified-btn-secondary {
+    grid-column: 1 / -1;
+    justify-content: center;
+    padding: 0.7rem 1rem;
+    font-size: 0.86rem;
+  }
   .unified-btn-action {
     justify-content: center;
+    padding: 0.65rem 0.75rem;
+    font-size: 0.82rem;
+    min-width: 0;
   }
   .unified-actions-row-secondary {
     display: grid;
@@ -1761,18 +1882,26 @@
   }
   .unified-btn-credential {
     justify-content: center;
+    font-size: 0.78rem;
+    padding: 0.5rem 0.5rem;
+    text-align: center;
+  }
+  .unified-about-box {
+    height: auto;
+    padding: 1.25rem;
+  }
+  .unified-deck-tabpanel {
+    padding: 1.25rem;
   }
 }
 
 @media (max-width: 480px) {
   .unified-content-body {
-    padding: 0 1rem 1.25rem;
+    padding: 0 0.875rem 1.25rem;
   }
   .unified-identity-header {
-    display: flex;
-    flex-direction: row; /* Konsisten KIRI (Avatar) & KANAN (Teks) */
-    align-items: flex-start;
-    gap: 0.75rem;
+    column-gap: 0.75rem;
+    row-gap: 0.75rem;
     margin-top: -1.8rem;
   }
   .unified-avatar-ring {
@@ -1785,23 +1914,44 @@
     height: 12px;
   }
   .unified-title {
-    font-size: 1.25rem;
+    font-size: 1.2rem;
   }
   .unified-role-headline {
-    font-size: 0.85rem;
+    font-size: 0.82rem;
   }
   .unified-bio-subtitle {
     font-size: 0.8rem;
+    line-height: 1.5;
+  }
+  .unified-avail-badge {
+    padding: 0.25rem 0.65rem;
+    font-size: 0.75rem;
   }
   .unified-meta-row {
-    gap: 0.5rem;
+    gap: 0.35rem;
+  }
+  .unified-pill-lang {
+    font-size: 0.72rem;
+    padding: 0.2rem 0.55rem;
+  }
+  .unified-chip-item {
+    font-size: 0.72rem;
+    padding: 0.2rem 0.5rem;
   }
   .unified-deck-tabs {
-    overflow-x: auto;
+    gap: 0.35rem;
+    padding: 3px;
   }
   .unified-deck-tab-btn {
-    padding: 0.45rem 0.6rem;
-    font-size: 0.76rem;
+    flex: 0 0 auto;
+    padding: 0.45rem 0.7rem;
+    font-size: 0.75rem;
+  }
+  .unified-about-box {
+    padding: 1rem;
+  }
+  .unified-deck-tabpanel {
+    padding: 1rem;
   }
 }
 

@@ -132,7 +132,7 @@ export default function UnifiedHeroProfileCard({
             </div>
           </div>
 
-          {/* Sisi Kanan: Nama, Badge Status, Headline, Bio, Bahasa, Chips */}
+          {/* Sisi Kanan Atas: Nama, Badge Status, Headline */}
           <div className="unified-identity-details">
             <div className="unified-name-row">
               <div className="unified-name-group">
@@ -151,6 +151,10 @@ export default function UnifiedHeroProfileCard({
             </div>
 
             <p className="unified-role-headline">{displayRole}</p>
+          </div>
+
+          {/* Sisi Bawah / Ekstensi Identitas: Bio, Bahasa, Chips, dan Tombol Aksi */}
+          <div className="unified-identity-body">
             <p className="unified-bio-subtitle">{bioText}</p>
 
             {/* Meta row: Languages & Key Tech Chips */}
@@ -169,7 +173,7 @@ export default function UnifiedHeroProfileCard({
               </div>
             </div>
 
-            {/* 3. Action Buttons Hierarchy (2 Baris Tanpa Redundansi) */}
+            {/* 3. Action Buttons Hierarchy (Tiered Hierarchy Tanpa Redundansi) */}
             <div className="unified-actions-tier">
               {/* Row 1: Primary Action Group */}
               <div className="unified-actions-row-primary">
