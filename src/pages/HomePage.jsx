@@ -416,12 +416,12 @@ export default function HomePage() {
                     style={{ height: '100%' }}
                   >
                     <Tilt
-                      tiltMaxAngleX={8}
-                      tiltMaxAngleY={8}
-                      scale={1.03}
+                      tiltMaxAngleX={6}
+                      tiltMaxAngleY={6}
+                      scale={1.01}
                       transitionSpeed={2500}
                       className="tilt-wrapper"
-                      style={{ height: '100%' }}
+                      style={{ height: '100%', width: '100%', maxWidth: '100%' }}
                     >
                       <SpotlightCard
                         className="project-card featured-project-card"

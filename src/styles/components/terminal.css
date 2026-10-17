@@ -422,4 +422,148 @@
   transform: scale(0.95);
 }
 
+/* ===== Responsive Neofetch Component (Desktop, Tablet & Mobile) ===== */
+.neofetch-wrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 1.5rem;
+  padding: 0.5rem 0;
+  width: 100%;
+}
+
+.neofetch-ascii-box {
+  flex-shrink: 0;
+}
+
+.neofetch-ascii {
+  color: #00ddb3;
+  font-family: inherit;
+  font-size: 0.8rem;
+  line-height: 1.25;
+  margin: 0;
+  white-space: pre;
+  user-select: none;
+  text-shadow: 0 0 12px rgba(0, 221, 179, 0.4);
+}
+
+[data-theme="light"] .neofetch-ascii {
+  color: #00886e;
+  text-shadow: none;
+}
+
+.neofetch-info-box {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-family: inherit;
+  font-size: 0.8rem;
+  line-height: 1.45;
+  min-width: 0;
+}
+
+.neofetch-user-host {
+  color: #00ddb3;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+[data-theme="light"] .neofetch-user-host {
+  color: #00886e;
+}
+
+.neofetch-divider {
+  color: rgba(255, 255, 255, 0.35);
+  margin-bottom: 4px;
+}
+
+[data-theme="light"] .neofetch-divider {
+  color: rgba(0, 0, 0, 0.25);
+}
+
+.neofetch-specs-list {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.neofetch-spec-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px;
+  font-size: 0.78rem;
+}
+
+.neofetch-key {
+  color: #00d2ff;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+[data-theme="light"] .neofetch-key {
+  color: #006699;
+}
+
+.neofetch-val {
+  color: #e2e8f0;
+}
+
+[data-theme="light"] .neofetch-val {
+  color: #2c2c44;
+}
+
+.neofetch-palette {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.palette-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+  display: inline-block;
+}
+
+.dot-black   { background: #2d3748; }
+.dot-red     { background: #ff4757; }
+.dot-green   { background: #2ed573; }
+.dot-yellow  { background: #ffa502; }
+.dot-blue    { background: #1e90ff; }
+.dot-magenta { background: #9b59b6; }
+.dot-cyan    { background: #00ddb3; }
+.dot-white   { background: #f1f2f6; }
+
+/* Responsive Breakpoints: Tablet & Mobile */
+@media (max-width: 768px) {
+  .neofetch-wrapper {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.85rem;
+  }
+
+  .neofetch-ascii-box {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .neofetch-ascii-box::-webkit-scrollbar {
+    display: none;
+  }
+
+  .neofetch-ascii {
+    font-size: clamp(0.55rem, 2.5vw, 0.72rem);
+    line-height: 1.15;
+  }
+
+  .neofetch-spec-row {
+    font-size: 0.74rem;
+  }
+}
+
+
 

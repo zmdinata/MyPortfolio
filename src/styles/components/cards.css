@@ -283,6 +283,7 @@
   height: 100%;
   width: 100%;
   color: var(--text-primary);
+  overflow: hidden;
 }
 
 .project-card-link:hover {
@@ -291,17 +292,24 @@
 
 .project-image-preview {
   width: 100%;
-  flex: 1;
+  flex: 1 1 0;
+  min-height: 0;
   object-fit: cover;
+  object-position: top center;
   transition: transform var(--transition-slow);
 }
 
 .project-card:hover .project-image-preview {
-  transform: scale(1.05);
+  transform: scale(1.03);
 }
 
 .project-card-title {
-  padding: 0.75rem 1rem;
+  flex-shrink: 0;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.6rem 1rem;
   font-size: 0.85rem;
   font-weight: 600;
   background: var(--bg-elevated);
@@ -324,6 +332,7 @@
   border-radius: var(--radius-pill);
   text-transform: uppercase;
   letter-spacing: 0.05em;
+  z-index: 4;
 }
 
 .certificate-card .external-badge,
@@ -349,10 +358,16 @@
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1.25rem;
+  width: 100%;
+  max-width: 100%;
 }
 
 .featured-project-card {
-  height: 260px;
+  height: 270px;
+  display: flex;
+  flex-direction: column;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .featured-projects-cta {
@@ -511,6 +526,20 @@
 
   .featured-projects-grid {
     grid-template-columns: 1fr;
+    gap: 1.25rem;
+    width: 100%;
+  }
+
+  .featured-project-card {
+    height: 250px;
+    max-width: 100%;
+  }
+
+  .tilt-wrapper .skill-card,
+  .tilt-wrapper .project-card,
+  .tilt-wrapper .certificate-card,
+  .tilt-wrapper .honor-card {
+    transform: none;
   }
 
   .contact-grid {
@@ -527,3 +556,32 @@
     height: 10px;
   }
 }
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .featured-projects-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .featured-project-card {
+    height: 240px;
+  }
+
+  .project-card-title {
+    font-size: 0.78rem;
+    padding: 0.5rem 0.6rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .featured-project-card {
+    height: 235px;
+  }
+
+  .project-card-title {
+    font-size: 0.8rem;
+    padding: 0.5rem 0.75rem;
+    min-height: 40px;
+  }
+}
+

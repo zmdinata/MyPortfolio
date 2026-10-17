@@ -18,6 +18,62 @@ function calculateWibUptime() {
   return { days, hours };
 }
 
+function NeofetchOutput({ data }) {
+  const { upDays, upHours, projectsCount, certsCount } = data || {};
+
+  const asciiArt = [
+    '  ███████╗███╗   ███╗██████╗ ',
+    '  ╚══███╔╝████╗ ████║██╔══██╗',
+    '    ███╔╝ ██╔████╔██║██║  ██║',
+    '   ███╔╝  ██║╚██╔╝██║██║  ██║',
+    '  ███████╗██║ ╚═╝ ██║██████╔╝',
+    '  ╚══════╝╚═╝     ╚═╝╚═════╝ ',
+  ].join('\n');
+
+  const specs = [
+    { key: 'OS', val: 'Linux Homelab (ThinkPad T440)' },
+    { key: 'Host', val: 'Lenovo ThinkPad T440 Core i5' },
+    { key: 'Kernel', val: 'Linux 6.1.0-agentz-ai' },
+    { key: 'Uptime', val: `${upDays} days, ${upHours} hours` },
+    { key: 'Shell', val: 'zsh 5.9 / agent-z runtime' },
+    { key: 'Stack', val: 'Nous Hermes • OpenClaw • n8n' },
+    { key: 'Database', val: 'Supabase Cloud (Live)' },
+    { key: 'Projects', val: `${projectsCount} Active in Database` },
+    { key: 'Credentials', val: `${certsCount} Verified` },
+    { key: 'Status', val: 'Online & Telemetry Active' },
+  ];
+
+  return (
+    <div className="neofetch-wrapper">
+      <div className="neofetch-ascii-box">
+        <pre className="neofetch-ascii">{asciiArt}</pre>
+      </div>
+      <div className="neofetch-info-box">
+        <div className="neofetch-user-host">zmdinata@homelab-t440</div>
+        <div className="neofetch-divider">---------------------</div>
+        <div className="neofetch-specs-list">
+          {specs.map((item, i) => (
+            <div key={i} className="neofetch-spec-row">
+              <span className="neofetch-key">{item.key}:</span>{' '}
+              <span className="neofetch-val">{item.val}</span>
+            </div>
+          ))}
+        </div>
+        <div className="neofetch-palette">
+          <span className="palette-dot dot-black" />
+          <span className="palette-dot dot-red" />
+          <span className="palette-dot dot-green" />
+          <span className="palette-dot dot-yellow" />
+          <span className="palette-dot dot-blue" />
+          <span className="palette-dot dot-magenta" />
+          <span className="palette-dot dot-cyan" />
+          <span className="palette-dot dot-white" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function InteractiveTerminal() {
   const { lang } = useLang();
   const [input, setInput] = useState('');
@@ -161,21 +217,13 @@ export default function InteractiveTerminal() {
       case 'system': {
         const { days: upDays, hours: upHours } = calculateWibUptime();
         newLog.push({
-          type: 'output',
-          text: [
-            '    ███████╗███╗   ███╗██████╗  zmdinata@homelab-t440',
-            '    ╚══███╔╝████╗ ████║██╔══██╗ ---------------------',
-            '      ███╔╝ ██╔████╔██║██║  ██║ OS: Linux Homelab (ThinkPad T440)',
-            '     ███╔╝  ██║╚██╔╝██║██║  ██║ Host: Lenovo ThinkPad T440 Core i5',
-            '    ███████╗██║ ╚═╝ ██║██████╔╝ Kernel: Linux 6.1.0-agentz-ai',
-            `    ╚══════╝╚═╝     ╚═╝╚═════╝  Uptime: ${upDays} days, ${upHours} hours`,
-            '                                Shell: zsh 5.9 / agent-z runtime',
-            '                                Stack: Nous Hermes • OpenClaw • n8n',
-            '                                Database: Supabase Cloud (Live)',
-            `                                Projects: ${liveData.projects.length} Active in Database`,
-            `                                Credentials: ${liveData.certificates.length} Verified`,
-            '                                Status: Online & Telemetry Active',
-          ].join('\n'),
+          type: 'neofetch',
+          data: {
+            upDays,
+            upHours,
+            projectsCount: liveData.projects.length || 20,
+            certsCount: liveData.certificates.length || 32,
+          },
         });
         break;
       }
@@ -447,6 +495,8 @@ export default function InteractiveTerminal() {
                   <span className="prompt-symbol">❯</span>
                   <span className="cmd-text">{log.text}</span>
                 </>
+              ) : log.type === 'neofetch' ? (
+                <NeofetchOutput data={log.data} />
               ) : (
                 <pre className="output-text">{log.text}</pre>
               )}
