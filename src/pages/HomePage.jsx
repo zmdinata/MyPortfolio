@@ -451,7 +451,7 @@ export default function HomePage() {
                 custom={idx * 0.16}
               >
                 <h3 style={{ marginBottom: '0.2rem' }}>{item.role}</h3>
-                {item.company && <div style={{ fontSize: '1.1rem', fontWeight: 600, color: '#00d2ff', marginBottom: '0.5rem' }}>{item.company}</div>}
+                {item.company && <div style={{ fontSize: '1.1rem', fontWeight: 600, color: 'var(--accent-secondary)', marginBottom: '0.5rem' }}>{item.company}</div>}
                 <p className="timeline-sub">{item.period}</p>
                 {item.description && <p>{item.description}</p>}
                 {item.responsibilities?.length > 0 && (
@@ -505,7 +505,7 @@ export default function HomePage() {
               >
                 <h3>{item.school}</h3>
                 <div style={{ display: 'flex', gap: '8px', alignItems: 'center', marginBottom: '0.25rem' }}>
-                  <span style={{ fontSize: '1rem', fontWeight: 600, color: '#00d2ff' }}>{item.degree}</span>
+                  <span style={{ fontSize: '1rem', fontWeight: 600, color: 'var(--accent-secondary)' }}>{item.degree}</span>
                   {item.major && (
                     <>
                       <span style={{ opacity: 0.5 }}>•</span>

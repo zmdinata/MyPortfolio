@@ -32,7 +32,7 @@ function PageLoader() {
       alignItems: 'center',
       justifyContent: 'center',
       minHeight: '60vh',
-      color: '#00d2ff',
+      color: 'var(--accent-primary)',
       fontSize: '0.95rem',
       fontWeight: 500,
       letterSpacing: '0.5px',
@@ -41,8 +41,8 @@ function PageLoader() {
       <div style={{
         width: '18px',
         height: '18px',
-        border: '2px solid rgba(0, 210, 255, 0.2)',
-        borderTopColor: '#00d2ff',
+        border: '2px solid var(--border-color)',
+        borderTopColor: 'var(--accent-primary)',
         borderRadius: '50%',
         animation: 'spin 0.8s linear infinite'
       }} />

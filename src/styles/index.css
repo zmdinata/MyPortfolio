@@ -36,8 +36,8 @@ body {
   min-height: 100vh;
   line-height: 1.7;
   background-image: var(--bg-grid-pattern);
-  background-size: 24px 24px, 48px 48px, 48px 48px;
-  background-position: center top;
+  background-size: 48px 48px, 48px 48px, 48px 48px;
+  background-position: 0 0;
   background-attachment: fixed;
   transition:
     background-color var(--transition-slow),

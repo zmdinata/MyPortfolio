@@ -118,7 +118,7 @@ export default function CoverCropperModal({
 
     // Outer border guide
     ctx.setLineDash([]);
-    ctx.strokeStyle = '#00d2ff';
+    ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--accent-primary').trim() || '#2563eb';
     ctx.lineWidth = 2;
     ctx.strokeRect(0, 0, cw, ch);
   }, [canvasDim, imageObj, zoom, offset, aspectRatio]);

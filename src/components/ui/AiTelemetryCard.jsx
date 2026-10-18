@@ -41,7 +41,7 @@ export default function AiTelemetryCard() {
 
   const stackItems = [
     { name: 'Hermes & OpenClaw', icon: <FaRobot />, color: '#7c6fff' },
-    { name: 'Gemini API', icon: <FaBrain />, color: '#00ddb3' },
+    { name: 'Gemini API', icon: <FaBrain />, color: 'var(--accent-secondary)' },
     { name: 'n8n Automation', icon: <FiTerminal />, color: '#FF6D5A' },
     { name: 'Python (ML / EDA)', icon: <SiPython />, color: '#3776AB' },
     { name: 'Linux Homelab T440', icon: <FiServer />, color: '#E95420' },

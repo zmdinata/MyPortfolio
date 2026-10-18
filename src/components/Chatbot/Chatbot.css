@@ -239,10 +239,10 @@
   width: 60px;
   height: 60px;
   border-radius: 50%;
-  background: var(--accent-primary, #00d2ff);
+  background: var(--accent-primary);
   color: #fff;
   border: none;
-  box-shadow: 0 4px 15px rgba(0, 210, 255, 0.3);
+  box-shadow: 0 4px 15px var(--glow-color);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -251,7 +251,7 @@
 }
 
 .chatbot-toggle-btn:hover {
-  background: var(--accent-secondary, #3a7bd5);
+  background: var(--accent-secondary);
 }
 
 /* =============================================================
@@ -307,7 +307,7 @@
   height: 40px;
   border-radius: 50%;
   overflow: hidden;
-  background: linear-gradient(135deg, #00d2ff, #3a7bd5);
+  background: var(--gradient-accent);
   flex-shrink: 0;
 }
 
@@ -381,9 +381,9 @@
 }
 
 .chatbot-close-btn:hover {
-  color: #00d2ff;
-  border-color: rgba(0, 210, 255, 0.4);
-  background: rgba(0, 210, 255, 0.1);
+  color: var(--accent-secondary);
+  border-color: var(--border-hover);
+  background: var(--glow-color);
 }
 
 /* =============================================================
@@ -424,7 +424,7 @@
 }
 
 .chatbot-message.user .chatbot-message-content {
-  background: var(--accent-primary, #00d2ff);
+  background: var(--accent-primary);
   color: #fff;
   border-bottom-right-radius: 4px;
 }
@@ -485,13 +485,13 @@
 }
 
 .chat-inline-code {
-  background: rgba(0, 210, 255, 0.14);
-  color: #00ddb3;
+  background: var(--glow-color);
+  color: var(--accent-secondary);
   padding: 2px 6px;
   border-radius: 4px;
   font-family: monospace;
   font-size: 0.85em;
-  border: 1px solid rgba(0, 221, 179, 0.25);
+  border: 1px solid var(--border-color);
 }
 
 .chatbot-message.user .chat-inline-code {
@@ -509,7 +509,7 @@
   font-family: monospace;
   font-size: 0.82rem;
   margin: 0.5rem 0;
-  color: #00ddb3;
+  color: var(--accent-secondary);
 }
 
 .chat-list {
@@ -554,14 +554,14 @@
 }
 
 .chatbot-input-area input:focus {
-  border-color: var(--accent-primary, #00d2ff);
+  border-color: var(--accent-primary);
 }
 
 .chatbot-input-area button {
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: var(--accent-primary, #00d2ff);
+  background: var(--accent-primary);
   color: white;
   border: none;
   display: flex;
@@ -577,7 +577,7 @@
 }
 
 .chatbot-input-area button:not(:disabled):hover {
-  background: var(--accent-secondary, #3a7bd5);
+  background: var(--accent-secondary);
 }
 
 /* =============================================================
@@ -594,7 +594,7 @@
 .typing-indicator span {
   width: 8px;
   height: 8px;
-  background: var(--accent-primary, #00d2ff);
+  background: var(--accent-primary);
   border-radius: 50%;
   animation: bounce 1s infinite ease-in-out both;
   opacity: 0.85;

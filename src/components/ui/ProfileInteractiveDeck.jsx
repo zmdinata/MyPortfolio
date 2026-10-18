@@ -9,13 +9,23 @@ import {
 } from 'lucide-react';
 import { CategoryIcon } from '../../lib/categoryIcons';
 import { useLang } from '../../context/LangContext';
+import { useTheme } from '../../context/ThemeContext';
 import { getLocalProfileConfig, fetchFullProfile, DEFAULT_PROFILE_CONFIG } from '../../lib/profileConfig';
 
 export default function ProfileInteractiveDeck({ name, role }) {
   const { lang } = useLang();
+  const { theme } = useTheme();
   const [profileConfig, setProfileConfig] = useState(getLocalProfileConfig());
   const [activeTab, setActiveTab] = useState('llm');
   const [copiedEmail, setCopiedEmail] = useState(false);
+
+  const getDeckAccent = (color) => {
+    if (theme === 'light') {
+      if (!color || color === '#00d2ff' || color === '#00ddb3') return 'var(--accent-primary)';
+      return color;
+    }
+    return color || 'var(--accent-secondary)';
+  };
 
   useEffect(() => {
     let isMounted = true;
@@ -119,7 +129,7 @@ export default function ProfileInteractiveDeck({ name, role }) {
                 tabIndex={isActive ? 0 : -1}
                 onClick={() => setActiveTab(deck.id)}
                 className={`deck-tab-btn ${isActive ? 'active' : ''}`}
-                style={{ '--deck-accent': deck.color || '#00d2ff' }}
+                style={{ '--deck-accent': getDeckAccent(deck.color) }}
               >
                 <CategoryIcon name={iconName} className="deck-tab-icon" size={16} />
                 <span>{deck.tabLabel}</span>
@@ -131,7 +141,7 @@ export default function ProfileInteractiveDeck({ name, role }) {
         {/* Tab Content Card */}
         <div
           className="deck-content-card"
-          style={{ '--deck-accent': currentDeck.color || '#00d2ff' }}
+          style={{ '--deck-accent': getDeckAccent(currentDeck.color) }}
           role="tabpanel"
           id={`deck-tabpanel-${currentDeck.id}`}
           aria-labelledby={`deck-tab-${currentDeck.id}`}

@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import { CategoryIcon } from '../../lib/categoryIcons';
 import { useLang } from '../../context/LangContext';
+import { useTheme } from '../../context/ThemeContext';
 import { DEFAULT_PROFILE_CONFIG } from '../../lib/profileConfig';
 import SpotlightCard from './SpotlightCard';
 
@@ -35,8 +36,17 @@ export default function UnifiedHeroProfileCard({
   ...props
 }) {
   const { lang, t } = useLang();
+  const { theme } = useTheme();
   const [activeTab, setActiveTab] = useState('llm');
   const [copiedEmail, setCopiedEmail] = useState(false);
+
+  const getDeckAccent = (color) => {
+    if (theme === 'light') {
+      if (!color || color === '#00d2ff' || color === '#00ddb3') return 'var(--accent-primary)';
+      return color;
+    }
+    return color || 'var(--accent-secondary)';
+  };
 
   const decks = profileConfig.specialization_decks || DEFAULT_PROFILE_CONFIG.specialization_decks;
   const currentDeck = decks.find((d) => d.id === activeTab) || decks[0] || DEFAULT_PROFILE_CONFIG.specialization_decks[0];
@@ -91,7 +101,7 @@ export default function UnifiedHeroProfileCard({
   return (
     <SpotlightCard
       className="bento-card-unified-hero"
-      spotlightColor="rgba(0, 221, 179, 0.14)"
+      spotlightColor="var(--glow-color)"
       borderBeam={true}
       {...props}
     >
@@ -288,7 +298,7 @@ export default function UnifiedHeroProfileCard({
                       tabIndex={isActive ? 0 : -1}
                       onClick={() => setActiveTab(deck.id)}
                       className={`unified-deck-tab-btn ${isActive ? 'active' : ''}`}
-                      style={{ '--deck-accent': deck.color || '#00d2ff' }}
+                      style={{ '--deck-accent': getDeckAccent(deck.color) }}
                     >
                       <CategoryIcon name={iconName} className="deck-tab-icon" size={15} />
                       <span>{deck.tabLabel}</span>
@@ -300,7 +310,7 @@ export default function UnifiedHeroProfileCard({
               {/* Tab Content Display */}
               <div
                 className="unified-deck-tabpanel"
-                style={{ '--deck-accent': currentDeck.color || '#00d2ff' }}
+                style={{ '--deck-accent': getDeckAccent(currentDeck.color) }}
                 role="tabpanel"
                 id={`unified-deck-panel-${currentDeck.id}`}
                 aria-labelledby={`unified-deck-tab-${currentDeck.id}`}
