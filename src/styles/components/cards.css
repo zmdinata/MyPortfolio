@@ -330,9 +330,9 @@
   padding: 0.55rem 0.85rem;
   font-size: 0.84rem;
   font-weight: 600;
-  background: rgba(13, 16, 28, 0.82);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: rgba(10, 14, 28, 0.52);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   border-top: 1px solid var(--glass-card-border);
   text-align: center;
   white-space: normal;
@@ -343,7 +343,7 @@
 }
 
 [data-theme="light"] .project-card-title {
-  background: rgba(255, 255, 255, 0.88);
+  background: rgba(255, 255, 255, 0.58);
   border-top: 1px solid rgba(0, 0, 0, 0.08);
 }
 

@@ -44,7 +44,7 @@
 
 /* Skeleton Card Container */
 .skeleton-card {
-  background: var(--glass-card-bg, rgba(16, 16, 28, 0.68));
+  background: var(--glass-card-bg, rgba(10, 14, 28, 0.42));
   backdrop-filter: blur(var(--glass-card-blur, 16px));
   -webkit-backdrop-filter: blur(var(--glass-card-blur, 16px));
   border: 1px solid var(--glass-card-border, rgba(255, 255, 255, 0.08));
@@ -59,7 +59,7 @@
 }
 
 [data-theme="light"] .skeleton-card {
-  background: var(--glass-card-bg, rgba(255, 255, 255, 0.72));
+  background: var(--glass-card-bg, rgba(255, 255, 255, 0.48));
   backdrop-filter: blur(var(--glass-card-blur, 16px));
   -webkit-backdrop-filter: blur(var(--glass-card-blur, 16px));
   border-color: rgba(0, 0, 0, 0.08);

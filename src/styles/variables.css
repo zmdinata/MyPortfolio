@@ -25,20 +25,20 @@
   --bg-primary: #06060e;
   --bg-secondary: #0f0f1a;
   --bg-elevated: #161625;
-  --bg-glass: rgba(22, 22, 37, 0.65);
-  --bg-card: rgba(13, 16, 28, 0.68);
-  --bg-card-elevated: rgba(22, 26, 44, 0.75);
+  --bg-glass: rgba(22, 22, 37, 0.45);
+  --bg-card: rgba(10, 14, 28, 0.42);
+  --bg-card-elevated: rgba(16, 20, 38, 0.52);
   --bg-obsidian: #08080d;
 
-  /* Glassmorphism Design Tokens */
-  --glass-card-bg: rgba(13, 16, 28, 0.68);
-  --glass-card-bg-elevated: rgba(22, 26, 44, 0.75);
-  --glass-card-border: rgba(255, 255, 255, 0.10);
-  --glass-card-border-hover: rgba(0, 221, 179, 0.35);
+  /* Glassmorphism Design Tokens - Ultra-Clear Frosted Glass */
+  --glass-card-bg: rgba(10, 14, 28, 0.42);
+  --glass-card-bg-elevated: rgba(16, 20, 38, 0.52);
+  --glass-card-border: rgba(255, 255, 255, 0.12);
+  --glass-card-border-hover: rgba(0, 221, 179, 0.45);
   --glass-card-blur: 16px;
   --glass-card-shadow: 0 12px 36px -10px rgba(0, 0, 0, 0.45);
-  --glass-card-shadow-hover: 0 16px 36px -8px rgba(0, 0, 0, 0.55), 0 0 24px -4px rgba(0, 221, 179, 0.22), 0 0 40px -10px rgba(124, 111, 255, 0.18);
-  --glass-card-inner-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.14);
+  --glass-card-shadow-hover: 0 16px 36px -8px rgba(0, 0, 0, 0.55), 0 0 24px -4px rgba(0, 221, 179, 0.25), 0 0 40px -10px rgba(124, 111, 255, 0.22);
+  --glass-card-inner-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.18);
 
   --text-primary: #eaeaf2;
   --text-secondary: #8b8ba8;
@@ -74,19 +74,19 @@
   --bg-primary: #f5f5fc;
   --bg-secondary: #ecedf8;
   --bg-elevated: #ffffff;
-  --bg-glass: rgba(255, 255, 255, 0.72);
-  --bg-card: rgba(255, 255, 255, 0.72);
-  --bg-card-elevated: rgba(255, 255, 255, 0.85);
+  --bg-glass: rgba(255, 255, 255, 0.48);
+  --bg-card: rgba(255, 255, 255, 0.48);
+  --bg-card-elevated: rgba(255, 255, 255, 0.58);
 
-  /* Glassmorphism Design Tokens */
-  --glass-card-bg: rgba(255, 255, 255, 0.72);
-  --glass-card-bg-elevated: rgba(255, 255, 255, 0.85);
+  /* Glassmorphism Design Tokens - Ultra-Clear Frosted Glass */
+  --glass-card-bg: rgba(255, 255, 255, 0.48);
+  --glass-card-bg-elevated: rgba(255, 255, 255, 0.58);
   --glass-card-border: rgba(0, 0, 0, 0.08);
-  --glass-card-border-hover: rgba(99, 85, 224, 0.32);
+  --glass-card-border-hover: rgba(99, 85, 224, 0.35);
   --glass-card-blur: 16px;
   --glass-card-shadow: 0 10px 30px -8px rgba(0, 0, 0, 0.06);
-  --glass-card-shadow-hover: 0 16px 36px -8px rgba(99, 85, 224, 0.14), 0 0 20px -4px rgba(0, 184, 154, 0.16);
-  --glass-card-inner-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  --glass-card-shadow-hover: 0 16px 36px -8px rgba(99, 85, 224, 0.16), 0 0 20px -4px rgba(0, 184, 154, 0.18);
+  --glass-card-inner-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.85);
 
   --text-primary: #1a1a2e;
   --text-secondary: #5a5a78;
