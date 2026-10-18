@@ -29,7 +29,7 @@
   bottom: 220%;      /* Di atas maskot */
   right: 90%;        /* Di kiri maskot */
   background: rgba(13, 16, 28, 0.82);
-  border: 1px solid rgba(0, 221, 179, 0.35);
+  border: 1px solid rgba(0, 210, 255, 0.35);
   backdrop-filter: blur(14px) saturate(160%);
   -webkit-backdrop-filter: blur(14px) saturate(160%);
   color: #ffffff;
@@ -47,7 +47,7 @@
 [data-theme="light"] .speech-bubble {
   background: rgba(255, 255, 255, 0.88);
   color: #1e293b;
-  border-color: rgba(0, 184, 154, 0.4);
+  border-color: rgba(220, 38, 38, 0.3);
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.9);
 }
 
@@ -398,14 +398,31 @@
   gap: 1rem;
 }
 
+.chatbot-messages {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) transparent;
+}
+
 .chatbot-messages::-webkit-scrollbar { width: 6px; }
 .chatbot-messages::-webkit-scrollbar-track { background: transparent; }
 .chatbot-messages::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.12);
   border-radius: 10px;
 }
 .chatbot-messages::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: var(--accent-secondary);
+}
+
+[data-theme="light"] .chatbot-messages {
+  scrollbar-color: var(--accent-primary) transparent;
+}
+
+[data-theme="light"] .chatbot-messages::-webkit-scrollbar-thumb {
+  background: rgba(220, 38, 38, 0.3);
+}
+
+[data-theme="light"] .chatbot-messages::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-primary);
 }
 
 .chatbot-message {

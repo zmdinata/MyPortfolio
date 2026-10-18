@@ -74,7 +74,7 @@
   border-radius: 50%;
   background: var(--accent-primary);
   border: 3px solid var(--bg-primary);
-  box-shadow: 0 0 0 3px rgba(124, 111, 255, 0.2);
+  box-shadow: 0 0 0 3px var(--glow-color);
   z-index: 1;
 }
 
@@ -202,7 +202,7 @@
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: thin;
-  scrollbar-color: rgba(0, 210, 255, 0.6) rgba(255, 255, 255, 0.04);
+  scrollbar-color: var(--accent-secondary) rgba(255, 255, 255, 0.04);
 }
 
 /* In-Frame Custom Styled Scrollbar */
@@ -512,7 +512,7 @@
   border-color: transparent;
   color: #fff;
   transform: translateY(-3px);
-  box-shadow: 0 8px 25px rgba(124, 111, 255, 0.3);
+  box-shadow: 0 8px 25px var(--glow-hover);
 }
 
 .contact-btn svg {

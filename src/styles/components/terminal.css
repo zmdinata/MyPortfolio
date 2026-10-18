@@ -130,7 +130,7 @@
   cursor: text;
   scroll-behavior: smooth;
   scrollbar-width: thin;
-  scrollbar-color: rgba(0, 221, 179, 0.4) rgba(0, 0, 0, 0.25);
+  scrollbar-color: rgba(0, 210, 255, 0.45) rgba(0, 0, 0, 0.25);
 }
 
 .terminal-body::-webkit-scrollbar {
@@ -149,6 +149,18 @@
 
 .terminal-body::-webkit-scrollbar-thumb:hover {
   background: var(--accent-secondary);
+}
+
+[data-theme="light"] .terminal-body {
+  scrollbar-color: var(--accent-primary) rgba(0, 0, 0, 0.06);
+}
+
+[data-theme="light"] .terminal-body::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+[data-theme="light"] .terminal-body::-webkit-scrollbar-thumb {
+  background: rgba(220, 38, 38, 0.35);
 }
 
 [data-theme="light"] .terminal-body::-webkit-scrollbar-thumb:hover {
@@ -208,12 +220,12 @@
 }
 
 .terminal-line.terminal-system .output-text {
-  color: #a395ff;
+  color: var(--accent-secondary);
   font-weight: 500;
 }
 
 [data-theme="light"] .terminal-line.terminal-system .output-text {
-  color: #6352de;
+  color: var(--accent-primary);
 }
 
 .terminal-line.terminal-error .output-text {
@@ -260,9 +272,9 @@
 }
 
 .terminal-send-btn {
-  background: rgba(124, 111, 255, 0.18);
-  border: 1px solid rgba(124, 111, 255, 0.35);
-  color: #a395ff;
+  background: rgba(37, 99, 235, 0.2);
+  border: 1px solid rgba(0, 210, 255, 0.35);
+  color: var(--accent-secondary);
   cursor: pointer;
   border-radius: 4px;
   padding: 4px 8px;
@@ -274,6 +286,17 @@
 }
 
 .terminal-send-btn:hover {
+  background: var(--accent-primary);
+  color: #ffffff;
+}
+
+[data-theme="light"] .terminal-send-btn {
+  background: rgba(220, 38, 38, 0.1);
+  border: 1px solid rgba(220, 38, 38, 0.3);
+  color: var(--accent-primary);
+}
+
+[data-theme="light"] .terminal-send-btn:hover {
   background: var(--accent-primary);
   color: #ffffff;
 }
@@ -357,7 +380,7 @@
   overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: thin;
-  scrollbar-color: rgba(0, 221, 179, 0.45) rgba(255, 255, 255, 0.04);
+  scrollbar-color: rgba(0, 210, 255, 0.45) rgba(255, 255, 255, 0.04);
   touch-action: pan-x;
   overscroll-behavior-x: contain;
   padding: 4px 4px 6px;
@@ -380,6 +403,18 @@
 
 .terminal-quick-chips-scroll::-webkit-scrollbar-thumb:hover {
   background: var(--accent-secondary);
+}
+
+[data-theme="light"] .terminal-quick-chips-scroll {
+  scrollbar-color: var(--accent-primary) rgba(0, 0, 0, 0.05);
+}
+
+[data-theme="light"] .terminal-quick-chips-scroll::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+[data-theme="light"] .terminal-quick-chips-scroll::-webkit-scrollbar-thumb {
+  background: rgba(220, 38, 38, 0.35);
 }
 
 [data-theme="light"] .terminal-quick-chips-scroll::-webkit-scrollbar-thumb:hover {
@@ -554,7 +589,7 @@
 .dot-yellow  { background: #ffa502; }
 .dot-blue    { background: #1e90ff; }
 .dot-magenta { background: #9b59b6; }
-.dot-cyan    { background: #00ddb3; }
+.dot-cyan    { background: #00d2ff; }
 .dot-white   { background: #f1f2f6; }
 
 /* Responsive Breakpoints: Tablet & Mobile */

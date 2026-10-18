@@ -194,10 +194,10 @@
 
 @keyframes glowPulse {
   0%, 100% {
-    box-shadow: 0 0 20px rgba(124, 111, 255, 0.1);
+    box-shadow: 0 0 20px var(--glow-color);
   }
   50% {
-    box-shadow: 0 0 40px rgba(124, 111, 255, 0.3), 0 0 80px rgba(0, 221, 179, 0.1);
+    box-shadow: 0 0 40px var(--glow-hover), 0 0 80px var(--glow-color);
   }
 }
 

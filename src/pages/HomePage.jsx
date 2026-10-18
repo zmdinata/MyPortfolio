@@ -265,7 +265,7 @@ export default function HomePage() {
           {/* Card 4: AI Telemetry & Stack Card */}
           <SpotlightCard
             className="bento-card-telemetry"
-            spotlightColor="rgba(0, 221, 179, 0.16)"
+            spotlightColor="var(--glow-color)"
             variants={cardInOut}
             custom={2}
             initial="hidden"
@@ -279,7 +279,7 @@ export default function HomePage() {
           <SpotlightCard
             className="bento-card-metrics"
             borderBeam={false}
-            spotlightColor="rgba(124, 111, 255, 0.14)"
+            spotlightColor="var(--glow-color)"
             variants={cardInOut}
             custom={3}
             initial="hidden"
@@ -383,7 +383,7 @@ export default function HomePage() {
                     <SpotlightCard
                       className="project-card featured-project-card"
                       borderBeam={true}
-                      spotlightColor="rgba(0, 221, 179, 0.18)"
+                      spotlightColor="var(--glow-color)"
                       onClick={() => handleFeaturedProjectClick(project)}
                     >
                         <div className="project-card-link">

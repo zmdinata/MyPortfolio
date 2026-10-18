@@ -27,6 +27,7 @@ html, body {
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 5rem;
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-bg);
 }
 
 body {

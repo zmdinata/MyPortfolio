@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 const SpotlightCard = forwardRef(function SpotlightCard({
   children,
   className = '',
-  spotlightColor = 'rgba(124, 111, 255, 0.16)',
+  spotlightColor = 'var(--glow-color)',
   borderBeam = false,
   borderBeamColor = 'var(--accent-primary)',
   onClick,
