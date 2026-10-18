@@ -125,7 +125,7 @@ export const cardInOut = {
       stiffness: 140,
       damping: 18,
       mass: 0.85,
-      delay: Math.min(i * 0.05, 0.25),
+      delay: Math.min(i * 0.1, 0.38),
     },
   }),
   exit: {
@@ -141,10 +141,10 @@ export const cardInOut = {
 
 export const stagger = {
   hidden: {},
-  visible: { transition: { staggerChildren: 0.09, delayChildren: 0.04 } },
+  visible: { transition: { staggerChildren: 0.12, delayChildren: 0.06 } },
 };
 
 export const staggerFast = {
   hidden: {},
-  visible: { transition: { staggerChildren: 0.045, delayChildren: 0.02 } },
+  visible: { transition: { staggerChildren: 0.08, delayChildren: 0.03 } },
 };

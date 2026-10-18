@@ -448,7 +448,7 @@ export default function HomePage() {
                 whileInView="visible"
                 viewport={{ once: false, amount: 0.15 }}
                 variants={fadeRight}
-                custom={idx * 0.12}
+                custom={idx * 0.16}
               >
                 <h3 style={{ marginBottom: '0.2rem' }}>{item.role}</h3>
                 {item.company && <div style={{ fontSize: '1.1rem', fontWeight: 600, color: '#00d2ff', marginBottom: '0.5rem' }}>{item.company}</div>}
@@ -501,7 +501,7 @@ export default function HomePage() {
                 whileInView="visible"
                 viewport={{ once: false, amount: 0.15 }}
                 variants={fadeRight}
-                custom={idx * 0.12}
+                custom={idx * 0.16}
               >
                 <h3>{item.school}</h3>
                 <div style={{ display: 'flex', gap: '8px', alignItems: 'center', marginBottom: '0.25rem' }}>
