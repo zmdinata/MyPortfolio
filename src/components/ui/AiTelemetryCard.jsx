@@ -55,7 +55,7 @@ export default function AiTelemetryCard() {
         <div className="telemetry-badge">
           <span className="telemetry-beacon" />
           <span className="telemetry-status-text">
-            {lang === 'en' ? 'AI Homelab Online' : 'AI Homelab Online'}
+            {lang === 'en' ? 'AI Homelab Online' : 'AI Homelab Aktif'}
           </span>
         </div>
         <div className="telemetry-latency">

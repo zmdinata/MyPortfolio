@@ -104,7 +104,8 @@ export default function Navbar() {
           <motion.button
             className="dock-action-btn"
             onClick={toggleTheme}
-            aria-label="Toggle theme"
+            aria-label={theme === 'dark' ? (lang === 'en' ? 'Switch to Light mode' : 'Beralih ke mode Terang') : (lang === 'en' ? 'Switch to Dark mode' : 'Beralih ke mode Gelap')}
+            title={theme === 'dark' ? (lang === 'en' ? 'Switch to Light mode' : 'Beralih ke mode Terang') : (lang === 'en' ? 'Switch to Dark mode' : 'Beralih ke mode Gelap')}
             whileTap={{ scale: 0.88, rotate: 180 }}
             transition={smoothSpring}
           >
@@ -113,7 +114,8 @@ export default function Navbar() {
           <motion.button
             className="dock-action-btn dock-lang-btn"
             onClick={toggleLang}
-            aria-label="Toggle language"
+            aria-label={lang === 'en' ? 'Ganti ke Bahasa Indonesia' : 'Switch to English'}
+            title={lang === 'en' ? 'Ganti ke Bahasa Indonesia' : 'Switch to English'}
             whileTap={{ scale: 0.88 }}
           >
             {lang === 'en' ? 'ID' : 'EN'}
@@ -169,7 +171,8 @@ export default function Navbar() {
           <button
             className="mobile-dock-btn"
             onClick={toggleTheme}
-            aria-label="Toggle theme"
+            aria-label={theme === 'dark' ? (lang === 'en' ? 'Switch to Light mode' : 'Beralih ke mode Terang') : (lang === 'en' ? 'Switch to Dark mode' : 'Beralih ke mode Gelap')}
+            title={theme === 'dark' ? (lang === 'en' ? 'Switch to Light mode' : 'Beralih ke mode Terang') : (lang === 'en' ? 'Switch to Dark mode' : 'Beralih ke mode Gelap')}
           >
             {theme === 'dark' ? <FiSun /> : <FiMoon />}
           </button>
@@ -177,7 +180,8 @@ export default function Navbar() {
           <button
             className="mobile-dock-btn mobile-dock-lang"
             onClick={toggleLang}
-            aria-label="Toggle language"
+            aria-label={lang === 'en' ? 'Ganti ke Bahasa Indonesia' : 'Switch to English'}
+            title={lang === 'en' ? 'Ganti ke Bahasa Indonesia' : 'Switch to English'}
           >
             {lang === 'en' ? 'ID' : 'EN'}
           </button>

@@ -269,6 +269,8 @@ export default function Chatbot() {
           <motion.button
             className={`chatbot-toggle-btn ${isOpen ? 'open' : ''}`}
             onClick={() => setIsOpen(!isOpen)}
+            aria-label={isOpen ? (lang === 'en' ? 'Close chat' : 'Tutup percakapan') : (lang === 'en' ? 'Open chat with Agent-Z' : 'Buka percakapan dengan Agent-Z')}
+            title={isOpen ? (lang === 'en' ? 'Close chat' : 'Tutup percakapan') : (lang === 'en' ? 'Open chat with Agent-Z' : 'Buka percakapan dengan Agent-Z')}
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
           >

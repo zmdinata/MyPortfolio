@@ -160,7 +160,7 @@ export default function UnifiedHeroProfileCard({
             <div className="unified-name-row">
               <div className="unified-name-group">
                 <h1 className="unified-title gradient-text">{displayName}</h1>
-                <span className="unified-verified-icon" title="Verified Portfolio Candidate">
+                <span className="unified-verified-icon" title={lang === 'en' ? 'Verified Candidate' : 'Kandidat Terverifikasi'}>
                   <ShieldCheck size={18} />
                 </span>
               </div>
@@ -202,7 +202,7 @@ export default function UnifiedHeroProfileCard({
                   type="button"
                   onClick={handleScrollToContact}
                   className="unified-btn-secondary"
-                  title="Hubungi langsung melalui formulir kontak"
+                  title={lang === 'en' ? 'Contact directly via form' : 'Hubungi langsung melalui formulir kontak'}
                 >
                   <Send size={15} />
                   <span>{lang === 'en' ? `Contact ${displayName.split(' ')[0]}` : `Hubungi ${displayName.split(' ')[0]}`}</span>
@@ -212,7 +212,7 @@ export default function UnifiedHeroProfileCard({
                   type="button"
                   onClick={handleCopyEmail}
                   className={`unified-btn-action ${copiedEmail ? 'copied' : ''}`}
-                  title="Salin alamat email ke clipboard"
+                  title={lang === 'en' ? 'Copy email address to clipboard' : 'Salin alamat email ke clipboard'}
                 >
                   {copiedEmail ? <Check size={15} className="text-green" /> : <Copy size={15} />}
                   <span>{copiedEmail ? (lang === 'en' ? 'Copied!' : 'Tersalin!') : 'Email'}</span>
@@ -222,7 +222,7 @@ export default function UnifiedHeroProfileCard({
                   type="button"
                   onClick={handleChatAgentZ}
                   className="unified-btn-action unified-btn-agentz"
-                  title="Tanya AI Assistant Agent-Z"
+                  title={lang === 'en' ? 'Ask AI Assistant Agent-Z' : 'Tanya AI Assistant Agent-Z'}
                 >
                   <MessageSquare size={15} />
                   <span>Agent-Z</span>
@@ -284,7 +284,7 @@ export default function UnifiedHeroProfileCard({
 
             <div className="unified-deck-card">
               {/* Tab Navigation */}
-              <div className="unified-deck-tabs" role="tablist" aria-label="Bidang Spesialisasi">
+              <div className="unified-deck-tabs" role="tablist" aria-label={lang === 'en' ? 'Specialization Areas' : 'Bidang Spesialisasi'}>
                 {decks.map((deck) => {
                   const iconName = deck.icon || (deck.id === 'workflow' ? 'zap' : deck.id === 'ml' ? 'activity' : 'cpu');
                   const isActive = activeTab === deck.id;
@@ -333,7 +333,7 @@ export default function UnifiedHeroProfileCard({
                           target="_blank"
                           rel="noreferrer"
                           className="unified-deck-link"
-                          title="Buka Proyek Terkait"
+                          title={lang === 'en' ? 'Open Related Project' : 'Buka Proyek Terkait'}
                         >
                           <ExternalLink size={14} />
                         </a>

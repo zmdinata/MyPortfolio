@@ -170,8 +170,13 @@ export default function HomePage() {
     const years = Math.floor(months / 12);
     const remMonths = months % 12;
     let durStr = '';
-    if (years > 0) durStr += `${years} yr${years > 1 ? 's' : ''} `;
-    if (remMonths > 0 || years === 0) durStr += `${remMonths} mo${remMonths > 1 ? 's' : ''}`;
+    if (lang === 'en') {
+      if (years > 0) durStr += `${years} yr${years > 1 ? 's' : ''} `;
+      if (remMonths > 0 || years === 0) durStr += `${remMonths} mo${remMonths > 1 ? 's' : ''}`;
+    } else {
+      if (years > 0) durStr += `${years} thn `;
+      if (remMonths > 0 || years === 0) durStr += `${remMonths} bln`;
+    }
 
     const location = (lang === 'en' ? loc_en : loc_id) || loc_en || loc_id || '';
     const parts = [`${startStr} — ${endStr}`, durStr.trim(), location, type].filter(Boolean);
@@ -457,7 +462,7 @@ export default function HomePage() {
                 {item.responsibilities?.length > 0 && (
                   <>
                     <p style={{ fontWeight: 600, marginTop: '0.75rem', color: 'var(--text-primary)' }}>
-                      {t('experience.title') === 'Pengalaman' ? 'Tanggung Jawab Utama:' : 'Key Responsibilities:'}
+                      {lang === 'en' ? 'Key Responsibilities:' : 'Tanggung Jawab Utama:'}
                     </p>
                     <ul>
                       {item.responsibilities.map((r, i) => <li key={i}>{r}</li>)}
@@ -467,7 +472,7 @@ export default function HomePage() {
                 {item.achievements?.length > 0 && (
                   <>
                     <p style={{ fontWeight: 600, marginTop: '0.75rem', color: 'var(--text-primary)' }}>
-                      {t('experience.title') === 'Pengalaman' ? 'Pencapaian Utama:' : 'Key Achievements:'}
+                      {lang === 'en' ? 'Key Achievements:' : 'Pencapaian Utama:'}
                     </p>
                     <ul>
                       {item.achievements.map((a, i) => <li key={i}>{a}</li>)}

@@ -46,8 +46,15 @@ export function LangProvider({ children }) {
     [lang]
   );
 
+  const setLanguage = useCallback((nextLang) => {
+    if (nextLang === 'en' || nextLang === 'id') {
+      localStorage.setItem('lang', nextLang);
+      setLang(nextLang);
+    }
+  }, []);
+
   return (
-    <LangContext.Provider value={{ lang, toggleLang, t, tObj }}>
+    <LangContext.Provider value={{ lang, toggleLang, setLanguage, setLang: setLanguage, t, tObj }}>
       {children}
     </LangContext.Provider>
   );

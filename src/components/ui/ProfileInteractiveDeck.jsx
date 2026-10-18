@@ -70,7 +70,11 @@ export default function ProfileInteractiveDeck({ name, role }) {
   const handleAskAgentZ = () => {
     window.dispatchEvent(
       new CustomEvent('open-chatbot', {
-        detail: { message: `Bisa jelaskan keahlian AI ${displayName}?` },
+        detail: {
+          message: lang === 'en'
+            ? `Can you explain ${displayName}'s AI expertise and projects?`
+            : `Bisa jelaskan keahlian AI dan proyek ${displayName}?`,
+        },
       })
     );
   };
@@ -96,7 +100,10 @@ export default function ProfileInteractiveDeck({ name, role }) {
               }
             }}
           />
-          <span className="profile-deck-live-dot" title="Homelab Telemetry Active" />
+          <span
+            className="profile-deck-live-dot"
+            title={lang === 'en' ? 'Homelab Telemetry Active' : 'Telemetri Homelab Aktif'}
+          />
         </div>
 
         <div className="bento-profile-meta">
@@ -115,7 +122,7 @@ export default function ProfileInteractiveDeck({ name, role }) {
       {/* 2. Interactive Specialization Mini-Deck */}
       <div className="deck-showcase-box">
         {/* Tab Navigation */}
-        <div className="deck-tabs-row" role="tablist" aria-label="Bidang Spesialisasi">
+        <div className="deck-tabs-row" role="tablist" aria-label={lang === 'en' ? 'Specialization Areas' : 'Bidang Spesialisasi'}>
           {decks.map((deck) => {
             const iconName = deck.icon || (deck.id === 'workflow' ? 'zap' : deck.id === 'ml' ? 'activity' : 'cpu');
             const isActive = activeTab === deck.id;
@@ -166,7 +173,7 @@ export default function ProfileInteractiveDeck({ name, role }) {
                     target="_blank"
                     rel="noreferrer"
                     className="deck-link-btn"
-                    title="Lihat Detail Proyek"
+                    title={lang === 'en' ? 'View Project Details' : 'Lihat Detail Proyek'}
                   >
                     <ExternalLink size={14} />
                   </a>
@@ -205,7 +212,7 @@ export default function ProfileInteractiveDeck({ name, role }) {
           type="button"
           onClick={handleCopyEmail}
           className={`deck-btn-action ${copiedEmail ? 'copied' : ''}`}
-          title="Salin alamat email"
+          title={lang === 'en' ? 'Copy email address' : 'Salin alamat email'}
         >
           {copiedEmail ? <Check size={15} className="text-green" /> : <Copy size={15} />}
           <span>{copiedEmail ? (lang === 'en' ? 'Copied!' : 'Tersalin!') : 'Email'}</span>
@@ -215,7 +222,7 @@ export default function ProfileInteractiveDeck({ name, role }) {
           type="button"
           onClick={handleAskAgentZ}
           className="deck-btn-action"
-          title="Tanya AI Assistant Agent-Z"
+          title={lang === 'en' ? 'Ask AI Assistant Agent-Z' : 'Tanya AI Assistant Agent-Z'}
         >
           <MessageSquare size={15} />
           <span>Agent-Z</span>
