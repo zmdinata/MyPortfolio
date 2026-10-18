@@ -1,19 +1,23 @@
 /* ===== Glass Cards ===== */
 .card {
-  background: var(--bg-card);
-  border: 1px solid var(--border-color);
+  background: var(--glass-card-bg);
+  backdrop-filter: blur(var(--glass-card-blur)) saturate(160%);
+  -webkit-backdrop-filter: blur(var(--glass-card-blur)) saturate(160%);
+  border: 1px solid var(--glass-card-border);
   border-radius: var(--radius-lg);
+  box-shadow: var(--glass-card-shadow), var(--glass-card-inner-highlight);
   overflow: hidden;
   transition:
-    transform var(--transition-base),
-    box-shadow var(--transition-base),
-    border-color var(--transition-base);
+    transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.35s ease;
+  will-change: transform, box-shadow;
 }
 
 .card:hover {
-  transform: translateY(-5px);
-  box-shadow: var(--shadow-md), var(--shadow-glow);
-  border-color: var(--border-hover);
+  transform: translateY(-4px);
+  box-shadow: var(--glass-card-shadow-hover), var(--glass-card-inner-highlight);
+  border-color: var(--glass-card-border-hover);
 }
 
 /* Tilt Wrapper */
@@ -50,13 +54,17 @@
   position: relative;
   padding: 1.5rem;
   margin-bottom: 1.5rem;
-  background: var(--bg-card);
-  border: 1px solid var(--border-color);
+  background: var(--glass-card-bg);
+  backdrop-filter: blur(var(--glass-card-blur)) saturate(160%);
+  -webkit-backdrop-filter: blur(var(--glass-card-blur)) saturate(160%);
+  border: 1px solid var(--glass-card-border);
+  box-shadow: var(--glass-card-shadow), var(--glass-card-inner-highlight);
   border-radius: var(--radius-lg);
   transition:
-    transform var(--transition-base),
-    box-shadow var(--transition-base),
-    border-color var(--transition-base);
+    transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.35s ease;
+  will-change: transform, box-shadow;
 }
 
 .timeline-item::before {
@@ -74,9 +82,9 @@
 }
 
 .timeline-item:hover {
-  transform: translateX(6px);
-  box-shadow: var(--shadow-md), var(--shadow-glow);
-  border-color: var(--border-hover);
+  transform: translateX(6px) translateY(-2px);
+  box-shadow: var(--glass-card-shadow-hover), var(--glass-card-inner-highlight);
+  border-color: var(--glass-card-border-hover);
 }
 
 .timeline-item h3 {
@@ -129,19 +137,23 @@
 .skill-card {
   text-align: center;
   padding: 2rem 1.5rem;
-  background: var(--bg-card);
-  border: 1px solid var(--border-color);
+  background: var(--glass-card-bg);
+  backdrop-filter: blur(var(--glass-card-blur)) saturate(160%);
+  -webkit-backdrop-filter: blur(var(--glass-card-blur)) saturate(160%);
+  border: 1px solid var(--glass-card-border);
+  box-shadow: var(--glass-card-shadow), var(--glass-card-inner-highlight);
   border-radius: var(--radius-lg);
   transition:
-    transform var(--transition-base),
-    box-shadow var(--transition-base),
-    border-color var(--transition-base);
+    transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.35s ease;
+  will-change: transform, box-shadow;
 }
 
 .skill-card:hover {
-  transform: translateY(-5px);
-  box-shadow: var(--shadow-md), var(--shadow-glow);
-  border-color: var(--border-hover);
+  transform: translateY(-4px);
+  box-shadow: var(--glass-card-shadow-hover), var(--glass-card-inner-highlight);
+  border-color: var(--glass-card-border-hover);
 }
 
 .skill-card-icon {
@@ -259,22 +271,26 @@
   height: 230px;
   width: 100%;
   border-radius: var(--radius-lg);
-  background: var(--bg-card);
-  border: 1px solid var(--border-color);
+  background: var(--glass-card-bg);
+  backdrop-filter: blur(var(--glass-card-blur)) saturate(160%);
+  -webkit-backdrop-filter: blur(var(--glass-card-blur)) saturate(160%);
+  border: 1px solid var(--glass-card-border);
+  box-shadow: var(--glass-card-shadow), var(--glass-card-inner-highlight);
   overflow: hidden;
   cursor: pointer;
   scroll-snap-align: start;
   position: relative;
   transition:
-    transform var(--transition-base),
-    box-shadow var(--transition-base),
-    border-color var(--transition-base);
+    transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.35s ease;
+  will-change: transform, box-shadow;
 }
 
 .project-card:hover {
-  transform: translateY(-5px) scale(1.02);
-  box-shadow: var(--shadow-md), var(--shadow-glow);
-  border-color: var(--border-hover);
+  transform: translateY(-4px) scale(1.012);
+  box-shadow: var(--glass-card-shadow-hover), var(--glass-card-inner-highlight);
+  border-color: var(--glass-card-border-hover);
 }
 
 .project-card-link {
@@ -314,14 +330,21 @@
   padding: 0.55rem 0.85rem;
   font-size: 0.84rem;
   font-weight: 600;
-  background: var(--bg-elevated);
-  border-top: 1px solid var(--border-color);
+  background: rgba(13, 16, 28, 0.82);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-top: 1px solid var(--glass-card-border);
   text-align: center;
   white-space: normal;
   word-break: break-word;
   overflow-wrap: break-word;
   line-height: 1.35;
   box-sizing: border-box;
+}
+
+[data-theme="light"] .project-card-title {
+  background: rgba(255, 255, 255, 0.88);
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
 }
 
 .project-card .external-badge {
@@ -398,22 +421,26 @@
 
 .certificate-card {
   border-radius: var(--radius-lg);
-  background: var(--bg-card);
-  border: 1px solid var(--border-color);
+  background: var(--glass-card-bg);
+  backdrop-filter: blur(var(--glass-card-blur)) saturate(160%);
+  -webkit-backdrop-filter: blur(var(--glass-card-blur)) saturate(160%);
+  border: 1px solid var(--glass-card-border);
+  box-shadow: var(--glass-card-shadow), var(--glass-card-inner-highlight);
   overflow: hidden;
   cursor: pointer;
   aspect-ratio: 16 / 10;
   position: relative;
   transition:
-    transform var(--transition-base),
-    box-shadow var(--transition-base),
-    border-color var(--transition-base);
+    transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.35s ease;
+  will-change: transform, box-shadow;
 }
 
 .certificate-card:hover {
-  transform: translateY(-5px) scale(1.02);
-  box-shadow: var(--shadow-md), var(--shadow-glow);
-  border-color: var(--border-hover);
+  transform: translateY(-4px) scale(1.015);
+  box-shadow: var(--glass-card-shadow-hover), var(--glass-card-inner-highlight);
+  border-color: var(--glass-card-border-hover);
 }
 
 .certificate-card img {
@@ -436,21 +463,25 @@
 
 .honor-card {
   border-radius: var(--radius-lg);
-  background: var(--bg-card);
-  border: 1px solid var(--border-color);
+  background: var(--glass-card-bg);
+  backdrop-filter: blur(var(--glass-card-blur)) saturate(160%);
+  -webkit-backdrop-filter: blur(var(--glass-card-blur)) saturate(160%);
+  border: 1px solid var(--glass-card-border);
+  box-shadow: var(--glass-card-shadow), var(--glass-card-inner-highlight);
   overflow: hidden;
   cursor: pointer;
   position: relative;
   transition:
-    transform var(--transition-base),
-    box-shadow var(--transition-base),
-    border-color var(--transition-base);
+    transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.35s ease;
+  will-change: transform, box-shadow;
 }
 
 .honor-card:hover {
-  transform: translateY(-5px);
-  box-shadow: var(--shadow-md), var(--shadow-glow);
-  border-color: var(--border-hover);
+  transform: translateY(-4px) scale(1.012);
+  box-shadow: var(--glass-card-shadow-hover), var(--glass-card-inner-highlight);
+  border-color: var(--glass-card-border-hover);
 }
 
 .honor-card-image {
@@ -547,6 +578,16 @@
   .tilt-wrapper .certificate-card,
   .tilt-wrapper .honor-card {
     transform: none;
+  }
+
+  .card,
+  .timeline-item,
+  .skill-card,
+  .project-card,
+  .certificate-card,
+  .honor-card {
+    backdrop-filter: blur(10px) saturate(140%);
+    -webkit-backdrop-filter: blur(10px) saturate(140%);
   }
 
   .contact-grid {
