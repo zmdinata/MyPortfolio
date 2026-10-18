@@ -40,3 +40,10 @@
   color: var(--accent-primary);
   transform: translateY(-2px);
 }
+
+/* Safe clearance for mobile & tablet bottom floating dock */
+@media (max-width: 1024px) {
+  .footer {
+    padding-bottom: 6.5rem;
+  }
+}
