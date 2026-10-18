@@ -132,7 +132,7 @@ export default function CertificatesPage() {
             className="certificate-grid"
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: false, amount: 0.15 }}
+            viewport={{ once: false, amount: 0.08, margin: "-40px 0px -40px 0px" }}
             variants={staggerFast}
           >
             {items.map((cert, idx) => {
@@ -141,9 +141,6 @@ export default function CertificatesPage() {
                 <motion.div
                   key={cert.id}
                   className="certificate-card"
-                  initial="hidden"
-                  whileInView="visible"
-                  viewport={{ once: false, amount: 0.15 }}
                   variants={cardInOut}
                   custom={idx % 4}
                   onClick={() => handleClick(cert)}

@@ -138,7 +138,7 @@ export default function ProjectsPage() {
           className="project-category"
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: false, amount: 0.15 }}
+          viewport={{ once: false, amount: 0.08, margin: "-40px 0px -40px 0px" }}
           variants={fadeUp}
           custom={catIdx * 0.15}
         >
@@ -156,7 +156,7 @@ export default function ProjectsPage() {
                   onClick={() => handleClick(project)}
                   initial="hidden"
                   whileInView="visible"
-                  viewport={{ once: false, amount: 0.15 }}
+                  viewport={{ once: false, amount: 0.08, margin: "-40px 0px -40px 0px" }}
                   variants={cardInOut}
                   custom={idx % 4}
                   style={{ willChange: 'transform, opacity' }}

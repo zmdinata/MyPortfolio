@@ -1,4 +1,4 @@
-import React, { useRef, useState, forwardRef } from 'react';
+import React, { useRef, forwardRef } from 'react';
 import { motion } from 'framer-motion';
 
 const SpotlightCard = forwardRef(function SpotlightCard({
@@ -12,8 +12,6 @@ const SpotlightCard = forwardRef(function SpotlightCard({
   ...props
 }, forwardedRef) {
   const cardRef = useRef(null);
-  const [isHovered, setIsHovered] = useState(false);
-
   const handleMouseMove = (e) => {
     if (!cardRef.current) return;
     const rect = cardRef.current.getBoundingClientRect();
@@ -23,9 +21,6 @@ const SpotlightCard = forwardRef(function SpotlightCard({
     cardRef.current.style.setProperty('--mouse-y', `${y}px`);
   };
 
-  const handleMouseEnter = () => setIsHovered(true);
-  const handleMouseLeave = () => setIsHovered(false);
-
   return (
     <motion.div
       ref={(node) => {
@@ -33,10 +28,8 @@ const SpotlightCard = forwardRef(function SpotlightCard({
         if (typeof forwardedRef === 'function') forwardedRef(node);
         else if (forwardedRef) forwardedRef.current = node;
       }}
-      className={`spotlight-card ${isHovered ? 'is-hovered' : ''} ${className}`}
+      className={`spotlight-card ${className}`}
       onMouseMove={handleMouseMove}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
       onClick={onClick}
       style={{
         '--spotlight-color': spotlightColor,

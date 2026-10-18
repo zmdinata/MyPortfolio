@@ -252,7 +252,7 @@ export default function HomePage() {
             custom={0}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: false, amount: 0.12 }}
+            viewport={{ once: false, amount: 0.08, margin: "-40px 0px -40px 0px" }}
           />
 
           {/* Card 3: Interactive Terminal Card */}
@@ -262,7 +262,7 @@ export default function HomePage() {
             custom={1}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: false, amount: 0.12 }}
+            viewport={{ once: false, amount: 0.08, margin: "-40px 0px -40px 0px" }}
           >
             <InteractiveTerminal />
           </motion.div>
@@ -275,7 +275,7 @@ export default function HomePage() {
             custom={2}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: false, amount: 0.12 }}
+            viewport={{ once: false, amount: 0.08, margin: "-40px 0px -40px 0px" }}
           >
             <AiTelemetryCard />
           </SpotlightCard>
@@ -289,7 +289,7 @@ export default function HomePage() {
             custom={3}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: false, amount: 0.12 }}
+            viewport={{ once: false, amount: 0.08, margin: "-40px 0px -40px 0px" }}
           >
             <div className="bento-metrics-grid">
               <div className="bento-metric-col">
@@ -370,7 +370,7 @@ export default function HomePage() {
               className="featured-projects-grid"
               initial="hidden"
               whileInView="visible"
-              viewport={{ once: false, amount: 0.15 }}
+              viewport={{ once: false, amount: 0.08, margin: "-40px 0px -40px 0px" }}
               variants={stagger}
             >
               {featuredProjects.map((project, idx) => {
@@ -380,9 +380,6 @@ export default function HomePage() {
                     key={project.id || project.source_key || `featured-${idx}`}
                     variants={cardInOut}
                     custom={idx % 3}
-                    initial="hidden"
-                    whileInView="visible"
-                    viewport={{ once: false, amount: 0.15 }}
                     style={{ height: '100%', willChange: 'transform, opacity' }}
                   >
                     <SpotlightCard
@@ -451,7 +448,7 @@ export default function HomePage() {
                 className="timeline-item"
                 initial="hidden"
                 whileInView="visible"
-                viewport={{ once: false, amount: 0.15 }}
+                viewport={{ once: false, amount: 0.08, margin: "-40px 0px -40px 0px" }}
                 variants={fadeRight}
                 custom={idx * 0.16}
               >
@@ -504,7 +501,7 @@ export default function HomePage() {
                 className="timeline-item"
                 initial="hidden"
                 whileInView="visible"
-                viewport={{ once: false, amount: 0.15 }}
+                viewport={{ once: false, amount: 0.08, margin: "-40px 0px -40px 0px" }}
                 variants={fadeRight}
                 custom={idx * 0.16}
               >
@@ -552,7 +549,7 @@ export default function HomePage() {
             className="skills-grid"
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: false, amount: 0.15 }}
+            viewport={{ once: false, amount: 0.08, margin: "-40px 0px -40px 0px" }}
             variants={stagger}
           >
             {displaySkills.length > 0 ? displaySkills.map((skill, idx) => (
@@ -561,9 +558,6 @@ export default function HomePage() {
                 className="skill-card"
                 variants={cardInOut}
                 custom={idx % 4}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: false, amount: 0.15 }}
                 style={{ willChange: 'transform, opacity' }}
               >
                 <div className="skill-card-icon" style={{ color: 'var(--text-primary)' }}>{getSkillIcon(skill.icon)}</div>
@@ -576,9 +570,6 @@ export default function HomePage() {
                 className="skill-card"
                 variants={cardInOut}
                 custom={idx % 4}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: false, amount: 0.15 }}
                 style={{ willChange: 'transform, opacity' }}
               >
                 <div className="skill-card-icon">{skillIcons[skill.icon]}</div>
@@ -607,7 +598,7 @@ export default function HomePage() {
             className="contact-grid"
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: false, amount: 0.15 }}
+            viewport={{ once: false, amount: 0.08, margin: "-40px 0px -40px 0px" }}
             variants={stagger}
           >
             {[
@@ -624,9 +615,6 @@ export default function HomePage() {
                 className="contact-btn"
                 variants={cardInOut}
                 custom={idx}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: false, amount: 0.15 }}
                 whileTap={{ scale: 0.98 }}
               >
                 {item.icon} {item.label}

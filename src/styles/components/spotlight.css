@@ -57,6 +57,7 @@
   );
 }
 
+.spotlight-card:hover .spotlight-layer,
 .spotlight-card.is-hovered .spotlight-layer {
   opacity: 1;
 }
@@ -89,11 +90,16 @@
     transparent
   );
   animation: borderShimmer 3s ease-in-out infinite;
+  animation-play-state: paused;
 }
 
 .spotlight-card:hover .border-beam-tracer,
 .spotlight-card.is-hovered .border-beam-tracer {
   opacity: 1;
+}
+
+.spotlight-card:hover .border-beam-tracer::after {
+  animation-play-state: running;
 }
 
 @keyframes borderShimmer {

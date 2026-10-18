@@ -120,7 +120,7 @@ export default function HonorsPage() {
           className="project-category honor-category-section"
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: false, amount: 0.15 }}
+          viewport={{ once: false, amount: 0.08, margin: "-40px 0px -40px 0px" }}
           variants={fadeUp}
           custom={catIdx * 0.15}
         >
@@ -137,7 +137,7 @@ export default function HonorsPage() {
                   className="project-card honor-card"
                   initial="hidden"
                   whileInView="visible"
-                  viewport={{ once: false, amount: 0.15 }}
+                  viewport={{ once: false, amount: 0.08, margin: "-40px 0px -40px 0px" }}
                   variants={cardInOut}
                   custom={idx % 4}
                   onClick={() => handleClick(honor)}
