@@ -35,6 +35,10 @@ body {
   color: var(--text-primary);
   min-height: 100vh;
   line-height: 1.7;
+  background-image: var(--bg-grid-pattern);
+  background-size: 24px 24px, 48px 48px, 48px 48px;
+  background-position: center top;
+  background-attachment: fixed;
   transition:
     background-color var(--transition-slow),
     color var(--transition-slow);
@@ -365,6 +369,11 @@ main {
   top: 40%;
   right: 20%;
   animation-delay: -14s;
+}
+
+[data-theme="light"] .floating-orb {
+  opacity: 0.10;
+  filter: blur(100px);
 }
 
 /* ===== Page Wrapper ===== */

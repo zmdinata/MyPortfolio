@@ -36,7 +36,7 @@
   height: 600px;
   top: -150px;
   left: -100px;
-  background: radial-gradient(circle, #7c6fff 0%, transparent 70%);
+  background: radial-gradient(circle, var(--accent-primary) 0%, transparent 70%);
   animation: ambientFloatLeft 18s ease-in-out infinite alternate;
   will-change: transform;
 }
@@ -46,7 +46,7 @@
   height: 500px;
   top: 100px;
   right: -100px;
-  background: radial-gradient(circle, #00ddb3 0%, transparent 70%);
+  background: radial-gradient(circle, var(--accent-secondary) 0%, transparent 70%);
   animation: ambientFloatRight 22s ease-in-out infinite alternate;
   will-change: transform;
 }
@@ -97,7 +97,6 @@
   z-index: 2;
 }
 
-/* Card layout sizing */
 .bento-card-unified-hero {
   grid-column: span 12;
   width: 100%;
@@ -108,22 +107,22 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  background: linear-gradient(135deg, rgba(14, 18, 34, 0.45) 0%, rgba(10, 13, 26, 0.52) 100%);
+  background: linear-gradient(135deg, rgba(11, 17, 34, 0.50) 0%, rgba(6, 9, 20, 0.58) 100%);
   backdrop-filter: blur(20px) saturate(180%);
   -webkit-backdrop-filter: blur(20px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.14);
+  border: 1px solid var(--glass-card-border);
   border-radius: var(--radius-xl);
-  box-shadow: 0 20px 50px -12px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  box-shadow: 0 20px 50px -12px rgba(2, 6, 23, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.2);
   min-height: 520px;
   transition: border-color 0.35s ease, box-shadow 0.35s ease;
 }
 
 [data-theme="light"] .bento-card-unified-hero {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.55) 0%, rgba(245, 247, 255, 0.45) 100%);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.65) 0%, rgba(250, 248, 245, 0.55) 100%);
   backdrop-filter: blur(20px) saturate(180%);
   -webkit-backdrop-filter: blur(20px) saturate(180%);
-  border-color: rgba(99, 85, 224, 0.15);
-  box-shadow: 0 20px 45px -10px rgba(99, 85, 224, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.95);
+  border-color: var(--glass-card-border);
+  box-shadow: 0 20px 45px -10px rgba(120, 30, 20, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.95);
 }
 
 .bento-card-main {
@@ -192,19 +191,19 @@
   gap: 0.5rem;
   padding: 0.4rem 0.95rem;
   border-radius: var(--radius-pill);
-  background: rgba(0, 221, 179, 0.12);
-  border: 1px solid rgba(0, 221, 179, 0.35);
+  background: var(--glow-color);
+  border: 1px solid var(--border-hover);
   font-size: 0.82rem;
   font-weight: 700;
-  color: #00ddb3;
+  color: var(--accent-secondary);
 }
 
 .bento-avail-beacon {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: #00ddb3;
-  box-shadow: 0 0 10px #00ddb3;
+  background: var(--accent-secondary);
+  box-shadow: 0 0 10px var(--accent-secondary);
   animation: beaconPulse 2s infinite ease-in-out;
 }
 
@@ -1183,12 +1182,12 @@
 .unified-cover-vignette {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to bottom, transparent 0%, transparent 82%, rgba(10, 13, 22, 0.95) 100%);
+  background: linear-gradient(to bottom, transparent 0%, transparent 85%, var(--bg-card) 100%);
   pointer-events: none;
 }
 
 [data-theme="light"] .unified-cover-vignette {
-  background: linear-gradient(to bottom, transparent 0%, transparent 82%, rgba(255, 255, 255, 0.95) 100%);
+  background: linear-gradient(to bottom, transparent 0%, transparent 85%, var(--bg-card) 100%);
 }
 
 .unified-content-body {
@@ -1256,9 +1255,9 @@
   width: 18px;
   height: 18px;
   border-radius: 50%;
-  background: #00ddb3;
-  border: 3px solid #0e121e;
-  box-shadow: 0 0 10px #00ddb3;
+  background: var(--accent-secondary);
+  border: 3px solid var(--bg-primary);
+  box-shadow: 0 0 10px var(--accent-secondary);
   animation: pulseBeacon 2s infinite;
 }
 

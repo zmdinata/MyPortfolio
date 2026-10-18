@@ -231,19 +231,19 @@
 }
 
 .horizontal-scroll::-webkit-scrollbar-thumb {
-  background: linear-gradient(90deg, #00d2ff, #00ddb3);
+  background: var(--gradient-accent);
   border-radius: 999px;
-  box-shadow: 0 0 10px rgba(0, 210, 255, 0.5);
+  box-shadow: 0 0 10px var(--glow-color);
   transition: all 0.2s ease;
 }
 
 .horizontal-scroll::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(90deg, #38bdf8, #2dd4bf);
-  box-shadow: 0 0 16px rgba(0, 210, 255, 0.85);
+  background: var(--gradient-accent);
+  box-shadow: 0 0 16px var(--glow-hover);
 }
 
 [data-theme="light"] .horizontal-scroll {
-  scrollbar-color: #0099cc rgba(0, 0, 0, 0.06);
+  scrollbar-color: var(--accent-primary) rgba(0, 0, 0, 0.06);
 }
 
 [data-theme="light"] .horizontal-scroll::-webkit-scrollbar-track {
@@ -252,7 +252,7 @@
 }
 
 [data-theme="light"] .horizontal-scroll::-webkit-scrollbar-thumb {
-  background: linear-gradient(90deg, #0099cc, #00b386);
+  background: var(--gradient-accent);
 }
 
 .horizontal-scroll > .project-card,
