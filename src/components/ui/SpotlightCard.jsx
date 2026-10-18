@@ -1,6 +1,7 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, forwardRef } from 'react';
+import { motion } from 'framer-motion';
 
-export default function SpotlightCard({
+const SpotlightCard = forwardRef(function SpotlightCard({
   children,
   className = '',
   spotlightColor = 'rgba(124, 111, 255, 0.16)',
@@ -9,7 +10,7 @@ export default function SpotlightCard({
   onClick,
   style = {},
   ...props
-}) {
+}, forwardedRef) {
   const cardRef = useRef(null);
   const [isHovered, setIsHovered] = useState(false);
 
@@ -26,8 +27,12 @@ export default function SpotlightCard({
   const handleMouseLeave = () => setIsHovered(false);
 
   return (
-    <div
-      ref={cardRef}
+    <motion.div
+      ref={(node) => {
+        cardRef.current = node;
+        if (typeof forwardedRef === 'function') forwardedRef(node);
+        else if (forwardedRef) forwardedRef.current = node;
+      }}
       className={`spotlight-card ${isHovered ? 'is-hovered' : ''} ${className}`}
       onMouseMove={handleMouseMove}
       onMouseEnter={handleMouseEnter}
@@ -53,6 +58,8 @@ export default function SpotlightCard({
 
       {/* Card Content */}
       <div className="spotlight-content">{children}</div>
-    </div>
+    </motion.div>
   );
-}
+});
+
+export default SpotlightCard;

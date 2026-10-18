@@ -6,7 +6,7 @@ import { CategoryIcon } from '../lib/categoryIcons';
 import { getDisplayType, getFileForItem, getPreviewForItem, isLinkType } from '../lib/portfolioMedia';
 import PreviewModal from '../components/ui/PreviewModal';
 import { HiOutlineExternalLink } from 'react-icons/hi';
-import { fadeLeft, fadeUp, scaleUp } from '../lib/motionConfig';
+import { cardInOut, fadeLeft, fadeUp, scaleUp } from '../lib/motionConfig';
 import { getCachedProjects } from '../lib/portfolioCache';
 import { useDocumentTitle } from '../hooks/useDocumentTitle';
 import { SkeletonGrid } from '../components/ui/SkeletonCard';
@@ -138,7 +138,7 @@ export default function ProjectsPage() {
           className="project-category"
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: '-20px' }}
+          viewport={{ once: false, amount: 0.15 }}
           variants={fadeUp}
           custom={catIdx * 0.15}
         >
@@ -156,11 +156,10 @@ export default function ProjectsPage() {
                   onClick={() => handleClick(project)}
                   initial="hidden"
                   whileInView="visible"
-                  exit="exit"
-                  viewport={{ once: true, margin: '-20px' }}
-                  variants={scaleUp}
-                  custom={idx}
-                  style={{ willChange: 'transform, opacity, filter' }}
+                  viewport={{ once: false, amount: 0.15 }}
+                  variants={cardInOut}
+                  custom={idx % 4}
+                  style={{ willChange: 'transform, opacity' }}
                 >
                   <div className="project-card-link">
                     {isLinkType(type) && (

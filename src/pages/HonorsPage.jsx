@@ -6,7 +6,7 @@ import { CategoryIcon } from '../lib/categoryIcons';
 import { getDisplayType, getFileForItem, getPreviewForItem, isLinkType } from '../lib/portfolioMedia';
 import PreviewModal from '../components/ui/PreviewModal';
 import { HiOutlineExternalLink } from 'react-icons/hi';
-import { fadeLeft, fadeUp, scaleUp } from '../lib/motionConfig';
+import { cardInOut, fadeLeft, fadeUp, scaleUp } from '../lib/motionConfig';
 import { getCachedHonors } from '../lib/portfolioCache';
 import { useDocumentTitle } from '../hooks/useDocumentTitle';
 import { SkeletonGrid } from '../components/ui/SkeletonCard';
@@ -120,7 +120,7 @@ export default function HonorsPage() {
           className="project-category honor-category-section"
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: '-20px' }}
+          viewport={{ once: false, amount: 0.15 }}
           variants={fadeUp}
           custom={catIdx * 0.15}
         >
@@ -137,12 +137,11 @@ export default function HonorsPage() {
                   className="project-card honor-card"
                   initial="hidden"
                   whileInView="visible"
-                  exit="exit"
-                  viewport={{ once: true, margin: '-20px' }}
-                  variants={scaleUp}
-                  custom={idx}
+                  viewport={{ once: false, amount: 0.15 }}
+                  variants={cardInOut}
+                  custom={idx % 4}
                   onClick={() => handleClick(honor)}
-                  style={{ willChange: 'transform, opacity, filter' }}
+                  style={{ willChange: 'transform, opacity' }}
                 >
                   <div className="project-card-link">
                     {isLinkType(type) && (

@@ -32,6 +32,7 @@ export default function UnifiedHeroProfileCard({
   isAvailable = true,
   heroJob,
   aboutContent,
+  ...props
 }) {
   const { lang, t } = useLang();
   const [activeTab, setActiveTab] = useState('llm');
@@ -88,7 +89,12 @@ export default function UnifiedHeroProfileCard({
   };
 
   return (
-    <SpotlightCard className="bento-card-unified-hero" spotlightColor="rgba(0, 221, 179, 0.14)" borderBeam={true}>
+    <SpotlightCard
+      className="bento-card-unified-hero"
+      spotlightColor="rgba(0, 221, 179, 0.14)"
+      borderBeam={true}
+      {...props}
+    >
       {/* 1. HD Cover Banner Header (Fixed Aspect Ratio 16:5) */}
       <div className="unified-cover-wrapper">
         {coverSrc ? (

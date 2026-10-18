@@ -26,98 +26,116 @@ export const cursorSpring = {
 };
 
 export const fadeUp = {
-  hidden: { opacity: 0, y: 24, filter: 'blur(6px)' },
+  hidden: {
+    opacity: 0,
+    y: 28,
+    transition: { duration: 0.22, ease: smoothEase },
+  },
   visible: (i = 0) => ({
     opacity: 1,
     y: 0,
-    filter: 'blur(0px)',
-    transition: { duration: 0.45, delay: i * 0.045, ease: smoothEase },
+    transition: { duration: 0.45, delay: Math.min(i * 0.05, 0.25), ease: smoothEase },
   }),
   exit: {
     opacity: 0,
-    y: -16,
-    filter: 'blur(4px)',
-    transition: { duration: 0.22, ease: smoothEase },
+    y: -18,
+    transition: { duration: 0.2, ease: smoothEase },
   },
 };
 
 export const fadeLeft = {
-  hidden: { opacity: 0, x: -20, filter: 'blur(4px)' },
+  hidden: {
+    opacity: 0,
+    x: -24,
+    transition: { duration: 0.22, ease: smoothEase },
+  },
   visible: (i = 0) => ({
     opacity: 1,
     x: 0,
-    filter: 'blur(0px)',
-    transition: { duration: 0.38, delay: i * 0.05, ease: smoothEase },
+    transition: { duration: 0.42, delay: Math.min(i * 0.05, 0.25), ease: smoothEase },
   }),
   exit: {
     opacity: 0,
-    x: -15,
-    filter: 'blur(3px)',
+    x: -16,
     transition: { duration: 0.2, ease: smoothEase },
   },
 };
 
 export const fadeRight = {
-  hidden: { opacity: 0, x: 20, filter: 'blur(4px)' },
+  hidden: {
+    opacity: 0,
+    x: 24,
+    transition: { duration: 0.22, ease: smoothEase },
+  },
   visible: (i = 0) => ({
     opacity: 1,
     x: 0,
-    filter: 'blur(0px)',
-    transition: { duration: 0.38, delay: i * 0.05, ease: smoothEase },
+    transition: { duration: 0.42, delay: Math.min(i * 0.05, 0.25), ease: smoothEase },
   }),
   exit: {
     opacity: 0,
-    x: 15,
-    filter: 'blur(3px)',
+    x: 16,
     transition: { duration: 0.2, ease: smoothEase },
   },
 };
 
 export const scaleUp = {
-  hidden: { opacity: 0, scale: 0.94, y: 20, filter: 'blur(6px)' },
-  visible: (i = 0) => ({
-    opacity: 1,
-    scale: 1,
-    y: 0,
-    filter: 'blur(0px)',
-    transition: {
-      type: 'spring',
-      stiffness: 190,
-      damping: 24,
-      mass: 0.8,
-      delay: i * 0.035,
-    },
-  }),
-  exit: {
+  hidden: {
     opacity: 0,
-    scale: 0.95,
-    y: -14,
-    filter: 'blur(4px)',
-    transition: { duration: 0.24, ease: smoothEase },
+    scale: 0.94,
+    y: 28,
+    transition: { duration: 0.22, ease: smoothEase },
   },
-};
-
-export const cardInOut = {
-  hidden: { opacity: 0, scale: 0.93, y: 26, filter: 'blur(8px)' },
   visible: (i = 0) => ({
     opacity: 1,
     scale: 1,
     y: 0,
-    filter: 'blur(0px)',
     transition: {
       type: 'spring',
-      stiffness: 210,
-      damping: 26,
-      mass: 0.8,
-      delay: i * 0.04,
+      stiffness: 150,
+      damping: 20,
+      mass: 0.85,
+      delay: Math.min(i * 0.045, 0.25),
     },
   }),
   exit: {
     opacity: 0,
     scale: 0.95,
     y: -16,
-    filter: 'blur(6px)',
-    transition: { duration: 0.22, ease: smoothEase },
+    transition: { duration: 0.2, ease: smoothEase },
+  },
+};
+
+export const cardInOut = {
+  hidden: {
+    opacity: 0,
+    scale: 0.94,
+    y: 36,
+    transition: {
+      duration: 0.24,
+      ease: smoothEase,
+    },
+  },
+  visible: (i = 0) => ({
+    opacity: 1,
+    scale: 1,
+    y: 0,
+    transition: {
+      type: 'spring',
+      stiffness: 140,
+      damping: 18,
+      mass: 0.85,
+      delay: Math.min(i * 0.05, 0.25),
+    },
+  }),
+  exit: {
+    opacity: 0,
+    scale: 0.95,
+    y: -20,
+    transition: {
+      duration: 0.2,
+      ease: smoothEase,
+    },
   },
 };
 

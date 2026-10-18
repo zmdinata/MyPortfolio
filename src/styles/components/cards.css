@@ -8,10 +8,9 @@
   box-shadow: var(--glass-card-shadow), var(--glass-card-inner-highlight);
   overflow: hidden;
   transition:
-    transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
     box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1),
     border-color 0.35s ease;
-  will-change: transform, box-shadow;
+  will-change: box-shadow, border-color;
 }
 
 .card:hover {
@@ -60,10 +59,9 @@
   box-shadow: var(--glass-card-shadow), var(--glass-card-inner-highlight);
   border-radius: var(--radius-lg);
   transition:
-    transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
     box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1),
     border-color 0.35s ease;
-  will-change: transform, box-shadow;
+  will-change: box-shadow, border-color;
 }
 
 .timeline-item::before {
@@ -142,10 +140,9 @@
   box-shadow: var(--glass-card-shadow), var(--glass-card-inner-highlight);
   border-radius: var(--radius-lg);
   transition:
-    transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
     box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1),
     border-color 0.35s ease;
-  will-change: transform, box-shadow;
+  will-change: box-shadow, border-color;
 }
 
 .skill-card:hover {
@@ -278,10 +275,9 @@
   scroll-snap-align: start;
   position: relative;
   transition:
-    transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
     box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1),
     border-color 0.35s ease;
-  will-change: transform, box-shadow;
+  will-change: box-shadow, border-color;
 }
 
 .project-card:hover {
@@ -423,10 +419,9 @@
   aspect-ratio: 16 / 10;
   position: relative;
   transition:
-    transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
     box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1),
     border-color 0.35s ease;
-  will-change: transform, box-shadow;
+  will-change: box-shadow, border-color;
 }
 
 .certificate-card:hover {
@@ -459,10 +454,9 @@
   cursor: pointer;
   position: relative;
   transition:
-    transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
     box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1),
     border-color 0.35s ease;
-  will-change: transform, box-shadow;
+  will-change: box-shadow, border-color;
 }
 
 .honor-card:hover {

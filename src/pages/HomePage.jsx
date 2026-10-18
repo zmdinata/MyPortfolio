@@ -16,7 +16,7 @@ import InteractiveTerminal from '../components/ui/InteractiveTerminal';
 import AiTelemetryCard from '../components/ui/AiTelemetryCard';
 import UnifiedHeroProfileCard from '../components/ui/UnifiedHeroProfileCard';
 import AmbientGridMesh from '../components/ui/AmbientGridMesh';
-import { fadeLeft, fadeRight, fadeUp, scaleUp, smoothEase, stagger, staggerFast } from '../lib/motionConfig';
+import { cardInOut, fadeLeft, fadeRight, fadeUp, scaleUp, smoothEase, stagger, staggerFast } from '../lib/motionConfig';
 import { projectCategoryFallbacks, projectItemFallbacks, mergePortfolioItems, resolveFeaturedProjects } from '../lib/portfolioFallbacks';
 import { getDisplayType, getFileForItem, getPreviewForItem, isLinkType } from '../lib/portfolioMedia';
 import { useDocumentTitle } from '../hooks/useDocumentTitle';
@@ -235,12 +235,7 @@ export default function HomePage() {
       <section className="bento-hero-section" id="home">
         <AmbientGridMesh />
 
-        <motion.div
-          className="bento-grid"
-          initial="hidden"
-          animate="visible"
-          variants={stagger}
-        >
+        <div className="bento-grid">
           {/* Card 1: Unified Executive Hero & Profile Card (Span 12 Bento) */}
           <UnifiedHeroProfileCard
             profile={profile}
@@ -248,20 +243,49 @@ export default function HomePage() {
             isAvailable={isAvailable}
             heroJob={heroJob}
             aboutContent={aboutContent}
+            variants={cardInOut}
+            custom={0}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: false, amount: 0.12 }}
           />
 
           {/* Card 3: Interactive Terminal Card */}
-          <div className="bento-card-terminal">
+          <motion.div
+            className="bento-card-terminal"
+            variants={cardInOut}
+            custom={1}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: false, amount: 0.12 }}
+          >
             <InteractiveTerminal />
-          </div>
+          </motion.div>
 
           {/* Card 4: AI Telemetry & Stack Card */}
-          <SpotlightCard className="bento-card-telemetry" spotlightColor="rgba(0, 221, 179, 0.16)">
+          <SpotlightCard
+            className="bento-card-telemetry"
+            spotlightColor="rgba(0, 221, 179, 0.16)"
+            variants={cardInOut}
+            custom={2}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: false, amount: 0.12 }}
+          >
             <AiTelemetryCard />
           </SpotlightCard>
 
           {/* Card 5: Metrics & Impact Overview (Synchronized 3-Column Grid) */}
-          <SpotlightCard className="bento-card-metrics" borderBeam={false} spotlightColor="rgba(124, 111, 255, 0.14)">
+          <SpotlightCard
+            className="bento-card-metrics"
+            borderBeam={false}
+            spotlightColor="rgba(124, 111, 255, 0.14)"
+            variants={cardInOut}
+            custom={3}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: false, amount: 0.12 }}
+          >
             <div className="bento-metrics-grid">
               <div className="bento-metric-col">
                 <span className="bento-metric-num gradient-text">
@@ -283,7 +307,7 @@ export default function HomePage() {
               </div>
             </div>
           </SpotlightCard>
-        </motion.div>
+        </div>
 
         {/* Scroll indicator */}
         <motion.div
@@ -305,7 +329,7 @@ export default function HomePage() {
             className="section-heading"
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, margin: '-100px' }}
+            viewport={{ once: false, amount: 0.2 }}
             variants={fadeLeft}
           >
             <h2>{t('about.title')}</h2>
@@ -313,7 +337,7 @@ export default function HomePage() {
           <motion.p
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, margin: '-100px' }}
+            viewport={{ once: false, amount: 0.2 }}
             variants={fadeUp}
             custom={1}
             style={{ maxWidth: '750px' }}
@@ -331,7 +355,7 @@ export default function HomePage() {
               className="section-heading"
               initial="hidden"
               whileInView="visible"
-              viewport={{ once: true, margin: '-100px' }}
+              viewport={{ once: false, amount: 0.2 }}
               variants={fadeLeft}
             >
               <h2>{t('featuredProjects.title')}</h2>
@@ -341,7 +365,7 @@ export default function HomePage() {
               className="featured-projects-grid"
               initial="hidden"
               whileInView="visible"
-              viewport={{ once: true, margin: '-60px' }}
+              viewport={{ once: false, amount: 0.15 }}
               variants={stagger}
             >
               {featuredProjects.map((project, idx) => {
@@ -349,13 +373,12 @@ export default function HomePage() {
                 return (
                   <motion.div
                     key={project.id || project.source_key || `featured-${idx}`}
-                    variants={scaleUp}
-                    custom={idx}
+                    variants={cardInOut}
+                    custom={idx % 3}
                     initial="hidden"
                     whileInView="visible"
-                    exit="exit"
-                    viewport={{ once: true, margin: '-40px' }}
-                    style={{ height: '100%', willChange: 'transform, opacity, filter' }}
+                    viewport={{ once: false, amount: 0.15 }}
+                    style={{ height: '100%', willChange: 'transform, opacity' }}
                   >
                     <SpotlightCard
                       className="project-card featured-project-card"
@@ -411,7 +434,7 @@ export default function HomePage() {
             className="section-heading"
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, margin: '-100px' }}
+            viewport={{ once: false, amount: 0.2 }}
             variants={fadeLeft}
           >
             <h2>{t('experience.title')}</h2>
@@ -423,9 +446,9 @@ export default function HomePage() {
                 className="timeline-item"
                 initial="hidden"
                 whileInView="visible"
-                viewport={{ once: true, margin: '-60px' }}
+                viewport={{ once: false, amount: 0.15 }}
                 variants={fadeRight}
-                custom={idx * 0.5}
+                custom={idx * 0.12}
               >
                 <h3 style={{ marginBottom: '0.2rem' }}>{item.role}</h3>
                 {item.company && <div style={{ fontSize: '1.1rem', fontWeight: 600, color: '#00d2ff', marginBottom: '0.5rem' }}>{item.company}</div>}
@@ -464,7 +487,7 @@ export default function HomePage() {
             className="section-heading"
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, margin: '-100px' }}
+            viewport={{ once: false, amount: 0.2 }}
             variants={fadeLeft}
           >
             <h2>{t('education.title')}</h2>
@@ -476,8 +499,9 @@ export default function HomePage() {
                 className="timeline-item"
                 initial="hidden"
                 whileInView="visible"
-                viewport={{ once: true, margin: '-60px' }}
+                viewport={{ once: false, amount: 0.15 }}
                 variants={fadeRight}
+                custom={idx * 0.12}
               >
                 <h3>{item.school}</h3>
                 <div style={{ display: 'flex', gap: '8px', alignItems: 'center', marginBottom: '0.25rem' }}>
@@ -514,7 +538,7 @@ export default function HomePage() {
             className="section-heading"
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, margin: '-100px' }}
+            viewport={{ once: false, amount: 0.2 }}
             variants={fadeLeft}
           >
             <h2>{t('skills.title')}</h2>
@@ -523,20 +547,19 @@ export default function HomePage() {
             className="skills-grid"
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, margin: '-60px' }}
+            viewport={{ once: false, amount: 0.15 }}
             variants={stagger}
           >
             {displaySkills.length > 0 ? displaySkills.map((skill, idx) => (
               <motion.div
                 key={skill.id}
                 className="skill-card"
-                variants={scaleUp}
-                custom={idx}
+                variants={cardInOut}
+                custom={idx % 4}
                 initial="hidden"
                 whileInView="visible"
-                exit="exit"
-                viewport={{ once: true, margin: '-40px' }}
-                style={{ willChange: 'transform, opacity, filter' }}
+                viewport={{ once: false, amount: 0.15 }}
+                style={{ willChange: 'transform, opacity' }}
               >
                 <div className="skill-card-icon" style={{ color: 'var(--text-primary)' }}>{getSkillIcon(skill.icon)}</div>
                 <h3>{skill.name}</h3>
@@ -546,13 +569,12 @@ export default function HomePage() {
               <motion.div
                 key={skill.id}
                 className="skill-card"
-                variants={scaleUp}
-                custom={idx}
+                variants={cardInOut}
+                custom={idx % 4}
                 initial="hidden"
                 whileInView="visible"
-                exit="exit"
-                viewport={{ once: true, margin: '-40px' }}
-                style={{ willChange: 'transform, opacity, filter' }}
+                viewport={{ once: false, amount: 0.15 }}
+                style={{ willChange: 'transform, opacity' }}
               >
                 <div className="skill-card-icon">{skillIcons[skill.icon]}</div>
                 <h3>{tObj(skill.title)}</h3>
@@ -570,7 +592,7 @@ export default function HomePage() {
             className="section-heading"
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, margin: '-100px' }}
+            viewport={{ once: false, amount: 0.2 }}
             variants={fadeLeft}
           >
             <h2>{t('contact.title')}</h2>
@@ -580,7 +602,7 @@ export default function HomePage() {
             className="contact-grid"
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, margin: '-60px' }}
+            viewport={{ once: false, amount: 0.15 }}
             variants={stagger}
           >
             {[
@@ -595,8 +617,11 @@ export default function HomePage() {
                 target={item.ext ? '_blank' : undefined}
                 rel={item.ext ? 'noopener noreferrer' : undefined}
                 className="contact-btn"
-                variants={scaleUp}
+                variants={cardInOut}
                 custom={idx}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: false, amount: 0.15 }}
                 whileTap={{ scale: 0.98 }}
               >
                 {item.icon} {item.label}
