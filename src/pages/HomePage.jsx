@@ -353,23 +353,16 @@ export default function HomePage() {
                     custom={idx}
                     initial="hidden"
                     whileInView="visible"
+                    exit="exit"
                     viewport={{ once: true, margin: '-40px' }}
-                    style={{ height: '100%' }}
+                    style={{ height: '100%', willChange: 'transform, opacity, filter' }}
                   >
-                    <Tilt
-                      tiltMaxAngleX={6}
-                      tiltMaxAngleY={6}
-                      scale={1.01}
-                      transitionSpeed={2500}
-                      className="tilt-wrapper"
-                      style={{ height: '100%', width: '100%', maxWidth: '100%' }}
+                    <SpotlightCard
+                      className="project-card featured-project-card"
+                      borderBeam={true}
+                      spotlightColor="rgba(0, 221, 179, 0.18)"
+                      onClick={() => handleFeaturedProjectClick(project)}
                     >
-                      <SpotlightCard
-                        className="project-card featured-project-card"
-                        borderBeam={true}
-                        spotlightColor="rgba(0, 221, 179, 0.18)"
-                        onClick={() => handleFeaturedProjectClick(project)}
-                      >
                         <div className="project-card-link">
                           {isLinkType(type) && <span className="external-badge">Link</span>}
                           <img
@@ -392,7 +385,6 @@ export default function HomePage() {
                           </div>
                         </div>
                       </SpotlightCard>
-                    </Tilt>
                   </motion.div>
                 );
               })}
@@ -535,43 +527,37 @@ export default function HomePage() {
             variants={stagger}
           >
             {displaySkills.length > 0 ? displaySkills.map((skill, idx) => (
-              <Tilt
+              <motion.div
                 key={skill.id}
-                tiltMaxAngleX={10}
-                tiltMaxAngleY={10}
-                scale={1.05}
-                transitionSpeed={2500}
-                className="tilt-wrapper"
+                className="skill-card"
+                variants={scaleUp}
+                custom={idx}
+                initial="hidden"
+                whileInView="visible"
+                exit="exit"
+                viewport={{ once: true, margin: '-40px' }}
+                style={{ willChange: 'transform, opacity, filter' }}
               >
-                <motion.div
-                  className="skill-card"
-                  variants={scaleUp}
-                  custom={idx}
-                >
-                  <div className="skill-card-icon" style={{ color: 'var(--text-primary)' }}>{getSkillIcon(skill.icon)}</div>
-                  <h3>{skill.name}</h3>
-                  <p style={{ opacity: 0.8, fontSize: '0.9rem', marginTop: '10px' }}>{lang === 'en' ? skill.description_en : skill.description_id}</p>
-                </motion.div>
-              </Tilt>
+                <div className="skill-card-icon" style={{ color: 'var(--text-primary)' }}>{getSkillIcon(skill.icon)}</div>
+                <h3>{skill.name}</h3>
+                <p style={{ opacity: 0.8, fontSize: '0.9rem', marginTop: '10px' }}>{lang === 'en' ? skill.description_en : skill.description_id}</p>
+              </motion.div>
             )) : skills.map((skill, idx) => (
-              <Tilt
+              <motion.div
                 key={skill.id}
-                tiltMaxAngleX={10}
-                tiltMaxAngleY={10}
-                scale={1.05}
-                transitionSpeed={2500}
-                className="tilt-wrapper"
+                className="skill-card"
+                variants={scaleUp}
+                custom={idx}
+                initial="hidden"
+                whileInView="visible"
+                exit="exit"
+                viewport={{ once: true, margin: '-40px' }}
+                style={{ willChange: 'transform, opacity, filter' }}
               >
-                <motion.div
-                  className="skill-card"
-                  variants={scaleUp}
-                  custom={idx}
-                >
-                  <div className="skill-card-icon">{skillIcons[skill.icon]}</div>
-                  <h3>{tObj(skill.title)}</h3>
-                  <p>{skill.description}</p>
-                </motion.div>
-              </Tilt>
+                <div className="skill-card-icon">{skillIcons[skill.icon]}</div>
+                <h3>{tObj(skill.title)}</h3>
+                <p>{skill.description}</p>
+              </motion.div>
             ))}
           </motion.div>
         </div>
@@ -611,12 +597,7 @@ export default function HomePage() {
                 className="contact-btn"
                 variants={scaleUp}
                 custom={idx}
-                whileHover={{
-                  y: -5,
-                  scale: 1.04,
-                  transition: { duration: 0.28, ease: smoothEase },
-                }}
-                whileTap={{ scale: 0.96 }}
+                whileTap={{ scale: 0.98 }}
               >
                 {item.icon} {item.label}
               </motion.a>

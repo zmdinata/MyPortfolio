@@ -15,21 +15,20 @@
 }
 
 .card:hover {
-  transform: translateY(-4px);
   box-shadow: var(--glass-card-shadow-hover), var(--glass-card-inner-highlight);
   border-color: var(--glass-card-border-hover);
 }
 
-/* Tilt Wrapper */
+/* Tilt Wrapper - Kept flat without displacement on hover */
 .tilt-wrapper {
-  transform-style: preserve-3d;
+  transform: none !important;
   height: 100%;
 }
 .tilt-wrapper .skill-card,
 .tilt-wrapper .project-card,
 .tilt-wrapper .certificate-card,
 .tilt-wrapper .honor-card {
-  transform: translateZ(20px);
+  transform: none !important;
 }
 
 /* ===== Timeline ===== */
@@ -82,7 +81,6 @@
 }
 
 .timeline-item:hover {
-  transform: translateX(6px) translateY(-2px);
   box-shadow: var(--glass-card-shadow-hover), var(--glass-card-inner-highlight);
   border-color: var(--glass-card-border-hover);
 }
@@ -151,7 +149,6 @@
 }
 
 .skill-card:hover {
-  transform: translateY(-4px);
   box-shadow: var(--glass-card-shadow-hover), var(--glass-card-inner-highlight);
   border-color: var(--glass-card-border-hover);
 }
@@ -288,7 +285,6 @@
 }
 
 .project-card:hover {
-  transform: translateY(-4px) scale(1.012);
   box-shadow: var(--glass-card-shadow-hover), var(--glass-card-inner-highlight);
   border-color: var(--glass-card-border-hover);
 }
@@ -312,11 +308,7 @@
   min-height: 0;
   object-fit: cover;
   object-position: top center;
-  transition: transform var(--transition-slow);
-}
-
-.project-card:hover .project-image-preview {
-  transform: scale(1.03);
+  transition: opacity var(--transition-base);
 }
 
 .project-card-title {
@@ -438,7 +430,6 @@
 }
 
 .certificate-card:hover {
-  transform: translateY(-4px) scale(1.015);
   box-shadow: var(--glass-card-shadow-hover), var(--glass-card-inner-highlight);
   border-color: var(--glass-card-border-hover);
 }
@@ -447,11 +438,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform var(--transition-slow);
-}
-
-.certificate-card:hover img {
-  transform: scale(1.05);
+  transition: opacity var(--transition-base);
 }
 
 /* ===== Honor Cards ===== */
@@ -479,7 +466,6 @@
 }
 
 .honor-card:hover {
-  transform: translateY(-4px) scale(1.012);
   box-shadow: var(--glass-card-shadow-hover), var(--glass-card-inner-highlight);
   border-color: var(--glass-card-border-hover);
 }
@@ -488,11 +474,7 @@
   width: 100%;
   aspect-ratio: 16 / 10;
   object-fit: cover;
-  transition: transform var(--transition-slow);
-}
-
-.honor-card:hover .honor-card-image {
-  transform: scale(1.05);
+  transition: opacity var(--transition-base);
 }
 
 .honor-card-body {

@@ -156,12 +156,11 @@ export default function ProjectsPage() {
                   onClick={() => handleClick(project)}
                   initial="hidden"
                   whileInView="visible"
+                  exit="exit"
                   viewport={{ once: true, margin: '-20px' }}
                   variants={scaleUp}
                   custom={idx}
-                  whileHover={{ y: -6, scale: 1.02 }}
-                  transition={{ duration: 0.2 }}
-                  style={{ willChange: 'transform, opacity' }}
+                  style={{ willChange: 'transform, opacity, filter' }}
                 >
                   <div className="project-card-link">
                     {isLinkType(type) && (

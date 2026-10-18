@@ -143,13 +143,12 @@ export default function CertificatesPage() {
                   className="certificate-card"
                   initial="hidden"
                   whileInView="visible"
+                  exit="exit"
                   viewport={{ once: true, margin: '-20px' }}
                   variants={scaleUp}
                   custom={idx}
                   onClick={() => handleClick(cert)}
-                  whileHover={{ y: -6, scale: 1.02 }}
-                  transition={{ duration: 0.2 }}
-                  style={{ willChange: 'transform, opacity' }}
+                  style={{ willChange: 'transform, opacity, filter' }}
                 >
                   {isLinkType(type) && (
                     <span className="external-badge">

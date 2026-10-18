@@ -17,7 +17,6 @@
 .spotlight-card:hover {
   border-color: var(--glass-card-border-hover);
   box-shadow: var(--glass-card-shadow-hover), var(--glass-card-inner-highlight);
-  transform: translateY(-4px);
 }
 
 [data-theme="light"] .spotlight-card {
@@ -31,7 +30,6 @@
 [data-theme="light"] .spotlight-card:hover {
   border-color: var(--glass-card-border-hover);
   box-shadow: var(--glass-card-shadow-hover), var(--glass-card-inner-highlight);
-  transform: translateY(-4px);
 }
 
 @media (max-width: 768px) {

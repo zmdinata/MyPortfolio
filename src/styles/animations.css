@@ -231,6 +231,45 @@
   animation: morphBlob 12s ease-in-out infinite;
 }
 
+/* ===== Glass Cards In-and-Out Entrance/Exit Animations ===== */
+@keyframes cardGlassIn {
+  0% {
+    opacity: 0;
+    transform: translateY(22px) scale(0.95);
+    filter: blur(8px);
+  }
+  60% {
+    opacity: 0.9;
+    filter: blur(2px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0px);
+  }
+}
+
+@keyframes cardGlassOut {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0px);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-16px) scale(0.96);
+    filter: blur(6px);
+  }
+}
+
+.animate-card-in {
+  animation: cardGlassIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.animate-card-out {
+  animation: cardGlassOut 0.25s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
 /* Stagger delays */
 .stagger-1 { animation-delay: 0.05s; }
 .stagger-2 { animation-delay: 0.1s; }
