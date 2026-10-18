@@ -139,9 +139,6 @@ export default function Chatbot() {
             exit={{ opacity: 0, y: 50, scale: 0.9 }}
             transition={{ duration: 0.3 }}
           >
-            <button className="chatbot-close-btn" onClick={() => setIsOpen(false)}>
-              <FiX size={24} />
-            </button>
             <div className="chatbot-header">
               <div className="chatbot-header-title">
                 <div className="chatbot-avatar">
@@ -154,14 +151,25 @@ export default function Chatbot() {
                   </span>
                 </div>
               </div>
-              {/* Tombol hapus memory */}
-              <button
-                className="chatbot-clear-btn"
-                onClick={handleClearMemory}
-                title={lang === 'en' ? 'Clear conversation' : 'Hapus percakapan'}
-              >
-                <FiTrash2 size={16} />
-              </button>
+              {/* Header Action Buttons: Clear Chat & Close Window */}
+              <div className="chatbot-header-actions">
+                <button
+                  className="chatbot-header-btn chatbot-clear-btn"
+                  onClick={handleClearMemory}
+                  title={lang === 'en' ? 'Clear conversation' : 'Hapus percakapan'}
+                  aria-label="Clear conversation"
+                >
+                  <FiTrash2 size={16} />
+                </button>
+                <button
+                  className="chatbot-header-btn chatbot-close-btn"
+                  onClick={() => setIsOpen(false)}
+                  title={lang === 'en' ? 'Close chat' : 'Tutup chat'}
+                  aria-label="Close chat"
+                >
+                  <FiX size={18} />
+                </button>
+              </div>
             </div>
             <div className="chatbot-messages">
               {messages.map((msg) => (

@@ -311,28 +311,6 @@
   white-space: nowrap;
 }
 
-/* Tombol hapus memory */
-.chatbot-clear-btn {
-  background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: rgba(255, 255, 255, 0.4);
-  border-radius: 8px;
-  width: 32px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: color 0.2s, border-color 0.2s, background 0.2s;
-  flex-shrink: 0;
-}
-
-.chatbot-clear-btn:hover {
-  color: #ff6b6b;
-  border-color: rgba(255, 107, 107, 0.4);
-  background: rgba(255, 107, 107, 0.1);
-}
-
 /* Status Indicator */
 .chatbot-status {
   font-size: 0.8rem;
@@ -355,36 +333,39 @@
 .chatbot-status.online::before { background: #4cd137; }
 .chatbot-status.offline::before { background: #e84118; }
 
-/* =============================================================
-   CLOSE BUTTON
-   ============================================================= */
-.chatbot-close-btn {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
+/* Header Action Buttons (Clear & Close) */
+.chatbot-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.chatbot-header-btn {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.6);
+  border-radius: 8px;
   width: 32px;
-  height: 42px;
+  height: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 50%;
-  background: transparent;
-  border: none;
-  color: var(--text-secondary, #aaa);
   cursor: pointer;
   transition: all 0.2s ease;
-  z-index: 100;
+  flex-shrink: 0;
 }
 
-.chatbot-close-btn svg {
-  flex-shrink: 0;
-  width: 24px;
-  height: 24px;
+.chatbot-clear-btn:hover {
+  color: #ff6b6b;
+  border-color: rgba(255, 107, 107, 0.4);
+  background: rgba(255, 107, 107, 0.1);
 }
 
 .chatbot-close-btn:hover {
-  color: var(--text-primary, #1dc3d5);
-  background: rgba(255, 255, 255, 0.1);
+  color: #00d2ff;
+  border-color: rgba(0, 210, 255, 0.4);
+  background: rgba(0, 210, 255, 0.1);
 }
 
 /* =============================================================
