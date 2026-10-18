@@ -286,21 +286,189 @@ async function callOpenRouter(messages, portfolioContext, lang) {
 }
 
 // ==============================================================
-// 4. HANDLER UTAMA SERVERLESS VERCEL
+// 4. MULTI-LAYERED GATEWAY SECURITY & ACCESS RESTRICTIONS
+// Memastikan endpoint hanya dapat diakses melalui browser resmi
+// dan memblokir Postman, cURL, script Python, dan bot eksternal.
+// ==============================================================
+const HANDSHAKE_SECRET = 'zmdinata_agentz_v2_armored_token_2026';
+
+const ALLOWED_ORIGIN_HOSTS = new Set([
+  'zmdinata.web.id',
+  'www.zmdinata.web.id',
+  'zmdinata.com',
+  'www.zmdinata.com',
+  'localhost',
+  '127.0.0.1',
+]);
+
+function isAllowedHost(originOrReferer) {
+  if (!originOrReferer || typeof originOrReferer !== 'string') return false;
+  try {
+    const parsed = new URL(originOrReferer);
+    const hostname = parsed.hostname.toLowerCase();
+    if (ALLOWED_ORIGIN_HOSTS.has(hostname)) return true;
+    if (hostname.endsWith('.vercel.app') && hostname.includes('zmdinata')) return true;
+    return false;
+  } catch {
+    return false;
+  }
+}
+
+const BLOCKED_UA_REGEX =
+  /postmanruntime|curl|wget|python-requests|aiohttp|httpx|httpie|insomnia|node-fetch|axios|go-http-client|apache-httpclient|scrapy|headlesschrome|phantomjs/i;
+
+function computeHandshakeSignature(timestamp, messageCount, secret = HANDSHAKE_SECRET) {
+  const seedStr = `${timestamp}:${messageCount}:${secret}`;
+  let h1 = 0xdeadbeef;
+  let h2 = 0x41c64e6d;
+  for (let i = 0; i < seedStr.length; i++) {
+    const ch = seedStr.charCodeAt(i);
+    h1 = Math.imul(h1 ^ ch, 2654435761);
+    h2 = Math.imul(h2 ^ ch, 1597334677);
+  }
+  h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^ Math.imul(h2 ^ (h2 >>> 13), 3266489909);
+  h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909);
+  return (4294967296 * (2097151 & h2) + (h1 >>> 0)).toString(16);
+}
+
+// In-Memory IP Sliding Window Rate Limiter
+const RATE_LIMIT_WINDOW_MS = 60000;
+const MAX_REQUESTS_PER_WINDOW = 12;
+const ipRateMap = new Map();
+
+function isRateLimited(ip) {
+  const now = Date.now();
+  const history = ipRateMap.get(ip) || [];
+  const validHits = history.filter((ts) => now - ts < RATE_LIMIT_WINDOW_MS);
+  if (validHits.length >= MAX_REQUESTS_PER_WINDOW) {
+    ipRateMap.set(ip, validHits);
+    return true;
+  }
+  validHits.push(now);
+  ipRateMap.set(ip, validHits);
+
+  if (ipRateMap.size > 2000) {
+    for (const [key, hits] of ipRateMap.entries()) {
+      if (hits.every((ts) => now - ts >= RATE_LIMIT_WINDOW_MS)) {
+        ipRateMap.delete(key);
+      }
+    }
+  }
+  return false;
+}
+
+// ==============================================================
+// 5. HANDLER UTAMA SERVERLESS VERCEL
 // ==============================================================
 export default async function handler(req, res) {
+  // ── LAPIS 1: Evaluasi CORS & Preflight (OPTIONS) ─────────────
+  const originHeader = req.headers.origin || req.headers.Origin || '';
+  const refererHeader = req.headers.referer || req.headers.Referer || '';
+  const isOriginValid = isAllowedHost(originHeader);
+  const isRefererValid = isAllowedHost(refererHeader);
+
+  // Jika Origin sah, tetapkan Header CORS resmi
+  if (isOriginValid) {
+    res.setHeader('Access-Control-Allow-Origin', originHeader);
+    res.setHeader('Vary', 'Origin');
+    res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+    res.setHeader(
+      'Access-Control-Allow-Headers',
+      'Content-Type, X-Client-Timestamp, X-Agent-Signature, X-Requested-With'
+    );
+    res.setHeader('Access-Control-Max-Age', '86400');
+  }
+
+  // Preflight Request OPTIONS
+  if (req.method === 'OPTIONS') {
+    if (!isOriginValid && !isRefererValid) {
+      return res.status(403).json({ error: 'Access Denied: Unauthorized origin.' });
+    }
+    return res.status(204).end();
+  }
+
+  // Hanya izinkan HTTP POST
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method Not Allowed' });
   }
 
+  // ── LAPIS 2: Blokir Tool Otomasi / Postman / cURL via User-Agent ─
+  const userAgent = req.headers['user-agent'] || req.headers['User-Agent'] || '';
+  if (!userAgent || BLOCKED_UA_REGEX.test(userAgent)) {
+    return res.status(403).json({
+      error: 'Access Denied: Direct external client or automated tool access is prohibited.',
+    });
+  }
+
+  // ── LAPIS 3: Validasi Ketat Asal Request (Origin & Referer) ───
+  if (!isOriginValid && !isRefererValid) {
+    return res.status(403).json({
+      error: 'Access Denied: Requests must originate from authorized portfolio domain (zmdinata.web.id).',
+    });
+  }
+
+  // ── LAPIS 4: Validasi Metadata Browser (Sec-Fetch-Site) ───────
+  const secFetchSite = req.headers['sec-fetch-site'] || req.headers['Sec-Fetch-Site'];
+  if (secFetchSite === 'cross-site' && !isOriginValid) {
+    return res.status(403).json({
+      error: 'Access Denied: Cross-site invocation rejected.',
+    });
+  }
+
+  // ── LAPIS 5: Verifikasi Handshake Signature Klien Portfolio ───
+  const clientTimestamp = Number(
+    req.headers['x-client-timestamp'] || req.headers['X-Client-Timestamp']
+  );
+  const clientSignature =
+    req.headers['x-agent-signature'] || req.headers['X-Agent-Signature'];
+  const requestedWith =
+    req.headers['x-requested-with'] || req.headers['X-Requested-With'];
   const { messages, portfolioContext, lang = 'id' } = req.body || {};
 
-  // Ambil teks pesan terakhir dari user
-  const lastUserMsg = Array.isArray(messages)
-    ? [...messages].reverse().find((m) => m.sender === 'user')?.text || ''
-    : '';
+  if (!clientTimestamp || !clientSignature || !requestedWith) {
+    return res.status(403).json({
+      error: 'Access Denied: Missing portfolio client handshake credentials.',
+    });
+  }
 
-  // ── LAPIS 1: Pre-Flight Guardrail Check ─────────────────────
+  // Jendela toleransi 60 detik (mencegah replay attack & mitigasi clock skew)
+  const now = Date.now();
+  if (Math.abs(now - clientTimestamp) > 60000) {
+    return res.status(403).json({
+      error: 'Access Denied: Client token expired or clock desynchronized.',
+    });
+  }
+
+  const messageCount = Array.isArray(messages) ? messages.length : 0;
+  const expectedSignature = computeHandshakeSignature(clientTimestamp, messageCount);
+  if (clientSignature !== expectedSignature) {
+    return res.status(403).json({
+      error: 'Access Denied: Invalid security signature.',
+    });
+  }
+
+  // ── LAPIS 6: IP Rate Limiting ─────────────────────────────────
+  const clientIp =
+    req.headers['x-forwarded-for']?.split(',')[0]?.trim() ||
+    req.headers['x-real-ip'] ||
+    req.socket?.remoteAddress ||
+    '127.0.0.1';
+
+  if (isRateLimited(clientIp)) {
+    return res.status(429).json({
+      error: 'Too Many Requests: Rate limit exceeded. Please wait a moment before sending another message.',
+    });
+  }
+
+  // ── LAPIS 7: Validasi Skema Payload ───────────────────────────
+  if (!Array.isArray(messages) || messages.length > 30) {
+    return res.status(400).json({ error: 'Bad Request: Invalid messages payload.' });
+  }
+
+  // Ambil teks pesan terakhir dari user
+  const lastUserMsg = [...messages].reverse().find((m) => m.sender === 'user')?.text || '';
+
+  // ── LAPIS 8: Pre-Flight Guardrail Check ──────────────────────
   const guardrailReply = checkPreFlightGuardrails(lastUserMsg, lang);
   if (guardrailReply) {
     return res.status(200).json({ reply: guardrailReply });

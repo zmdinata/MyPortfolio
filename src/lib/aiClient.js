@@ -2,6 +2,8 @@
 // Frontend client yang memanggil Vercel Serverless Function (Backend Proxy)
 // API Keys aman tersimpan di Server.
 
+import { createHandshakeHeaders } from './securityHandshake';
+
 /**
  * Memanggil endpoint backend proxy untuk mendapatkan balasan AI
  * 
@@ -12,10 +14,13 @@
  */
 export async function generateChatResponse(messages, portfolioContext, lang = 'id') {
   try {
+    const handshakeHeaders = createHandshakeHeaders(messages);
+
     const response = await fetch('/api/chat', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        ...handshakeHeaders,
       },
       body: JSON.stringify({
         messages,

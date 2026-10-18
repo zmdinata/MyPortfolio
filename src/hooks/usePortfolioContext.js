@@ -36,10 +36,10 @@ export function usePortfolioContext() {
         supabase.from('profile').select('*').eq('id', 1).maybeSingle(),
         supabase.from('experience').select('*').order('date_start', { ascending: false }),
         supabase.from('education').select('*').order('date_start', { ascending: false }),
-        supabase.from('skills').select('*').order('category', { ascending: true }),
+        supabase.from('skills').select('*').order('name', { ascending: true }),
         supabase.from('projects').select('*').order('sort_order', { ascending: true }),
         supabase.from('certificates').select('*').order('sort_order', { ascending: true }),
-        supabase.from('honors').select('*').order('year', { ascending: false })
+        supabase.from('honors').select('*').order('sort_order', { ascending: true })
       ]);
 
       const localProfile = getLocalProfileConfig();
@@ -80,9 +80,9 @@ export function usePortfolioContext() {
         lines.push(`[KEAHLIAN]`);
         const skillCategories = {};
         skills.forEach(s => {
-          const cat = s.category || 'Teknis';
+          const cat = s.category || 'Teknis & AI';
           if (!skillCategories[cat]) skillCategories[cat] = [];
-          skillCategories[cat].push(s.name);
+          skillCategories[cat].push(s.name || s.title || s.id);
         });
 
         Object.entries(skillCategories).forEach(([cat, list]) => {
@@ -136,7 +136,8 @@ export function usePortfolioContext() {
         certificates.slice(0, 8).forEach(c => {
           const title = c.title_id || c.title_en;
           const issuer = c.issuer_id || c.issuer_en;
-          lines.push(`- ${title} (${issuer}${c.date ? `, ${c.date}` : ''})`);
+          const meta = [issuer, c.date].filter(Boolean).join(', ');
+          lines.push(`- ${title}${meta ? ` (${meta})` : ''}`);
         });
         lines.push('');
       }
@@ -146,7 +147,8 @@ export function usePortfolioContext() {
         honors.slice(0, 4).forEach(h => {
           const title = h.title_id || h.title_en;
           const issuer = h.issuer_id || h.issuer_en;
-          lines.push(`- ${title} (${issuer}${h.year ? `, ${h.year}` : ''})`);
+          const meta = [issuer, h.year].filter(Boolean).join(', ');
+          lines.push(`- ${title}${meta ? ` (${meta})` : ''}`);
         });
         lines.push('');
       }
