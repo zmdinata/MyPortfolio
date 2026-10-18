@@ -1,4 +1,4 @@
-﻿/* ===== High-Performance Shimmer Wave Skeleton ===== */
+/* ===== High-Performance Shimmer Wave Skeleton ===== */
 @keyframes shimmerWave {
   0% {
     transform: translateX(-100%);
@@ -44,8 +44,10 @@
 
 /* Skeleton Card Container */
 .skeleton-card {
-  background: var(--bg-surface, rgba(16, 16, 28, 0.8));
-  border: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.08));
+  background: var(--glass-card-bg, rgba(16, 16, 28, 0.68));
+  backdrop-filter: blur(var(--glass-card-blur, 16px));
+  -webkit-backdrop-filter: blur(var(--glass-card-blur, 16px));
+  border: 1px solid var(--glass-card-border, rgba(255, 255, 255, 0.08));
   border-radius: var(--radius-lg, 14px);
   overflow: hidden;
   display: flex;
@@ -57,7 +59,9 @@
 }
 
 [data-theme="light"] .skeleton-card {
-  background: #ffffff;
+  background: var(--glass-card-bg, rgba(255, 255, 255, 0.72));
+  backdrop-filter: blur(var(--glass-card-blur, 16px));
+  -webkit-backdrop-filter: blur(var(--glass-card-blur, 16px));
   border-color: rgba(0, 0, 0, 0.08);
 }
 
